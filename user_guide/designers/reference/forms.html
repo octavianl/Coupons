@@ -1,0 +1,416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Forms | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent active" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Forms</h1>
+
+<p>Forms, <a href="./../../publishing/forms.html">created in the control panel</a>, are essentially a group of custom fields that, when submitted, are saved in the database (viewable in the control panel) and potentially emailed to a specified email address.  Each form is mapped to a custom URL.</p>
+
+<h2>Templates</h2>
+
+<p>Each form can be mapped to any template in your theme folder but, by default, forms are displayed with the <span class="filename">form.thtml</span> template.</p>
+
+<h2>Example Form Template</h2>
+
+<pre class="code brush: xml">
+
+{extends file=&quot;layout.thtml&quot;}
+{block name=&quot;title&quot;}
+{$title} - {$smarty.block.parent}
+{/block}
+{block name=&quot;content&quot;}
+	&lt;h1&gt;{$title}&lt;/h1&gt;
+	{if $text}{$text}{/if}
+	&lt;form class=&quot;form validate&quot; enctype=&quot;multipart/form-data&quot; method=&quot;post&quot; action=&quot;{url path=&quot;forms/form/submit&quot;}&quot;&gt;
+		&lt;input type=&quot;hidden&quot; name=&quot;form_id&quot; value=&quot;{$id}&quot; /&gt;
+		
+		{if $validation_errors}
+			&lt;div class=&quot;errors&quot;&gt;
+				{$validation_errors}
+			&lt;/div&gt;
+		{/if}
+		
+		&lt;ul class=&quot;form&quot;&gt;
+			{foreach $custom_fields as $field}
+			{if $field.type != 'checkbox'}
+				&lt;li&gt;
+					&lt;label class=&quot;full&quot; for=&quot;{$field.name}&quot;&gt;{$field.friendly_name}&lt;/label&gt;
+				&lt;/li&gt;
+				&lt;li&gt;
+					{custom_field field=$field value=$values[$field.name]}
+				&lt;/li&gt;
+			{else}
+				&lt;li&gt;
+					{custom_field field=$field value=$values[$field.name]} &lt;label for=&quot;{$field.name}&quot; &gt;{$field.friendly_name}&lt;/label&gt;
+				&lt;/li&gt;
+			{/if}
+			{if $field.help}
+				&lt;li&gt;
+					&lt;div class=&quot;help flush&quot;&gt;{$field.help}&lt;/div&gt;
+				&lt;/li&gt;
+			{/if}
+			{/foreach}
+		&lt;/ul&gt;
+
+		&lt;input type=&quot;submit&quot; class=&quot;button&quot; name=&quot;go&quot; value=&quot;{$button_text}&quot; /&gt;
+	&lt;/form&gt;
+{/block}
+
+</pre>
+
+<h2>Form Template Variables</h2>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Variables</td>
+		</tr>
+		<tr>
+			<td class="variable_name">Variable</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><span class="code">{$id}</span></td>
+			<td>The form's ID.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$link_id}</span></td>
+			<td>The corresponding link ID in the universal links database.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$title}</span></td>
+			<td>The form's title</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$text}</span></td>
+			<td>The form's introductory text.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$custom_fields}</span></td>
+			<td>An array of all of the custom fields building this form.  See <a href="./../../designers/reference/custom_fields.html">for details on displaying the custom fields</a>.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$table_name}</span></td>
+			<td>The database table used to store form responses.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$admin_link}</span></td>
+			<td>The link in the administrator control panel for form responses.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$url}</span></td>
+			<td>The absolute URL to the form.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$url_path}</span></td>
+			<td>The relative path to the form.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$email}</span></td>
+			<td>The email address used for form responses.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$button_text}</span></td>
+			<td>The text for the form's submit button.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$redirect}</span></td>
+			<td>The relative path for the redirection after form submission.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$privileges}</span></td>
+			<td>If the form is restricted for viewing by certain member groups, this variable is an array of those member group ID's.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$num_responses}</span></td>
+			<td>How many responses to the form have been submitted?</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$template}</span></td>
+			<td>The template file used to display the form.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Template Plugins</h2>
+
+<h3 class="method">{form}</h3>
+
+<p>Retrieve a form and display it in any template.  Returns all variables specified above into the <span class="code">$var</span>-named array.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Variable</td>
+			<td class="is_required">Required?</td>
+			<td class="parameter_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>var</td>
+			<td>Required</td>
+			<td>Specify the name for the returned variable array (e.g., "form" returns an array with keys like <span class="code">{$form.title}</span>.</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>Required</td>
+			<td>The form ID for a specific piece of content to retrieve.</td>
+		</tr>
+	</tbody>
+</table>
+
+<pre class="code brush: xml">
+
+{form var=&quot;form&quot; id=&quot;X&quot;}
+    &lt;form class=&quot;form validate&quot; enctype=&quot;multipart/form-data&quot; method=&quot;post&quot; action=&quot;{url path=&quot;forms/form/submit&quot;}&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;form_id&quot; value=&quot;{$form.id}&quot; /&gt;
+         
+        {if $form.validation_errors}
+            &lt;div class=&quot;errors&quot;&gt;
+                {$form.validation_errors}
+            &lt;/div&gt;
+        {/if}
+         
+        &lt;ul class=&quot;form&quot;&gt;
+            {foreach $form.custom_fields as $field}
+            {if $field.type != 'checkbox'}
+                &lt;li&gt;
+                    &lt;label class=&quot;full&quot; for=&quot;{$field.name}&quot;&gt;{$field.friendly_name}&lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    {custom_field field=$field value=$values[$field.name]}
+                &lt;/li&gt;
+            {else}
+                &lt;li&gt;
+                    {custom_field field=$field value=$values[$field.name]} &lt;label for=&quot;{$field.name}&quot; &gt;{$field.friendly_name}&lt;/label&gt;
+                &lt;/li&gt;
+            {/if}
+            {if $field.help}
+                &lt;li&gt;
+                    &lt;div class=&quot;help flush&quot;&gt;{$field.help}&lt;/div&gt;
+                &lt;/li&gt;
+            {/if}
+            {/foreach}
+        &lt;/ul&gt;
+ 
+        &lt;input type=&quot;submit&quot; class=&quot;button&quot; name=&quot;go&quot; value=&quot;{$form.button_text}&quot; /&gt;
+    &lt;/form&gt;
+{/form}
+
+</pre>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /designers/reference-->

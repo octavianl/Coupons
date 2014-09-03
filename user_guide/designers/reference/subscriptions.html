@@ -1,0 +1,572 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Subscriptions | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent active" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Subscriptions</h1>
+
+<p>Retrieve and utilize the user's purchased subscriptions in your templates.</p>
+
+<h2>Important URL's</h2>
+
+<ul>
+<li><span class="url">/subscriptions</span>, by default, maps to a listing of subscription packages in the <span class="filename">subscriptions.thtml</span> template</li>
+<li><span class="url">/subscriptions/renew/OLD_SUBSCRIPTION_ID</span> adds a renewal subscription for a specific subscription ID related to the logged in user, redirects to checkout</li>
+<li><span class="url">/subscriptions/upgrade/OLD_SUBSCRIPTION_ID/NEW_PLAN_D</span> adds an upgrading subscription to a new plan for a specific subscription ID related to the logged in user, redirects to checkout</li>
+</ul>
+
+<h2>Subscription Template Variables</h2>
+
+<p>Each subscription has the following available data accessible.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Variables</td>
+		</tr>
+		<tr>
+			<td class="variable_name">Variable</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><span class="code">{$id}</span></td>
+			<td>The subscription ID.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$date_created}</span></td>
+			<td>The date the subscription was purchased.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$amount}</span></td>
+			<td>The recurring charge, without a currency symbol.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$interval}</span></td>
+			<td>The number of days between successive charges for this subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$start_date}</span></td>
+			<td>The date of the first charge.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$end_date}</span></td>
+			<td>The date the subscription will/has expired.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$last_charge_date}</span></td>
+			<td>The date of the last charge.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$next_charge_date}</span></td>
+			<td>The date of the next charge.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$number_occurrences}</span></td>
+			<td>The number of charges that have/will occur for this subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$card_last_four}</span></td>
+			<td>If the user entered a credit card, the last 4 digits of this credit card.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$cancel_date}</span></td>
+			<td>The date the subscription was cancelled, if applicable.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$plan.name}</span></td>
+			<td>The name of the subscription plan (notice it's an array)</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$renew_link}</span></td>
+			<td>An absolute URL for the renewal link.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$cancel_link}</span></td>
+			<td>An absolute URL to cancel this subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$update_cc_link}</span></td>
+			<td>An absolute URL to update the billing information for this subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$is_recurring}</span></td>
+			<td>Set to TRUE if this subscription is actively recurring, else FALSE.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$is_active}</span></td>
+			<td>Set to TRUE if this subscription has not expired, else FALSE.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$is_renewed}</span></td>
+			<td>Set to TRUE if this subscription has been subsequently renewed by the user, else FALSE.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Subscription Plan Template Variables</h2>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Variables</td>
+		</tr>
+		<tr>
+			<td class="variable_name">Variable</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><span class="code">{$id}</span></td>
+			<td>The subscription plan ID.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$name}</span></td>
+			<td>The name of the plan.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$type}</span></td>
+			<td>Either "paid" or "free".</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$initial_charge}</span></td>
+			<td>The initial charge for the subscription.  Does not co-exist with a free trial.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$amount}</span></td>
+			<td>The recurring charge for the subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$interval}</span></td>
+			<td>The number of days between recurring charges.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$free_trial}</span></td>
+			<td>The number of days prior to the first charge.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$occurrences}</span></td>
+			<td>The number of occurrences for the subscription (if not unlimited).</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$number_occurrences}</span></td>
+			<td>The number of charges that have/will occur for this subscription.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$is_taxable}</span></td>
+			<td>Set to TRUE/FALSE depending on if the subscription plan is charged exempt.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$active_subscribers}</span></td>
+			<td>The number of members currently subscribing to the plan.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$require_billing_for_trial}</span></td>
+			<td>Set to TRUE/FALSE depending of if billing information is required for the free trial.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$description}</span></td>
+			<td>The plan description.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$promotion}</span></td>
+			<td>If set, this is the member group that subscribers are added to.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$demotion}</span></td>
+			<td>If set, this is the member group that expired subscribers are added to.</td>
+		</tr>
+		<tr>
+			<td><span class="code">{$add_to_cart}</span></td>
+			<td>If this URL is accessed, the subscription is added to the member's cart and they are redirected to the cart.  Use it in a [b]subscribe now[/b] link.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Template Plugins</h2>
+
+<h3 class="method">{has_subscriptions}</h3>
+
+<p>Only display the content between the two tags if the user has at least one active subscription on their account.</p>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+{has_subscriptions}
+You are a subscriber (of some kind)!
+{/has_subscriptions}
+
+</pre>
+
+<h3 class="method">{subscriptions}</h3>
+
+<p>Retrieve the user's subscriptions (active or expired) based on a set of parameters.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Variable</td>
+			<td class="is_required">Required?</td>
+			<td class="parameter_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>var</td>
+			<td>Required</td>
+			<td>Specify the name for the returned variable array (e.g., "sub" returns an array with keys like <span class="code">{$sub.date_created}</span>.</td>
+		</tr>
+		<tr>
+			<td>active</td>
+			<td>No</td>
+			<td>Set to TRUE to return only subscriptions that have not expired.</td>
+		</tr>
+		<tr>
+			<td>recurring</td>
+			<td>No</td>
+			<td>Set to TRUE to return only subscriptions that are still actively recurring.</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>No</td>
+			<td>Specify a particular subscription to return.</td>
+		</tr>
+		<tr>
+			<td>plan_id</td>
+			<td>No</td>
+			<td>Only return subscriptions to this particular subscription plan.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Example usage (from the account manager):</p>
+
+<pre class="code brush: xml">
+
+{has_subscriptions}
+&lt;table class=&quot;table&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;
+			&lt;td colspan=&quot;2&quot;&gt;Your Subscriptions&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+	{subscriptions var=&quot;sub&quot; active=TRUE}
+	{assign var=&quot;sub_id&quot; value=$sub.id}
+		&lt;tr&gt;
+			&lt;td style=&quot;width:50%&quot;&gt;&lt;b&gt;{$sub.plan.name}&lt;/b&gt;&lt;/td&gt;
+			&lt;td&gt;
+				{if $sub.is_recurring == TRUE}Next Charge: {$sub.next_charge_date|date_format:&quot;%B %e, %Y&quot;}
+				{else}Expires: {$sub.end_date|date_format:&quot;%B %e, %Y&quot;}{/if}
+				{if $sub.is_renewed == TRUE} (Renewed){/if}
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td colspan=&quot;2&quot;&gt;
+				&lt;ul class=&quot;sub_options&quot;&gt;
+					{if $sub.card_last_four and $sub.is_recurring}
+						&lt;li&gt;
+							&lt;a href=&quot;{$sub.update_cc_link}&quot;&gt;Update Credit Card Information&lt;/a&gt;
+						&lt;/li&gt;
+					{/if}
+					{if $sub.last_charge_date}
+						&lt;li&gt;
+							&lt;a href=&quot;{url path=&quot;users/invoices/$sub_id&quot;}&quot;&gt;View Related Invoices&lt;/a&gt;
+						&lt;/li&gt;
+					{/if}
+					{if $sub.is_recurring}
+						&lt;li&gt;
+							&lt;a href=&quot;{$sub.cancel_link}&quot;&gt;Cancel Subscription&lt;/a&gt;
+						&lt;/li&gt;
+					{/if}
+					{if $sub.is_renewed == FALSE and $sub.last_charge_date}
+						&lt;li&gt;
+							&lt;a href=&quot;{$sub.renew_link}&quot;&gt;Renew Subscription&lt;/a&gt;
+						&lt;/li&gt;
+					{/if}
+					
+					{if !$sub.is_recurring and !$sub.last_charge_date}
+						&lt;li&gt;No options available.&lt;/li&gt;
+					{/if}
+				&lt;/ul&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	{/subscriptions}
+	&lt;/tbody&gt;
+&lt;/table&gt;
+{/has_subscriptions}
+
+</pre>
+
+<h3 class="method">{subscription_plans}</h3>
+
+<p>Retrieve and display your site's subscription plan products.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Variable</td>
+			<td class="is_required">Required?</td>
+			<td class="parameter_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>var</td>
+			<td>Required</td>
+			<td>Specify the name for the returned variable array (e.g., "sub" returns an array with keys like <span class="code">{$sub.name}</span>.</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>No</td>
+			<td>Specify a particular subscription plan to return.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Example usage:</p>
+
+<pre class="code brush: xml">
+
+&lt;h2&gt;Check out our available subscription products!&lt;/h2&gt;
+
+&lt;table class=&quot;table&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;
+			&lt;td colspan=&quot;2&quot;&gt;Your Subscriptions&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+	{subscription_plans sub=&quot;plan&quot;}
+		&lt;tr&gt;
+			&lt;td style=&quot;width:50%&quot;&gt;&lt;b&gt;{$plan.name}&lt;/b&gt;&lt;/td&gt;
+			&lt;td&gt;
+				{setting name=&quot;currency_symbol&quot;}{money_format value=$plan.amount} {if $plan.free_trial}{$plan.free_trial} day free trial{/if}
+			&lt;/td&gt;
+			&lt;td&gt;
+				&lt;a href=&quot;{$plan.add_to_cart}&quot;&gt;subscribe now!&lt;/a&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	{/subscriptions}
+	&lt;/tbody&gt;
+&lt;/table&gt;
+
+</pre>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /designers/reference-->

@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Emails | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../js/shCore.js"></script>
+		<script type="text/javascript" src="./../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../js/user_guide.js"></script>
+		<link href="./../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent active" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../publishing/forms.html">Forms</a></li>
+							<li><a href="./../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent" href="#">Designing</a>
+						<ul>
+							<li><a href="./../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent" href="#">Developing</a>
+						<ul>
+							<li><a href="./../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../developers/security.html">Security</a></li>
+							<li><a href="./../developers/modules.html">Module Development</a></li>
+							<li><a href="./../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Emails</h1>
+
+<p>Most websites need to communicate with their visitors via email at least infrequently.  For example, after registration, an order from the store, or a successful subscription payment.</p>
+
+<p>Emails are managed at <strong>Configuration > Emails</strong> in the control panel.</p>
+
+<p>Hero allows you to define and configure system emails based on any system action (i.e., <a href="./../developers/reference/app_hooks_library.html">any one of the system hooks</a>).  At each hook point (e.g., "store_order", or "member_register"), different data is available.  This data can be included in the email subject/body dynamically by using tags like <span class="code">{$member.first_name}</span>.</p>
+
+<p>All standard emails are pre-configured with your installation of Hero.  However, you may want to add new emails or customize existing emails.  This guide will show you how.</p>
+
+<h2>Email Template Example</h2>
+
+<pre class="code brush: xml">
+
+{extends file=&quot;email_layout.thtml&quot;}
+		
+{block name=&quot;body&quot;}
+
+&lt;p&gt;Hi {$member.first_name},&lt;/p&gt;
+
+&lt;p&gt;Thanks for your order from {$site_name}!  You were billed {$setting.currency_symbol}{$invoice.amount} on {$invoice.date|date_format:&quot;%B %d, %Y&quot;}.&lt;/p&gt;
+
+&lt;p&gt;Your shopping cart:&lt;/p&gt;
+
+&lt;ul&gt;
+{foreach $products as $product}
+     &lt;li&gt;({$product.quantity}) {$product.name}&lt;/li&gt;
+{/foreach}
+{if $subscription_plan}
+     &lt;li&gt;{$subscription_plan.name}&lt;/li&gt;
+{/if}
+&lt;/ul&gt;
+
+{if $shipping_address}
+&lt;p&gt;You have entered the following shipping address:&lt;/p&gt;
+
+&lt;p&gt;{$shipping_address}&lt;/p&gt;
+
+&lt;p&gt;&#042; If this address is incorrect, please contact us immediately to change it &#042;&lt;/p&gt;
+{/if}
+
+&lt;p&gt;If you would like to view your invoices or update your account, please visit {url path=&quot;users/&quot;}.&lt;/p&gt;
+
+{/block}
+
+</pre>
+
+<p>You should notice a few things right away:</p>
+
+<ul>
+<li>Default emails use simple HTML to ensure proper formatting for the end user.</li>
+<li>Default emails extend a global email template file, <span class="filename">email_layout.html</span>.</li>
+<li>Email templates follow the same syntax and have the same available features as the <a href="./../designers/smarty.html">Smarty template code</a> used in the frontend of the website.</li>
+</ul>
+
+<p>These observations are helpful in managing automated system emails.  We'll cover the email variables and global email template later in this guide, but first we'll look at important configuration parameters for emails.</p>
+
+<h2>Specifying additional criteria for email sending</h2>
+
+<p>Because Hero binds emails to <a href="./../developers/reference/app_hooks_library.html">system hooks</a> like <strong>member_register</strong>, <strong>member_delete</strong>, <strong>subscription_new</strong>, <strong>subscription_charge</strong>, <strong>subscription_expire</strong>, you aren't limited to blindly sending an email simply based on this hook.  You can also specify parameters that must be met before the email is sent.</p>
+
+<p>For example, with hooks that involve a single product (such as <strong>store_order_product</strong>), you can send an email only if the Product matches the product you specify in the email manager.  This allows you to send a specific email such as "How to begin using your new product X" for product X but not product Y.</p>
+
+<p>Potentially, emails can be configured with the following parameters:</p>
+
+<ul>
+<li>Product</li>
+<li>Member</li>
+<li>Invoice</li>
+<li>Collection</li>
+</ul>
+
+<h2>Specifying email recipients</h2>
+
+<p>It is not always the case that you want to send an email to the member who performed the action.  For example, you may want to email the person in charge of shipping when someone makes an order, or email the administrator when a new user signs up.</p>
+
+<p>Each email can be configured to send to <strong>one or more</strong> of the following:</p>
+
+<ul>
+<li>The <strong>member</strong> associated with the action, if applicable.</li>
+<li>The <strong>administrator</strong> (customizable at <strong>Configuration > Settings > site_email</strong>).</li>
+<li>Any other email address, entered as a comma-separated list of email addresses.</li>
+</ul>
+
+<h2>Available variables at each email hook</h2>
+
+<p>When adding/editing emails at <strong>Configuration > Emails</strong> a list of all possible variables associated with that system hook is listed beside the email editor.  You can simply copy and paste the tags you want to use to the email subject or body.</p>
+
+<pre class="code brush: xml">
+
+... Your order has invoice #{$invoice.id} and was made on {$invoice.date}...
+
+</pre>
+
+<p>Of course, there's much more you can do than just displaying the data.  <strong>These emails are dynamically generated, after all!</strong>  You may want to loop through an array of data:</p>
+
+<pre class="code brush: xml">
+
+You purchased:
+
+{foreach $order.products as $product}
+{$product.name}
+{/foreach}
+
+</pre>
+
+... or use any Smarty template plugins and modifiers:
+
+<pre class="code brush: xml">
+
+... Your order has invoice #{$invoice.id} and was made on {$invoice.date|date_format:&quot;%b %e, %Y&quot;}...
+
+</pre>
+
+<p>For an introduction to Smarty and all the possibilities of dynamic emails, <a href="./../designers/smarty.html">check out this guide</a>.</p>
+
+<h2>Editing or removing the global email template</h2>
+
+<p>As you saw in the first example of a default system email, default emails extend the global email template.  This allows you, the end user, to make changes to all emails much more quickly (e.g., adding your logo at the top of each email, or a signature to the footer).</p>
+
+<p>The global email template can be edited at <strong>Configuration > Emails > Edit Global Email Layout</strong>.  It is just a normal template file the email templates we've been discussing in this guide.</p>
+
+<p>You can stop using the global email template by either editing it to look like the template below or remove all <span class="code">{extends file=&quot;email_layout.thtml&quot;}</span> references from the individual emails:</p>
+
+<pre class="code brush: php">
+
+{block name=&quot;body&quot;}
+	
+{/block}
+
+</pre>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /configuration-->

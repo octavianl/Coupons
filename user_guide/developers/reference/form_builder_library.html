@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Form Builder Library | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent active" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Form Builder Library</h1>
+
+<p>This library provides a way to assemble multiple <a href="./../../developers/reference/fieldtype_library.html">Fieldtype objects</a> into one form, and then run form-wide methods such as validation routines, assigning values to the form fields, or displaying the form.  It is most commonly used in conjunction with pre-defined custom field groups, but it can also be used to build a form manually by adding new Fieldtype objects sequentially and manipulating these objects to add values, help text, default options, etc.</p>
+
+<h2>Initialization</h2>
+
+<pre class="code brush: php">
+
+$this-&gt;load-&gt;library('custom_fields/form_builder');
+// methods calls: $this-&gt;form_builder-&gt;add_field(), $this-&gt;form_builder-&gt;reset(), etc.
+
+</pre>
+
+<h2>Method Reference</h2>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">build_form_from_group</span> <span class="arguments">(int <span class="variable">$custom_field_group_id</span>)</span></h3>
+
+<p>Pass this method an ID of a custom field group in the system, and it will automatically load and build your form based on the returned data from <span class="code">$this-&gt;custom_fields_model-&gt;get_custom_fields()</span> (<a href="./../../developers/reference/custom_fields_model.html">documentation here</a>).</p>
+
+<p>Form objects are not directly manipulable in this case, because it does not return any field objects.  However, you can use form-wide functions like <span class="code">set_values()</span> and <span class="code">clear_defaults()</span> to work with your form.</p>
+
+<pre class="code brush: php">
+
+$this-&gt;form_builder-&gt;build_form_from_group (15);
+// get form, formatted for the control panel
+$form = $this-&gt;form_builder-&gt;output_admin();
+// easy as that
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">build_form_from_array</span> <span class="arguments">(array get_custom_fields)</span></h3>
+
+<p>Like <span class="code">build_form_from_group()</span>, this method builds a form using pre-defined custom field group data.  However, this method takes an array from <span class="code">custom_fields_model-&gt;get_custom_fields()</span> (<a href="./../../developers/reference/custom_fields_model.html">documentation here</a>) as its only parameter, thereby eliminating another call to that method.  Usage is identical after its loaded.</p>
+
+<h3 class="method"><span class="return_type">object</span> <span class="method_name">add_field</span> <span class="arguments">(string <span class="variable">$type</span>)</span></h3>
+
+<p>If you are not using predefined fields, you can build your form programmatically as you go by creating and manipulating field objects.  You have access to all of the custom fieldtypes in your system (defined at <span class="filename">/app/modules/custom_fields/libraries/fieldtypes/</span>).</p>
+
+<p>This is the optimal way to use this library to build dynamic, control panel-ready forms for your new module without touching any HTML.</p>
+
+<pre class="code brush: php">
+
+$this-&gt;load-&gt;library('custom_fields/form_builder');
+$my_text_field = $this-&gt;form_builder-&gt;add_field('text');
+$my_text_field-&gt;name('my_text')
+	   	      -&gt;label('My Text Field')
+	   	      -&gt;default_value('I like this!')
+	   	      -&gt;validation(array('alphanumeric','minlength[5]'));
+
+$my_select_field = $this-&gt;form_builder-&gt;add_field('select');
+$my_select_field-&gt;name('school')
+	            -&gt;label('My School')
+	            -&gt;options(array(
+							array('name' =&gt; 'MPSS', 'value' =&gt; 'MPSS'),
+							array('name' =&gt; 'CSS', 'value' =&gt; 'CSS'),
+							array('name' =&gt; 'HSS', 'value' =&gt; 'HSS')
+							))
+				-&gt;required(TRUE)
+				-&gt;help('Please select your school.');
+											
+$output = $this-&gt;form_builder-&gt;output_admin();
+
+</pre>
+
+<h3 class="method"><span class="return_type">string</span> <span class="method_name">output_admin</span> <span class="arguments">()</span></h3>
+
+<p>Return the formatted HTML for the form in memory.</p>
+
+<p>In your controller:</p>
+
+<pre class="code brush: php">
+
+$form = $this-&gt;form_builder-&gt;output_admin();
+$this-&gt;load-&gt;view('my_form_view', array('form' =&gt; $form));
+
+</pre>
+
+<p>In your view:</p>
+
+<pre class="code brush: php">
+
+&lt;form method=&quot;post&quot; action=&quot;admincp/my_module/post&quot;&gt;
+	&lt;fieldset&gt;
+		&lt;ul class=&quot;form&quot;&gt;
+			&lt;?=$form;?&gt;
+		&lt;/ul&gt;
+	&lt;/fieldset&gt;
+&lt;/form&gt;
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">validate_post</span> <span class="arguments">()</span></h3>
+
+<p>When a form has been loaded/built, you can run this method to validate a POST submission across all the form fields based on their individual validation routines.  It will return <span class="code">FALSE</span> if some value that has been POST'd is invalid.</p>
+
+<pre class="code brush: php">
+
+// reminder: this controller is invoked by an POST form submissions
+$this-&gt;load-&gt;library('form_builder');
+$this-&gt;form_builder-&gt;build_form_from_group(29);
+if ($this-&gt;form_builder-&gt;validate_post() === FALSE) {
+	// we have a problem
+	
+	$errors = $this-&gt;form_builder-&gt;validation_errors();
+	
+	// not the best style, but we'll just print the HTML-formatted errors
+	echo $errors;
+}
+else {
+	$values = $this-&gt;form_builder-&gt;post_to_array();
+	
+	// we now have an array of $values for the form, keyed with each field's &quot;name&quot;,
+	// for insertion into a database or processing of some kind
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">string|array</span> <span class="method_name">validation_errors</span> <span class="arguments">([boolean <span class="variable">$array</span> = FALSE])</span></h3>
+
+<p>When <span class="code">validate_post()</span> has been called and returned <span class="code">FALSE</span>, validation errors can be retrieved with this method.</p>
+
+<p>If called without parameters or with <span class="code">$array</span> as <span class="code">FALSE</span>, the method will return HTML-formatted errors (each error in a <span class="code">&lt;p&gt;</span> element).</p>
+
+<p>If <span class="code">$array</span> is set to <span class="code">TRUE</span>, an array of errors is retrieved.</p>
+
+<pre class="code brush: php">
+
+$array = $this-&gt;form_builder-&gt;validation_errors(TRUE);
+
+foreach ($array as $error) {
+	echo $error . '&lt;br /&gt;';
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">post_to_array</span> <span class="arguments">()</span></h3>
+
+<p>This method invokes each field object's <span class="code">post_to_value()</span> method to retrieve a value from the POST submission for this field.  For some fields (e.g., text fields), this is as simple as returning the element in POST of the same name.  However, for other complex fields (e.g., file uploads), this involves seeing if a file was uploaded, whether a file was previously uploaded and they are just leaving this file, or whether they entered a file uploaded by FTP that should override the specific file upload field.  Either way, the fields do this processing themselves.</p>
+
+<p>This method simply returns an array that has a key for each field and its subsequent value.</p>
+
+<pre class="code brush: php">
+
+// we'll build our form.
+// this would likely be in a method/function that is called by both the form displaying controller and
+// the form processing controller so that we aren't rewriting code.
+
+$this-&gt;load-&gt;library('custom_fields/form_builder');
+$my_text_field = $this-&gt;form_builder-&gt;add_field('text');
+$my_text_field-&gt;name('my_text')
+	   	      -&gt;label('My Text Field')
+	   	      -&gt;default_value('I like this!')
+	   	      -&gt;validation(array('alphanumeric','minlength[5]'));
+
+$my_select_field = $this-&gt;form_builder-&gt;add_field('select');
+$my_select_field-&gt;name('school')
+	            -&gt;label('My School')
+	            -&gt;options(array(
+							array('name' =&gt; 'MPSS', 'value' =&gt; 'MPSS'),
+							array('name' =&gt; 'CSS', 'value' =&gt; 'CSS'),
+							array('name' =&gt; 'HSS', 'value' =&gt; 'HSS')
+							))
+				-&gt;required(TRUE)
+				-&gt;help('Please select your school.');
+											
+// now, we can process the POST submission with one simple call
+$post_data = $this-&gt;form_builder-&gt;post_to_array();
+
+// we now have an array like, array( 'my_text' =&gt; '1234abcd', 'school' =&gt; 'MPSS' )
+// this obviously changes depending on the form submission, itself.
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">set_values</span> <span class="arguments">(array <span class="variable">$values</span>)</span></h3>
+
+<p>Once a form is built, you may want to set values for all the form fields en masse.  To do so, pass this method an array of data (with each key representing a field's name), and they will be set.</p>
+
+<pre class="code brush: php">
+
+// we have a form built with fields &quot;name&quot;, &quot;school&quot;, and &quot;team&quot;...
+$data = array(
+				'name' =&gt; 'Paul N',
+				'school' =&gt; 'MPSS',
+				'team' =&gt; 'Thunder'
+			);
+$this-&gt;form_builder-&gt;set_values($data);
+
+</pre>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">clear_defaults</span> <span class="arguments">()</span></h3>
+
+<p>When you are editing a piece of published content or data, it is unlikely that you want to substitute in the field's default values for empty fields.  This method will wipe out all default values for the form in memory.</p>
+
+<pre class="code brush: php">
+
+if ($editing == TRUE) {
+	$this-&gt;form_builder-&gt;clear_defaults();
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">reset</span> <span class="arguments">()</span></h3>
+
+<p>Once you have built a form, it will remain in Form Builder until this method resets the library.  It's smart to call this before building any form.</p>
+
+<pre class="code brush: php">
+
+$this-&gt;form_builder-&gt;reset();
+
+</pre>
+
+
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /developers/reference-->

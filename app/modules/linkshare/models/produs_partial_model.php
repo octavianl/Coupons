@@ -1,0 +1,244 @@
+<?php
+
+/**
+* Produs Partial Model
+*
+* Manages partial produs
+*
+* @author Weblight.ro
+* @copyright Weblight.ro
+* @package Save-Coupon
+
+*/
+
+	class Produs_partial_model extends CI_Model
+	{
+		private $CI;
+	
+		function __construct()
+		{
+			parent::__construct();
+		
+			$this->CI =& get_instance();
+		}
+	
+        /**
+	* Get Produse
+	*
+	*
+	* @return array
+	*/
+	function get_produse () {
+		$row = array();										
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $linie) {
+			$row[] = $linie;
+		}
+                
+		return $row;														
+	}
+        
+        /**
+	* Get Produse By Mid
+	* @param array $params
+	*
+	* @return array
+	*/
+	function get_produse_by_mid ($params) {
+		$row = array();
+                if (isset($params['limit'])) {
+                            $offset = (isset($params['offset'])) ? $params['offset'] : 0;
+                            $this->db->limit($params['limit'], $offset);
+                    }
+                if($params['id_site'])  $this->db->where('id_site',$params['id_site']);
+                if($params['mid'])  $this->db->where('mid',$params['mid']);
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $linie) {
+			$row[] = $linie;
+		}
+                
+		return $row;														
+	}
+        
+        /**
+	* Get Produs Status
+	*
+	*
+	* @return array
+	*/
+	function get_produs_status () {
+		$row = array();										
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $value) {
+                        $row[$value['id']] = $value['name'];
+		}
+                                		
+		return $row;                                
+	}
+        
+        /**
+	* Change Produs Status
+	* @param int $id_product
+	*
+	* @return boolean
+	*/
+	function change_produs_status ($id_product) {
+		$row = array();	
+                $this->db->where('id',$id_product);
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $value) {
+                        $available = $value['available'];
+		}
+                
+                if($available == 'yes') $available = 'no';
+                elseif($available == 'no') $available = 'yes';
+                
+                $update_fields['available'] = $available;
+                $this->update_produs ($update_fields,$id_product);
+                
+		return TRUE;                                
+	}
+                
+	/**
+	* Get Produs
+	*
+	* @param int $id	
+	*
+	* @return array
+	*/
+	function get_produs ($id) {
+		$row = array();								
+		$this->db->where('id',$id);
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $row) {
+			return $row;
+		}
+		
+		return $row;														
+	}
+        
+        /**
+	* Get Produs By linkid
+	*
+	* @param int $linkid	
+	*
+	* @return array
+	*/
+	function get_produs_by_linkid ($linkid) {
+		$row = array();								
+		$this->db->where('linkid',$linkid);
+		$result = $this->db->get('linkshare_produs_partial');
+				
+		foreach ($result->result_array() as $row) {
+			return $row;
+		}
+		
+		return $row;														
+	}
+                
+	
+	/**
+	* Create New Produs
+	*
+	* Creates a new produs
+	*
+	* @param array $insert_fields	
+	*
+	* @return int $insert_id
+	*/
+	function new_produs ($insert_fields) {																										
+		$this->db->insert('linkshare_produs_partial', $insert_fields);		
+		$insert_id = $this->db->insert_id();
+										
+		return $insert_id;
+	}
+	
+	/**
+	* Update Produs
+	*
+	* Updates produs
+	* 
+	* @param array $update_fields
+	* @param int $id	
+	*
+	* @return boolean TRUE
+	*/
+	function update_produs ($update_fields,$id) {																														
+		$this->db->update('linkshare_produs_partial',$update_fields,array('id' => $id));
+										
+		return TRUE;
+	}
+        
+        /**
+	* Update Produs By Linkid
+	*
+	* Updates produs
+	* 
+	* @param array $update_fields
+	* @param int $linkid	
+	*
+	* @return boolean TRUE
+	*/
+	function update_produs_by_linkid ($update_fields,$linkid) { 
+            $produs = $this->get_produs_by_linkid ($linkid);
+            //preserve insert date
+            $update_fields['insert_date'] = $produs['insert_date'];
+            $this->db->update('linkshare_produs_partial',$update_fields,array('linkid' => $linkid));
+										
+		return TRUE;
+	}
+	
+	/**
+	* Delete Produs
+	*
+	* Deletes produs
+	* 	
+	* @param int $id	
+	*
+	* @return boolean TRUE
+	*/
+	function delete_produs ($id) {																										
+				
+		$this->db->delete('linkshare_produs_partial',array('id' => $id));
+										
+		return TRUE;
+	}
+        
+        /**
+	* Checks if Produs Exists
+	*
+	* Exists produs
+	* 	
+	* @param int $linkid	
+	*
+	* @return boolean
+	*/
+	function exists_produs ($linkid) {
+            $this->db->where('linkid',$linkid);
+            $result = $this->db->get('linkshare_produs_partial');
+            foreach ($result->result_array() as $row) {
+                    return TRUE;
+            }
+
+            return FALSE;
+	}
+	
+        /**
+	* Sterge Produs partial
+	*
+	* Truncate produs partial	
+	*
+	* @return boolean TRUE
+	*/
+	function sterge () {																								
+		$this->db->truncate('linkshare_produs_partial');
+										
+		return TRUE;
+	}
+        			
+}

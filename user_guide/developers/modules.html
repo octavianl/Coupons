@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Module Development | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../js/shCore.js"></script>
+		<script type="text/javascript" src="./../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../js/user_guide.js"></script>
+		<link href="./../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../publishing/forms.html">Forms</a></li>
+							<li><a href="./../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent" href="#">Designing</a>
+						<ul>
+							<li><a href="./../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent active" href="#">Developing</a>
+						<ul>
+							<li><a href="./../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../developers/security.html">Security</a></li>
+							<li><a href="./../developers/modules.html">Module Development</a></li>
+							<li><a href="./../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Module Development</h1>
+
+<p>A <strong>module</strong> is a collection of files that add new functionality to the platform.  These modules can do as much or as little as they want:</p>
+
+<ul>
+<li>Function entirely in the background (e.g., small integration plugins)</li>
+<li>Create <strong>binds</strong> on <strong>hooks</strong> to execute methods/functions when a system action occurs</li>
+<li>Create and link to new control panel interfaces</li>
+<li>Generate database tables and manipulate the platform with install/update routines</li>
+<li>Create new frontend controllers mapped to URL's.</li>
+<li>Access other Hero models, libraries, and helper functions (referenced in this guide).</li>
+</ul>
+
+<p>Third-party modules created by developers share identical rights with Hero-standard modules, and have access to every facet of the application.</p>
+
+<p>Creating a module is simple and <strong>requires</strong> the following:</p>
+
+<ul>
+<li>A folder: <span class="filename">/app/modules/modulename/</span></li>
+<li>A module definition and installation file: <span class="filename">/app/modules/modulename/modulename.php</span></li>
+</ul>
+
+<p>Optionally, you can add the following:</p>
+
+<ul>
+<li>One or more model class files at: <span class="filename">/app/modules/modulename/models/</span></li>
+<li>A control panel controller file at: <span class="filename">/app/modules/modulename/controllers/admincp.php</span></li>
+<li>Other controller files at: <span class="filename">/app/modules/modulename/controllers/</span></li>
+<li>A views folder for control panel interface screens: <span class="filename">/app/modules/modulename/views/</span></li>
+<li>Helper files in: <span class="filename">/app/modules/modulename/helpers/</span></li>
+<li>Library files in: <span class="filename">/app/modules/modulename/libraries/</span></li>
+</ul>
+
+<p>Developers have access to all standard <a href="http://www.codeigniter.com/user_guide">CodeIgniter</a> libraries/helpers, as well as a number of additional libraries and helpers specific to Hero (documented in the Reference section of this guide).  For more information on how Hero works with CodeIgniter, <a href="./../developers/codeigniter.html">click here</a>.</p>
+
+<h2>Module Definition & Installation File</h2>
+
+<ul>
+<li>Location: <span class="filename">/app/modules/modulename/modulename.php</span></li>
+</ul>
+
+<p>This file has three main responsibilities:</p>
+
+<ol><li>Perform any installation or upgrade tasks, such as database table creation/modification, settings creation, and writeable folder creation.</li>
+<li>Universal control preload operations such as displaying navigation items.  These occur upon each page load of the control panel.</li>
+<li>Universal frontend preload operations such as adding Smarty template plugin folders.</li>
+</ol>
+
+<p>First, we must define the class, mandatory variables, and class constructor (required by all modules):</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	var $version = '1.0';
+	var $name = 'modulename';
+	
+	function __construct () {
+		$this-&gt;active_module = $this-&gt;name;
+		
+		parent::__construct();
+	}
+}
+
+</pre>
+
+<p>Here, we've specified the current module name as well as version.  We've also extended the Module class which handles much of the shared logic for modules.</p>
+
+<div class="note">If there is a class conflict (e.g., your frontend controller class is <span class="code">Modulename</span> and you can't use <span class="code">Modulename</span> for the module definition class), you can use <span class="code">Modulename_module</span> (e.g., "<span class="code">Search_module</span>") as the class name for the module definition file.</div>
+
+<p>The <a href="./../developers/codeigniter.html">CodeIgniter superobject</a> is now accessible within our module definition class at <span class="code">$this-&gt;CI</span>.</p>
+
+<strong>No other code is required</strong> in the module definition, but few modules will be that simple.
+
+<h3>Installation/upgrade routines</h3>
+
+<p>Hero handles installation/upgrades in one <span class="code">update()</span> method.  The method takes the current installed version as a parameter and performs a series of "upgrades" to reach the current version.  It the returns the current version so that the database can be updated.</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	var $version = '1.02';
+	var $name = 'modulename';
+	
+	function __construct () {
+		$this-&gt;active_module = $this-&gt;name;
+		
+		parent::__construct();
+	}
+	
+	/&#042;&#042;
+	&#042; Update
+	&#042;
+	&#042; @param int $db_version The current version of the installed module and its database, if applicable
+	&#042;
+	&#042; @return int $version The updated version (i.e., the version of this module file)
+	&#042;/
+	function update ($db_version) {
+		if ($db_version &lt; 1.0) {
+			// this would be a fresh install, as it's less than 1.0
+		}
+		
+		if ($db_version &lt; 1.02) {
+			// this second command is an upgrade, something to run only if they don't
+			// already have version 1.02 installed
+		}
+		
+		return $this-&gt;version;
+	}
+}
+
+</pre>
+
+<p>Keep in mind that, if your module is in version 1.05 (for example), and you have 5 <span class="code">if</span> statements performing separate operations, all 5 of these statements will be executed upon a fresh install.  You don't need to modify each one repeatedly adding the new logic.</p>
+
+<h3>Uninstallation</h3>
+
+<p>Not all modules require uninstallation code, and it's not a necessity for any module.  However, if you place a <span class="code">uninstall()</span> method in your module definition file, this method will be executed during an uninstall, just like the <span class="code">update()</span> runs.</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	var $version = '1.20';
+	var $name = 'modulename';
+	
+	function __construct () {
+		$this-&gt;active_module = $this-&gt;name;
+		
+		parent::__construct();
+	}
+	
+	/&#042;&#042;
+	&#042; Uninstall
+	&#042;/
+	function uninstall () {
+		$this-&gt;db-&gt;query('DROP TABLE IF EXISTS `my_module_table`');
+		$this-&gt;db-&gt;query('DROP TABLE IF EXISTS `another_table`');
+	}
+}
+
+</pre>
+
+<h3>Administration preload: Execute code upon each control panel load</h3>
+
+<p>We will now add a new item to the control panel navigation via a new method, <span class="code">admin_preload()</span>.  This method, if it exists, is run <strong>prior to any control panel screen running</strong>.</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	// ... variables, constructor, updator logic, etc...
+	
+	function admin_preload () {
+		$this-&gt;CI-&gt;admin_navigation-&gt;child_link('configuration',60,$this-&gt;name . ' Configuration',site_url('admincp/modulename/configuration'));
+	}
+}
+
+</pre>
+
+<p>The single line in the admin_preload method above adds a new navigation link to the control panel as a sub-link of the "configuration" tab.  It's weight is "60" (i.e., it appears after something weighted 59 but before links weighted 61), has "Module Name Configuration" as its text, and links to <span class="url">/admincp/modulename/configuration</span>.  Your module's control panel controller is always accessible at <span class="url">/admincp/modulename</span>, and here we are specifying the configuration method within that controller.</p>
+
+<h3>Frontend preload: Execute code upon each frontend load</h3>
+
+<p>Similarly to <span class="code">admin_preload()</span>, <span class="code">front_preload()</span> is executed prior to every page load in the frontend.  It is less commonly used than <span class="code">admin_preload()</span>, but can be useful when your module <strong>adds new Smarty template plugins</strong>.</p>
+
+<p>Here, we will define a new folder filled with Smarty plugins in our module:</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	// ... all other module code ...
+	
+	function front_preload () {
+		$this-&gt;CI-&gt;smarty-&gt;addPluginsDir(APPPATH . 'modules/modulename/template_plugins/');
+	}
+}
+
+</pre>
+
+<p>Now, Smarty will look in this directory for function/block plugin files like <span class="filename">function.your_plugin.php</span>.  For more information on creating template plugins, via our <a href="./../developers/template_plugins.html">documentation on creating a template plugin</a>.</p>
+
+<h2>Models</h2>
+
+<ul>
+<li>Location: <span class="filename">/app/modules/modulename/models/your_model.php</span></li>
+</ul>
+
+<p>These model definition files are standard CodeIgniter model files.  They usually contain a series of methods used for creating, updating, and deleting database records related to your module. For more information on models, visit <a href="http://www.codeigniter.com/user_guide">CodeIgniter's documentation</a>.</p>
+
+<h2>Libraries and helper functions</h2>
+
+<ul>
+<li>Location (Libraries): <span class="filename">/app/modules/modulename/libraries/your_library.php</span></li>
+<li>Location (Helpers): <span class="filename">/app/modules/modulename/helpers/your_function_helper.php</span></li>
+</ul>
+
+<p>These are also CodeIgniter-standard files, following typical <a href="./../developers/codeigniter.html">Hero + CodeIgniter structure</a>.  They can provide additional functionality to your module and Hero.</p>
+
+<h2>Control panel controller</h2>
+
+<ul>
+<li>Location: <span class="filename">/app/modules/modulename/controllers/admincp.php</span></li>
+</ul>
+
+<p>If your module has at least one control panel screen, you must create a control panel controller file.  This controllers allows for control panel pages to be viewable at <span class="url">/admincp/modulename</span>.  This main URL will automatically load the <span class="code">index()</span> method in your controller (e.g., your module's control panel home page).  A third URI segment (e.g., <span class="url">/admincp/modulename/another_method</span>) will prompt that method to be loaded in your control panel controller (e.g., <span class="code">Admincp_controller-&gt;third_uri_segment()</span>).  All URL segments after this 3rd segment are passed as the first, second, third, (etc.) arguments to the specified method.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li><span class="url">/admincp/builder</span> loads the <span class="code">index()</span> method of the Admincp controller at <span class="filename">/app/modules/builder/controllers/admincp.php</span></li>
+<li><span class="url">/admincp/builder/post</span> loads the <span class="code">post()</span> method of the Admincp controller</li>
+<li><span class="url">/admincp/builder/post/editing</span> loads the <span class="code">post($form)</span> method of the Admincp controller with <span class="code">$form == 'editing'</span></li>
+</ul>
+
+<p>As a start, your control panel controller will include the following code:</p>
+
+<pre class="code brush: php">
+
+class Admincp extends Admincp_Controller {
+	function __construct()
+	{
+		parent::__construct();
+				
+		// sets the active navigation tab to &quot;publish&quot;
+		// other options: storefront, members, reports, design, configuration
+		// you can re-specify or change this within any method, as well
+		$this-&gt;admin_navigation-&gt;parent_active('publish');
+	}
+}
+
+</pre>
+
+<p>You should also have an <span class="code">index()</span> method to be displayed at <span class="url">/admincp/modulename</span>.  If not, and the user accesses this page, they will get a 404 error.</p>
+
+<p>You can add as many methods to your control panel as you wish.  All HTML should be displayed using standard <a href="http://codeigniter.com/user_guide/general/views.html">CodeIgniter views</a>.</p>
+
+<h2>Frontend controllers</h2>
+
+<ul>
+<li>Location: <span class="filename">/app/modules/modulename/controllers/</span></li>
+</ul>
+
+<p>Frontend controller files give your module a presence in the frontend.  For example, the Publish module has a frontend controller called "content" which displays a piece of content retrieved via the content model.</p>
+
+<p>Frontend controllers automatically map to URL's.  For example, if a controller called "test.php" existed at <span class="filename">/app/modules/test/test.php</span>, it would be accessible at <span class="url">/modulename/test</span>, and any methods inside of it are accessible at <span class="url">/modulename/test/method_name</span>.</p>
+
+<p>Besides these automatically-mapping URL's, you can map your controllers to arbitrary URL's by tapping into the <a href="./../developers/reference/link_model.html">universal links model</a>.  By registering a link with this model, you can map any URL path (such as <span class="url">/my/fake/url/path</span>) to the module > controller > method of your choice.  The URL path will be passed to your method as its first argument.  For example, in the Publish module, URL's like <span class="url">/my_article</span> are mapped to publish (module) > content (controller) > view (method).  The <span class="code">content-&gt;view()</span> method takes one argument, <span class="code">$url_path</span>, and looks up the content in the database using this <span class="code">$url_path</span>.</p>
+
+<p>As a start, your frontend controller must extend the <span class="code">Front_Controller</span> class and call its parent's constructor:</p>
+
+<pre class="code brush: php">
+
+class Any_controller_name extends Front_Controller {
+	function __construct() {
+		parent::__construct();
+	}
+}
+
+</pre>
+
+<p>If a URL maps to your controller but the method is non-existent, a 404 error will be returned.  Also, within any of your methods, you can programatically return a 404 error to the user like so:</p>
+
+<pre class="code brush: php">
+
+class Any_controller_name extends Front_Controller {
+	function __construct() {
+		parent::__construct();
+	}
+	
+	function view ($url_path) {
+		$this-&gt;load-&gt;model('modulename/module_model.php');
+		$item = $this-&gt;module_model-&gt;get_item($url_path);
+		
+		if (empty($item)) {
+			// no such item exists with that URL
+			return show_404($url_path);
+		}
+		
+		// else show the item nicely with a page...
+	}
+}
+
+</pre>
+
+<p>Frontend controllers will almost always assign variables and display templates with the Smarty template engine and API.  <a href="http://www.smarty.net">Click here for more information on Smarty</a>.</p>
+
+<h3>Frontend controllers and Smarty</h3>
+
+<p>Hero uses the <a href="./../designers/smarty.html">Smarty Template Engine</a> to display the web pages in the frontend.  Most of the advanced functionality of Smarty and Hero is covered in the <a href="./../developers/template_plugins.html">template plugins guide</a>.  Within controllers, using Smarty is simple.</p>
+
+<p>The Smarty library is accessed at <span class="code">$this-&gt;smarty</span> and includes all the functionality covered in the <a href="http://www.smarty.net">Smarty</a> documentation.</p>
+
+<p>Within the controllers, all you have to think about is assigning variables and triggering the Smarty template:</p>
+
+<pre class="code brush: php">
+
+class Any_controller_name extends Front_Controller {
+	function __construct() {
+		parent::__construct();
+	}
+	
+	function view ($url_path) {
+		$this-&gt;load-&gt;model('modulename/module_model.php');
+		$item = $this-&gt;module_model-&gt;get_item($url_path);
+		
+		if (empty($item)) {
+			// no such item exists with that URL
+			return show_404($url_path);
+		}
+		
+		$this-&gt;smarty-&gt;assign('item',$item);
+		$this-&gt;smarty-&gt;display('my_template'); // the &quot;.thtml&quot; extension is appended automatically
+	}
+}
+
+</pre>
+
+<p>Between those two simple methods, <span class="code">assign()</span> and <span class="code">display()</span>, you have all you need to know about Smarty in frontend controllers.</p>
+
+<h2>Template Plugins</h2>
+
+<p>Your module may need to add functionality to the Hero template files via template plugins (called by tags like <span class="code">{my_template_plugin}</span> in any template).  For example, you may want to create a plugin that loads data from your module and displays it in any template.</p>
+
+<p>First, create a <span class="filename">template_plugins</span> folder in your module's folder, e.g., <span class="filename">/app/modules/mymod/template_plugins/</span>.</p>
+
+<p>Second, define this folder as holding Smarty template plugins in your module definition file:</p>
+
+<pre class="code brush: php">
+
+class Modulename extends Module {
+	// ... all other module code ...
+	
+	function front_preload () {
+		$this-&gt;CI-&gt;smarty-&gt;addPluginsDir(APPPATH . 'modules/modulename/template_plugins/');
+	}
+}
+
+</pre>
+
+<p>Third, use the <a href="./../developers/template_plugins.html">template plugin development</a> documentation to create template plugin files in this folder.  These functions will immediately be available as template plugins site-wide in all your templates.</p>
+
+<h2>Automatic Processes and Cronjobs</h2>
+
+<p>If your module requires an automatic process or a cronjob be run on a scheduled basis, check out the documentation for using Hero's built-in <a href="./../developers/cronjobs.html">cronjob architecture</a>.</p>
+
+<h2>Resources</h2>
+
+<p>This guide has described the basic structure for modules, but what about the code that integrates and builds on the platform?  To find out more about tapping into Hero models and libraries, view the Reference section of this guide.  Also, check out <a href="./../developers/codeigniter.html">the section on CodeIgniter</a> to see all of the versatile libraries that you have at your disposal.</p>
+
+<p>Of course, you should also read the Hero developer <a href="./../developers/standards.html">standards and practices</a> so that your module can be easily shared with others.</p>
+
+<p>Best of luck with developing on the best web platform available!</p>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /developers-->

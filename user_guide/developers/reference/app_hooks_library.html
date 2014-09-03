@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>App Hooks Library | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent active" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>App Hooks Library</h1>
+
+<p>Hooks are system actions such as <strong>store_order</strong>, <strong>member_registration</strong>, and <strong>subscription_new</strong> that serve as possible triggers for emails or method/function calls.</p>
+
+<p>All users, even novice users, will configure for emails to be sent by adding/editing emails attached to hooks at <strong>Configuration > Emails</strong> in the control panel.  <a href="./../../configuration/emails.html">Learn more about configuring emails</a>.</p>
+
+<p>Developers and advanced users can use the App Hooks library to extend Hero's functionality beyond what it is today by tying it into third-party software, weaving new routines into the software, etc.  You can bind any <span class="code">class-&gt;method()</span> call to a hook, but you can also bind any simple <span class="code">function()</span> call as long as you specify the <span class="code">$filename</span> during your <span class="code">bind()</span> creation.</p>
+
+<p>Most hooks will automatically pass arguments to your called methods/functions.  These are not comprehensive arguments, but rather ID's that can be used to retrieve full details of the relevant system action via other methods like <span class="code">$this-&gt;invoice_model-&gt;get_invoice()</span>.</p>
+
+<h2>Default Available Hooks</h2>
+
+<p>The following hooks are available in an Hero installation, by default.  They are stored in the <span class="code">hooks</span> table of your database.</p>
+
+<ul>
+<li><strong>cron</strong> - The daily cronjob for maintenance updates.</li>
+<li><strong>coupon_validate</strong> - A coupon is attempted to be applied during checkout.  (arguments: $coupon_id)</li>
+<li><strong>mass_email</strong> - An email is sent from the control panel's Send Email function. (arguments: $recipients, $subject, $body, $queued)</li>
+<li><strong>member_change_password</strong> - A member changes their password. (arguments: $user_id, $new_password)</li>
+<li><strong>member_delete</strong> - A member account is deleted. (arguments: $user_id)</li>
+<li><strong>member_forgot_password</strong> - A member requests a new password via the "Forgot Password" feature.</li>
+<li><strong>member_login</strong> - A member logs in. (arguments: $user_id, $password)</li>
+<li><strong>member_logout</strong> - A member logs out. (arguments: $user_id)</li>
+<li><strong>member_register</strong> - A new member account is created. (arguments: $user_id, $password)</li>
+<li><strong>member_suspend</strong> - A member account is suspended. (arguments: $user_id)</li>
+<li><strong>member_update</strong> - A member account is updated. (arguments: $user_id, $old_user_data)</li>
+<li><strong>member_unsuspend</strong> - A member account is unsuspended. (arguments: $user_id)</li>
+<li><strong>member_validate_email</strong> - A member must validate their email address after registration.</li>
+<li><strong>new_content</strong> - A content item is published (arguments: $content_id)</li>
+<li><strong>new_topic</strong> - A topic is created (arguments: $topic_id)</li>
+<li><strong>store_order</strong> - An order is made from the store (includes at least one product). (arguments: $invoice_id)</li>
+<li><strong>store_order_product</strong> - A product is ordered from the store (hook called for each product). (arguments: $invoice_id, $product_id)</li>
+<li><strong>store_order_product_downloadable</strong> - A downloadable product is ordered from the store (hook called for each downloadable product). (arguments: $invoice_id, $product_id)</li>
+<li><strong>subscription_cancel</strong> - A subscription is cancelled. (arguments: $subscription_id)</li>
+<li><strong>subscription_charge</strong> - A subscription charge is made. (arguments: $invoice_id, $subscription_id)</li>
+<li><strong>subscription_expire</strong> - A subscription expires. (arguments: $subscription_id)</li>
+<li><strong>subscription_expire_1_month</strong> - A subscription will expire in 1 month. (arguments: $subscription_id)</li>
+<li><strong>subscription_expire_1_week</strong> - A subscription will expire in 1 week. (arguments: $subscription_id)</li>
+<li><strong>subscription_new</strong> - A subscription is created. (arguments: $subscription_id)</li>
+<li><strong>subscription_renew</strong> - A subscription is renewed. (arguments: $subscription_id)</li>
+<li><strong>subscription_renew_1_month</strong> - A subscription will renew in 1 month. (arguments: $subscription_id)</li>
+<li><strong>subscription_renew_1_week</strong> - A subscription will renew in 1 week. (arguments: $subscription_id)</li>
+<li><strong>subscription_renewal_failure</strong> - A subscription charge fails. (arguments: $subscription_id)</li>
+<li><strong>update_content</strong> - A content item is edited (arguments: $content_id)</li>
+<li><strong>update_topic</strong> - A topic is edited (arguments: $topic_id)</li>
+</ul>
+
+<h2>Creating New Hooks in Custom Modules</h2>
+
+<p>You can register a new hook in any of your custom module installation routines by calling this library's <span class="code">register()</span> method documented below.</p>
+
+<p>This hook can then be bound to like anything else.  Look at the <span class="code">trigger()</span> method below for how to trigger your system hooks once they've been created.  This includes adding data to the hook which can be used in emails or passed to subsequently bound method/function calls.</p>
+
+<h2>Initialization</h2>
+
+<p>This library is loaded automatically by both <span class="code">Front_controller</span> and <span class="code">Admincp_controller</span>.  So, if you are using a standard module or your new module is extending these classes (as it should!), you can access this library with:</p>
+
+<pre class="code brush: php">
+
+$this-&gt;app_hooks-&gt;...();
+
+</pre>
+
+<p>Otherwise, you'll have to load the library:</p>
+
+<pre class="code brush: php">
+
+$this-&gt;load-&gt;library('app_hooks');
+
+</pre>
+
+<h2>Method Reference</h2>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">bind</span> <span class="arguments">(string <span class="variable">$hook</span> , string <span class="variable">$class</span> , string <span class="variable">$method</span> , string <span class="variable">$filename</span>)</span></h3>
+
+<p>Bind a class/method or function to a hook.  These classes can be CodeIgniter standard models or libraries, but can also be outside classes located in other PHP files.  If you are only using a simple <span class="code">function()</span> call that is not part of a class, set <span class="code">$class</span> to FALSE.</p>
+
+<p>The <span class="code">$filename</span> should be relative to your root Hero folder.  For example, to bind a method in a library file in your new module, "my_new_module":</p>
+
+<pre class="code brush: php">
+
+$this-&gt;app_hooks-&gt;bind('member_register', 'My_library', 'create_user_in_my_app', 'app/modules/my_new_module/libraries/my_library.php');
+
+</pre>
+
+<p>Now, whenever a user registers, that library will be loaded (if not already loaded) and a call will be made by App Hooks like so:</p>
+
+<pre class="code brush: php">
+
+$this-&gt;load-&gt;library('my_new_module/my_library');
+$this-&gt;my_library-&gt;create_user_in_my_app($user_id, $password);
+
+</pre>
+
+<p>Note that two arguments were sent to your method.  These arguments are specified when triggering the hook and differ from hook to hook.  In this case, for a member registration, it makes sense to pass the user's system ID and their password (something you cannot retrieve from a <span class="code">user_model-&gt;get_user()</span> call).</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_hooks</span> <span class="arguments">()</span></h3>
+
+<p>Return an alphabetically sorted array of all hooks.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_hook</span> <span class="arguments">(string <span class="variable">$name</span>)</span></h3>
+
+<p>Return the configuration of one particular hook.  Configuration data:</p>
+
+<ul>
+<li><strong>id</strong> (arbitrary ID in the hooks table, not important)</li>
+<li><strong>name</strong></li>
+<li><strong>description</strong></li>
+<li><i>email_data</i> - An array of all potential data types available in emails (none, one, or more of "member", "product", "order", "invoice", "subscription", and "subscription_plan").</li>
+<li><i>other_email_data</i> - One off additional variables available in the emails (e.g., 'new_password' during a password change).  These are not standard variables included in one of the data types above, but unique to specific system actions.</li>
+</ul>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">register</span> <span class="arguments">(string <span class="variable">$name</span> , string <span class="variable">$description</span> , array <span class="variable">$email_data</span> , array <span class="variable">$other_email_data</span>)</span></h3>
+
+<p>Create a new hook in the system.  Configuration details are equivalent to the <span class="code">get_hook()</span> method.  This method is likely called in your <a href="./../../developers/modules.html">module definition file</a> as part of an installation/upgrade routine.</p>
+
+<pre class="code brush: php">
+
+// we are accessing the CI superobject via $this-&gt;CI because this example comes from a module definition file
+$this-&gt;CI-&gt;app_hooks-&gt;register('subscription_renewal_failure','A subscription charge fails.',array('member','subscription','subscription_plan'));
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">data</span> <span class="arguments">(string <span class="variable">$data</span> , int <span class="variable">$id</span>)</span></h3>
+
+<p>Set email data using a general datetype when calling a trigger.  This method is called potentially multiple times before a hook is triggered.  It is used to initiate the loading of standard data variables into the hook's email variable options.  For example, by simply specify <span class="code">$this-&gt;app_hooks-&gt;data('member', $member_id);</span> (assuming that member ID is valid), we are making variables like *{$member.username}*, *{$member.email}*, *{$member.first_name}*, and *{$member.last_name}* available to emails that are sent with this hook.  For more information on emails, <a href="./../../configuration/emails.html">check out the guide to configuring emails</a>.</p>
+
+<pre class="code brush: php">
+
+$this-&gt;app_hooks-&gt;data('member', $user_id);
+$this-&gt;app_hooks-&gt;data('invoice', $invoice_id);
+$this-&gt;app_hooks-&gt;trigger('paid_invoice');
+
+</pre>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">data_var</span> <span class="arguments">(string <span class="variable">$name</span> , string <span class="variable">$value</span>)</span></h3>
+
+<p>Specify a single variable to add to the email data accumulating before a hook call with <span class="code">trigger()</span>.  These are one-off variables unique to a hook, not standard data types like <strong>member</strong>, <strong>invoice</strong>, or <strong>subscription</strong>.</p>
+
+<pre class="code brush: php">
+
+$this-&gt;app_hooks-&gt;data('member', $user_id);
+$this-&gt;app_hooks-&gt;data_var('new_password', $new_password);
+$this-&gt;app_hooks-&gt;trigger('change_password');
+
+</pre>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">trigger</span> <span class="arguments">(string <span class="variable">$name</span> [, <span class="variable">$arguments</span> ])</span></h3>
+
+<p>Trigger a hook.  This will send out all emails that match the hooks current data parameters, and also trigger the calling of methods/functions bound to this hook.  If additional arguments are passed, they will be passed along to the methods/functions bound to this hook.</p>
+
+<p>This is an example of a real trigger call for the <strong>member_change_password</strong> hook:</p>
+
+<pre class="code brush: php">
+
+// load the CI superobject
+$CI =&amp; get_instance();
+
+// prep the hook with data
+$CI-&gt;app_hooks-&gt;data('member', $user_id);
+$CI-&gt;app_hooks-&gt;data_var('new_password', $new_password);
+
+// trigger with 2 additional arguments
+$CI-&gt;app_hooks-&gt;trigger('member_change_password', $user_id, $new_password);
+
+// be kind, reset the hook's data so that the next hook trigger doesn't accidentally pass email data that doesn't exist
+$CI-&gt;app_hooks-&gt;reset();
+
+</pre>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">reset</span> <span class="arguments">()</span></h3>
+
+<p>Reset the current data being attached to a hook call.</p>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /developers/reference-->

@@ -1,0 +1,810 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Global Plugins | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent active" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>Global Plugins</h1>
+
+<p>Like <a href="./../../designers/reference/global_variables.html">global variables</a>, these plugins are available for use in any template.  Of course, they aren't the only plugins you can use across your templates - the <a href="./../../designers/smarty.html">Smarty Template Engine</a> has lots of built-in plugin functionality, as well.</p>
+
+<h3 class="method">{custom_field}</h3>
+
+<p>Display a form element from a standard custom field data array for one field.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>field</td>
+			<td>Required</td>
+			<td>An array for a custom field containing data such as "name", "type", "options", etc.  This is automatically generated by Hero.</td>
+		</tr>
+		<tr>
+			<td>value</td>
+			<td>No</td>
+			<td>The current value of the field.  If no value is passed, we will attempt to retrieve a value from the current POST submission, if available.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage (assuming the template has been passed an array of custom fields as <span class="code">$custom_fields</span>):</p>
+
+<pre class="code brush: xml">
+
+{foreach $custom_fields as $field}
+	&lt;li&gt;
+		&lt;label for=&quot;field_{$field.name}&quot;&gt;{$field.friendly_name}&lt;/label&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+		{custom_field field=$field}
+	&lt;/li&gt;
+	{if $field.help}
+		&lt;li&gt;
+			&lt;div class=&quot;help&quot;&gt;{$field.help}&lt;/div&gt;
+		&lt;/li&gt;
+	{/if}
+{/foreach}
+
+</pre>
+
+<p>Usage (specifying a default value):</p>
+
+<pre class="code brush: php">
+
+{custom_field field=$field value=&quot;Predefined Value&quot;}
+
+</pre>
+
+<h3 class="method">{money_format}</h3>
+
+<p>Format a given value as if it was currency.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>value</td>
+			<td>Required</td>
+			<td>The value to format and return as a valid currency figure.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+This product costs {money_format value=$product.price}.
+
+</pre>
+
+<h3 class="method">{paginate}</h3>
+
+<p>Generate the HTML for a set of paginating links.  These links provide an easy way for users to go forward or back through a series of pages, or click through to a specific page number.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>base_url</td>
+			<td>Required</td>
+			<td>The URL upon which paginating query strings will be affixed (e.g., $current_url).</td>
+		</tr>
+		<tr>
+			<td>total_rows</td>
+			<td>Required</td>
+			<td>The total number of items in the dataset (e.g., "45" if there are 45 blog posts to paginate).</td>
+		</tr>
+		<tr>
+			<td>per_page</td>
+			<td>Required</td>
+			<td>How many items are displayed on each page?</td>
+		</tr>
+		<tr>
+			<td>variable</td>
+			<td>Required</td>
+			<td>This is the name of the variable that will be affixed to the "base_url" (e.g., if you specify "page" as the base_url, then "?page=X" will be added to this URL to denote the different pages).</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Example (being passed certain variables such as <span class="code">$total_rows</span> dynamically):</p>
+
+<pre class="code brush: php">
+
+{paginate variable=&quot;page&quot; base_url=$current_url total_rows=$total_rows per_page=&quot;50&quot;}
+
+</pre>
+
+<p>Will display:</p>
+
+<pre class="code brush: php">
+
+&lt;ul&gt;
+	&lt;li&gt;
+		&lt;a class=&quot;active&quot; href=&quot;http://www.example.com/blog?page=1&quot;&gt;1&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+		&lt;a href=&quot;http://www.example.com/blog?page=2&quot;&gt;2&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+		&lt;a href=&quot;http://www.example.com/blog?page=3&quot;&gt;3&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+		&lt;a href=&quot;http://www.example.com/blog?page=2&quot;&gt;Next&lt;/a&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
+</pre>
+
+<h3 class="method">{parse_as_template}</h3>
+
+<p>Parse the given variable as if it were a Smarty template itself.  This is highly useful for when you may be using template tags within published content.</p>
+
+<p>The variable will only be parsed as a template if the plugin auto-detects that it has Smarty variables or tags of some kind (this saves resources).</p>
+
+<p>Example:</p>
+
+<pre class="code brush: xml">
+
+// within a content template
+
+&lt;h1&gt;{$title}&lt;/h1&gt;
+
+{$body|parse_as_template}
+
+</pre>
+
+<h3 class="method">{protected_link}</h3>
+
+<p>Protect a file download URL from being shared by using this tag to generate a unique file access URL which validates the member's member group status upon each request.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>url</td>
+			<td>Yes</td>
+			<td>The URL to protect from unauthorized access.  This may be relative (e.g., "/writeable/uploads/test.pdf") or absolute (e.g., "http://www.example.com/writeable/uploads/test.pdf").</td>
+		</tr>
+		<tr>
+			<td>groups</td>
+			<td>Yes</td>
+			<td>An array of member group ID's which can access this resource.  If passed a single group (e.g., "4"), this one group alone will have access.  You may also pass multiple groups as an array variable, or like "2|5|6".</td>
+		</tr>
+		<tr>
+			<td>filename</td>
+			<td>No</td>
+			<td>If you are protecting a download, you can specify the filename of the download.  Otherwise, it will be a random alphanumeric string.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Basic usage, within a content template, where there are at least two content fields called <strong>file_download</strong> and <strong>file_size</strong> as well as standard access restrictions set in the control panel for this content:</p>
+
+<pre class="code brush: xml">
+
+&lt;a href=&quot;{protected_link url=$file_download groups=$privileges}&quot;&gt;Click here to download the file&lt;/a&gt; ({$file_size}).
+
+</pre>
+
+<p>This would return an encrypted link that would verify the user has the proper privileges every time it is accessed, preventing the user from sharing the link.</p>
+
+<p>We can also pass a filename so the user has the original name of the file:</p>
+
+<pre class="code brush: xml">
+
+&lt;a href=&quot;{protected_link url=$file_download groups=$privileges filename=&quot;report&quot;}&quot;&gt;Click here to download the file&lt;/a&gt; ({$file_size}).
+
+</pre>
+
+<h3 class="method">{restricted}</h3>
+
+<p>Display or hide certain content in a template based on the user's being in (or not being in) specified member groups.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>in_group</td>
+			<td>No</td>
+			<td>The user must be in (at least one of) this/these group(s) to see the content.  Can be a single group ID like "4", a combination of groups like "4|5|3", or an array of group ID's such as that passed by standard content like "<span class="code">{$article.privileges}</span>".</td>
+		</tr>
+		<tr>
+			<td>not_in_group</td>
+			<td>No</td>
+			<td>The user must not be (in any of) this/these group(s) to see the content.  Can be a single group ID like "4", a combination of groups like "4|5|3", or an array of group ID's such as that passed by standard content like "<span class="code">{$article.privileges}</span>".</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>If the user is in the in_group and not in the not_in_group, the content between the tags is parsed.  Both tags are optional.  Furthermore, if you want to check either the in_group or not_in_group status of the user against multiple member group ID's, you can pass a string like "1|2" (each member group ID is separated by a pipe).</p>
+
+<p>Note that, while most of the examples below show the parameters passed as integers or pipe-delimited strings, you can also pass arrays such as the standard <span class="code">{$privileges}</span> array used in many Hero modules.</p>
+
+<p>Basic usage:</p>
+
+<pre class="code brush: php">
+
+{restricted in_group=&quot;3&quot;}
+Only users in group #3 can see this.
+{/restricted}
+
+</pre>
+
+<p>Check against multiple member groups:</p>
+
+<pre class="code brush: php">
+
+{restricted in_group=&quot;1|5&quot;}
+Users in either or both groups #1 and #5 can see this.
+{/restricted}
+
+</pre>
+
+<p>User must be in a group but not in another group:</p>
+
+<pre class="code brush: php">
+
+{restricted in_group=&quot;5&quot; not_in_group=&quot;3&quot;}
+Content is only shown if user is in group #5 but no in group #3.
+{/restricted}
+
+</pre>
+
+<p>Example with a content privileges array:</p>
+
+<pre class="code brush: xml">
+
+{restricted in_group=$privileges}
+	You are in this group.  I'll show you the full article:
+	
+	{$title}
+	Published on {$date}.
+	
+	{$body}
+{/restricted}
+
+{restricted not_in_group=$privileges}
+	You are not in the group.  Sorry.
+{/restricted}
+
+</pre>
+
+<h3 class="method">{shorten}</h3>
+
+<p>Shorten a string of text to a specific length and attach "..." to the end of it.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>string</td>
+			<td>Required</td>
+			<td>The text to be shortened, either as a variable (e.g., <span class="code">{$article.body}</span>) or a text string.</td>
+		</tr>
+		<tr>
+			<td>length</td>
+			<td>Required</td>
+			<td>The maximum character count length for the string.  If the string is not greater than this length, it will be returned unaltered.  Otherwise, it will be returned shortened with "..." appended to it.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+Print a summary of the article body: {shorten length=&quot;250&quot; string=$body}
+
+</pre>
+
+<h3 class="method">{setting}</h3>
+
+<p>Retrieve a site configuration or setting value.  All standard Hero settings viewable in the control panel at Configuration > Settings.  Furthermore, all configuration variables defined in /app/config (standard CodeIgniter variables) are also available.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>name</td>
+			<td>No</td>
+			<td>The name of the setting to retrieve.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage - site title:</p>
+
+<pre class="code brush: php">
+
+{setting name=&quot;site_title}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+Your site title
+
+</pre>
+
+<p>Another example - site base URL:</p>
+
+<pre class="code brush: php">
+
+{setting name=&quot;base_url&quot;}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+http://www.yourbaseurl.com OR https://www.yourbaseurl.com, depending on SSL status
+
+</pre>
+
+<p>Final example - the site's currency symbol:</p>
+
+<pre class="code brush: xml">
+
+This product costs {setting name=&quot;currency_symbol&quot;}{$product.price}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+This product costs $45.00
+
+</pre>
+
+<h3 class="method">{theme_url}</h3>
+
+<p>Retrieve an absolute URL within your active theme's folder with a relative URL path.  Will use HTTPS if necessary.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>path</td>
+			<td>Required</td>
+			<td>The relative path within your theme folder (e.g., "js/universal.js").</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+{theme_url path=&quot;images/theme_header.gif&quot;}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+http://www.yourdomain.com/themes/yourtheme/images/theme_header.gif
+
+</pre>
+
+<h3 class="method">{thumbnail}</h3>
+
+<p>Create a thumbnail of an image and return the URL to this cached thumbnail image.</p>
+ 
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>path</td>
+			<td>Required</td>
+			<td>The full server path to the image (e.g., "/home/webuser/public_html/writeable/images/test.jpg").</td>
+		</tr>
+		<tr>
+			<td>height</td>
+			<td>Required</td>
+			<td>The maximum height of the image thumbnail.</td>
+		</tr>
+		<tr>
+			<td>width</td>
+			<td>Required</td>
+			<td>The maximum width of the image thumbnail.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>This function actually wraps the <a href="./../../developers/reference/image_thumb_helper.html">image_thumb helper</a> function.  It works with your Hero default image processing settings configured in <a href="./../../configuration/advanced.html">config.php</a>.</p>
+
+<div class="note">This function keeps the proportion of the image, using the "height" and "width" parameters as the maximums for the returned thumbnail.  So, if you resize an image with 100x100 width/height, you may get an image that is 100x80 or 95x100, etc.</div>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+{&#042; This would occur within a product page &#042;}
+&lt;img src=&quot;{thumbnail path=$image.path width=&quot;80&quot; height=&quot;80&quot;}&quot; alt=&quot;Image Thumbnail&quot; /&gt;
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+&lt;img src=&quot;http://www.example.com/writeable/image_thumbs/fsdf24r02j8paja3894dfkf8fj2a2.jpg&quot; alt=&quot;Image Thumbnail&quot; /&gt;
+
+</pre>
+
+<h3 class="method">{url}</h3>
+
+<p>Retrieve an absolute URL relative to your site's base URL.  Will use HTTPS if necessary.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>path</td>
+			<td>Required</td>
+			<td>The relative path of the link.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+{url path=&quot;my_page.html&quot;}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+http://www.yourdomain.com/my_page.html
+
+</pre>
+
+<h3 class="method">{xss_clean}</h3>
+
+<p>Cleanse a string of all XSS maliciousness for displaying in a template.</p>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="title">
+			<td colspan="3">Parameters</td>
+		</tr>
+		<tr>
+			<td class="parameter_name">Parameter</td>
+			<td class="is_required">Required?</td>
+			<td class="variable_description">Description</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>string</td>
+			<td>Required</td>
+			<td>The suspicious string.</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Usage:</p>
+
+<pre class="code brush: php">
+
+This is from a GET query parameter, so we should cleanse it: {xss_clean string=$smarty.get.test_param}
+
+</pre>
+
+<p>Returns to template:</p>
+
+<pre class="code brush: php">
+
+This is from a GET query parameter, so we should cleanse it: Parameter value
+
+</pre>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /designers/reference-->

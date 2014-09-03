@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>User Model | Hero User Guide</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript" src="./../../js/shCore.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushPhp.js"></script>
+		<script type="text/javascript" src="./../../js/shBrushXml.js"></script>
+		<script type="text/javascript" src="./../../js/user_guide.js"></script>
+		<link href="./../../css/user_guide.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shCore.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="./../../css/shThemeDefault.css" media="screen" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="header">
+			Hero <span class="sub">/ User Guide</span>
+		</div>
+		<div class="body">
+			<div id="navigation">
+				<ul>
+					<li>
+						<a rel="basic" class="parent" href="#">Basic Details</a>
+						<ul>
+							<li>
+								<a href="./../../index.html">Welcome to Hero</a>
+							</li>
+							<li>
+								<a href="./../../license.html">License Agreement</a>
+							</li>
+							<li>
+								<a href="./../../changelog.html">Changelog</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="installation" class="parent" href="#">Installation</a>
+						<ul>
+							<li>
+								<a href="./../../installation/server_requirements.html">Server Requirements</a>
+							</li>
+							<li>
+								<a href="./../../installation/installation.html">Fresh Installation</a>
+							</li>
+							<li>
+								<a href="./../../installation/upgrading.html">Upgrading</a>
+							</li>
+							<li>
+								<a href="./../../installation/migration.html">Migration</a>
+							</li>
+							<li>
+								<a href="./../../installation/troubleshooting.html">Troubleshooting</a>
+							</li>
+							<li>
+								<a href="./../../installation/deployment.html">Mass Deployment</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="configuration" class="parent" href="#">Configuration</a>
+						<ul>
+							<li>
+								<a href="./../../configuration/settings.html">Settings</a>
+							</li>
+							<li>
+								<a href="./../../configuration/coupon_codes.html">Coupon Codes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/branding.html">Custom Branding</a>
+							</li>
+							<li>
+								<a href="./../../configuration/custom_fields.html">Custom Fields</a>
+							</li>
+							<li>
+								<a href="./../../configuration/emails.html">Emails</a>
+							</li>
+							<li>
+								<a href="./../../configuration/importing_members.html">Importing Members</a>
+							</li>
+							<li>
+								<a href="./../../configuration/member_groups.html">Member Groups</a>
+							</li>
+							<li>
+								<a href="./../../configuration/payment_gateways.html">Payment Gateways</a>
+							</li>
+							<li>
+								<a href="./../../configuration/reports.html">Reports</a>
+							</li>
+							<li>
+								<a href="./../../configuration/search.html">Search</a>
+							</li>
+							<li>
+								<a href="./../../configuration/security.html">Security</a>
+							</li>
+							<li>
+								<a href="./../../configuration/shipping.html">Shipping Rates</a>
+							</li>
+							<li>
+								<a href="./../../configuration/subscriptions.html">Subscriptions</a>
+							</li>
+							<li>
+								<a href="./../../configuration/taxes.html">Taxes</a>
+							</li>
+							<li>
+								<a href="./../../configuration/advanced.html">Advanced</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a rel="publishing" class="parent" href="#">Publishing</a>
+						<ul>
+							<li><a href="./../../publishing/blogs.html">Blogs</a></li>
+							<li><a href="./../../publishing/content.html">Content &amp; Content Types</a></li>
+							<li><a href="./../../publishing/forms.html">Forms</a></li>
+							<li><a href="./../../publishing/menus.html">Navigation Menus</a></li>
+							<li><a href="./../../publishing/rss_feeds.html">RSS Feeds</a></li>
+							<li><a href="./../../publishing/store.html">Store Products &amp; Collections</a>
+							<li><a href="./../../publishing/topics.html">Topics</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="designers" class="parent" href="#">Designing</a>
+						<ul>
+							<li><a href="./../../designers/index.html">Designer Introduction</a></li>
+							<li><a href="./../../designers/smarty.html">Smarty Template Engine</a></li>
+							<li><a href="./../../designers/includes.html">Stylesheets &amp; JavaScript</a></li>
+							<li><a href="./../../designers/template_plugins.html">Template Plugins</a></li>
+							<li><a href="./../../designers/mapping_urls.html">Mapping URL's</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../designers/reference/global_variables.html">Global Variables</a></li>
+							<li class="reference"><a href="./../../designers/reference/global_plugins.html">Global Plugins</a></li>
+							<li class="reference"><a href="./../../designers/reference/blogs.html">Blogs &amp; Archives</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+							<li class="reference"><a href="./../../designers/reference/forms.html">Forms</a></li>
+							<li class="reference"><a href="./../../designers/reference/members.html">Members</a></li>
+							<li class="reference"><a href="./../../designers/reference/menus.html">Navigation Menus</a></li>
+							<li class="reference"><a href="./../../designers/reference/paywall_privileges.html">Access Restrictions &amp; Paywalls</a></li>
+							<li class="reference"><a href="./../../designers/reference/publish.html">Published Content &amp; Topics</a></li>
+							<li class="reference"><a href="./../../designers/reference/rss_feeds.html">RSS Feeds</a></li>
+							<li class="reference"><a href="./../../designers/reference/search.html">Search Forms &amp; Results</a></li>
+							<li class="reference"><a href="./../../designers/reference/store.html">Store Products &amp; Collections</a></li>
+							<li class="reference"><a href="./../../designers/reference/subscriptions.html">Subscriptions</a></li>
+							<li class="reference"><a href="./../../designers/reference/custom_fields.html">Custom Fields</a></li>
+						</ul>
+					</li>
+					<li>
+						<a rel="developers" class="parent active" href="#">Developing</a>
+						<ul>
+							<li><a href="./../../developers/index.html">Developer Introduction</a></li>
+							<li><a href="./../../developers/codeigniter.html">CodeIgniter</a></li>
+							<li><a href="./../../developers/standards.html">Standards &amp; Best Practices</a></li>
+							<li><a href="./../../developers/security.html">Security</a></li>
+							<li><a href="./../../developers/modules.html">Module Development</a></li>
+							<li><a href="./../../developers/template_plugins.html">Template Plugin Development</a></li>
+							<li><a href="./../../developers/cronjobs.html">Cronjobs &amp; Automated Processes</a></li>
+							<li><a href="./../../developers/forms.html">Forms &amp; Custom Fieldtypes</a></li>
+							<li><a href="./../../developers/errors_logging.html">Errors &amp; Logging</a></li>
+							<li><a href="./../../developers/profiling.html">Debug/Profile Mode</a></li>
+							<li class="reference">Reference</li>
+							<li class="reference"><a href="./../../developers/reference/admin_form_library.html">Admin Form Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/admin_navigation_library.html">Admin Navigation Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/app_hooks_library.html">App Hooks Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/array_to_csv_library.html">Array to CSV Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/array_to_json_helper.html">Array to JSON Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/blog_model.html">Blog Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/cart_model.html">Cart Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/clean_string_helper.html">Clean String Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/collections_mode.html">Collections Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/content_model.html">Content Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/content_type_model.html">Content Type Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/coupon_model.html">Coupon Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/custom_fields_model.html">Custom Fields Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/dataset_library.html">Dataset Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/email_model.html">Email Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/fieldtype_library.html">Fieldtype Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_builder_library.html">Form Builder Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/form_model.html">Form Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/image_thumb_helper.html">Image Thumb Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/invoice_model.html">Invoice Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/head_assets_library.html">Head Assets Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/link_model.html">Link Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/login_model.html">Login Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/menu_model.html">Menu Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/notices_library.html">Notices Library</a></li>
+							<li class="reference"><a href="./../../developers/reference/order_model.html">Order Model</a></li>  
+							<li class="reference"><a href="./../../developers/reference/products_model.html">Products Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/product_option_model.html">Product Option Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/rss_model.html">RSS Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/setting_helper.html">Setting Helper</a></li>
+							<li class="reference"><a href="./../../developers/reference/settings_model.html">Settings Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/shipping_model.html">Shipping Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/states_model.html">States Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/stats_library.html">Stats Library</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_model.html">Subscription Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/subscription_plan_model.html">Subscription Plan Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/taxes_model.html">Taxes Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/template_files_helper.html">Template Files Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/theme_model.html">Theme Model</a></li>
+							<li class="reference"><a href="./../../developers/reference/time_since_helper.html">Time Since Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/topic_model.html">Topic Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/url_helper.html">URL Helper</a></li> 
+							<li class="reference"><a href="./../../developers/reference/user_model.html">User Model</a></li> 
+							<li class="reference"><a href="./../../developers/reference/usergroup_model.html">Usergroup Model</a></li> 
+						</ul>
+						
+					</li>
+				</ul>
+			</div>
+			<div id="content">
+				<h1>User Model</h1>
+
+<p>Create, modify, retrieve, and delete member records, create and delete logged-in sessions.  This model provides a powerful API for developers to integrate and interact with the Hero user system, particularly to retrieve information about the currently logged-in user.</p>
+
+<p>This model also provides an API to access "customer" records for users.  Customer records are the billing address and name that are linked to a user's account.  These are kept apart from the user records, because billing information is often not equivalent to the member's profile data.  It also provides a separate set of data for the billing engine to use (the billing models at <span class="filename">/app/modules/billing/models/</span> will interact with customer records, not user records).</p>
+
+<h2>Initialization</h2>
+
+<p>This model is loaded automatically in both the frontend and control panel's controllers.</p>
+
+<p>It's methods are accessible as the <span class="code">user_model</span> object of the CI superobject.</p>
+
+<h2>Method Reference</h2>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">login</span> <span class="arguments">(string <span class="variable">$username</span> , string <span class="variable">$password</span> [, boolean <span class="variable">$remember</span> = FALSE])</span></h3>
+
+<p>Attempt a login by username and password.  Passing the third <span class="code">$remember</span> parameter will place a random has key cookie on the visitor's computer, linked to a database record, so that they will be auto-logged-in on their next visit (i.e., the "Remember Me" checkboxes).</p>
+
+<pre class="code brush: php">
+
+$username = $this-&gt;input-&gt;post('username');
+$password = $this-&gt;input-&gt;post('password');
+
+if ($this-&gt;user_model-&gt;login($username, $password)) {
+	redirect('home/logged_in');
+}
+else {
+	show_error('Login failed!');
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">login_by_id</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Login a user by user ID.  This method is used internally by <span class="code">login()</span> after the user's details are validated.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">logout</span> <span class="arguments">()</span></h3>
+
+<p>End the logged-in user's session.  It will also remove the user's "remember me" key set in <span class="code">login()</span>, if one exists.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">is_admin</span> <span class="arguments">()</span></h3>
+
+<p>Is the logged in user an administrator?  Returns <span class="code">FALSE</span> if the user is not an administrator of it the user isn't logged in.</p>
+
+<pre class="code brush: php">
+
+if ($this-&gt;user_model-&gt;is_admin()) {
+	echo 'Hi Admin';
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">logged_in</span> <span class="arguments">()</span></h3>
+
+<p>Is the visitor logged in?</p>
+
+<pre class="code brush: php">
+
+if (!$this-&gt;user_model-&gt;logged_in()) {
+	echo 'Please &lt;a href=&quot;' . site_url('users/login') . '&quot;&gt;login now&lt;/a&gt;';
+}
+
+</pre>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">in_group</span> <span class="arguments">(int|array <span class="variable">$group</span> [, int <span class="variable">$user_id</span> = FALSE])</span></h3>
+
+<p>Verify whether the user belongs to any of the groups in <span class="code">$group</span> array of usergroup ID numbers.  Alternatively, only one group ID can be passed as an integer.</p>
+
+<p>If the second parameter is not passed, the logged-in user will be assessed.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">not_in_group</span> <span class="arguments">(int|array <span class="variable">$group</span> [, int <span class="variable">$user_id</span> = FALSE])</span></h3>
+
+<p>Verify that the user does not belong on in any of the groups passed in the <span class="code">$group</span> array.  You may also pass only one group ID as an integer.</p>
+
+<p>If the second parameter is not passed, the logged-in user will be assessed.</p>
+
+<h3 class="method"><span class="return_type">string</span> <span class="method_name">get</span> <span class="arguments">(string <span class="variable">$parameter</span>)</span></h3>
+
+<p>Retrieve a piece of data about the logged in user.</p>
+
+<pre class="code brush: php">
+
+$username = $this-&gt;user_model-&gt;get('username');
+$email = $this-&gt;user_model-&gt;get('email');
+$user_id = $this-&gt;user_model-&gt;get('id');
+$first_name = $this-&gt;user_model-&gt;get('first_name');
+$last_name = $this-&gt;user_model-&gt;get('last_name');
+
+// also works with any custom data you might have, referenced by field name
+$school = $this-&gt;user_model-&gt;get('school');
+
+</pre>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_active_subscriptions</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Retrieve an array of all active subscriptions linked to a user's account.  If none exist, returns <span class="code">FALSE</span>.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_subscriptions</span> <span class="arguments">(int <span class="variable">$user_id</span> , array Array)</span></h3>
+
+<p>A wrapper for the <a href="./../../developers/reference/subscription_model.html">subscription model</a>'s <span class="code">get_subscriptions()</span> method that sets a user filter automatically.</p>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">get_customer_id</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Retrieve the ID of the customer record (in table <span class="code">customers</span>) linked to the user's account.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">set_charge_id</span> <span class="arguments">(int <span class="variable">$user_id</span> , int <span class="variable">$charge_id</span>)</span></h3>
+
+<p>During a 3rd party checkout (e.g., PayPal), we wait until the order is confirmed before processing the order.  So, the pending charge ID is stored in the user's record while they head off and finish the transaction.  This method sets the pending charge ID.  If they never finish the charge, it will just sit here.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">remove_charge_id</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Unset the charge ID set by <span class="code">set_charge_id()</span>.  The charge either completed successfully or never completed.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">validation</span> <span class="arguments">([boolean <span class="variable">$editing</span> = FALSE [, boolean <span class="variable">$error_array</span> = TRUE]])</span></h3>
+
+<p>Validate POST data for the creation of a new user, includes validation of custom member data fields.  Results can be returned either as an error or an HTML-formatted string.  If editing, the first parameter should be set to <span class="code">TRUE</span> so that we don't look for a unique username and email.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">validate_billing_address</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Is the billing address on file in the linked customer record valid?  In essence, is it missing any data?</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_billing_address</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Retrieve the billing address on file for this user.  It will be returned as an array of address elements ("address_1", "address_2", "city", "state", "country", "postal_code").</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">unique_email</span> <span class="arguments">(string <span class="variable">$email</span>)</span></h3>
+
+<p>Is the submitted email address unique?  Returns <span class="code">TRUE</span> if it's unique.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">unique_username</span> <span class="arguments">(string <span class="variable">$username</span>)</span></h3>
+
+<p>Is the submitted username unique?  Returns <span class="code">TRUE</span> if it's unique.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">add_group</span> <span class="arguments">(int <span class="variable">$user_id</span> , int <span class="variable">$group_id</span>)</span></h3>
+
+<p>Add the user to the group specified in <span class="code">$group_id</span>.  Users can be added to as many groups as you wish.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">remove_group</span> <span class="arguments">(int <span class="variable">$user_id</span> , int <span class="variable">$group_id</span>)</span></h3>
+
+<p>Remove a user from a group.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">resend_validation_email</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>If the user's email account is not yet validated, you can resend their validation email which has a link to validate their account.</p>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">new_user</span> <span class="arguments">(string <span class="variable">$email</span> , string <span class="variable">$password</span> , string <span class="variable">$username</span> , string <span class="variable">$first_name</span> , string <span class="variable">$last_name</span> [, array <span class="variable">$groups</span> = FALSE [, int <span class="variable">$affiliate</span> = FALSE [, boolean <span class="variable">$is_admin</span> = FALSE [, array <span class="variable">$custom_fields</span> = array() [, boolean <span class="variable">$require_validation</span> = FALSE]]]]])</span></h3>
+
+<p>Create a new user.  User records are quite simple, as you can see from the function parameters.  The user does not necessarily have to belong to any user groups.</p>
+
+<p>Custom member data can be passed as an array with name => value pairs.  This is likely generated by the <a href="./../../developers/reference/form_builder_library.html">form builder</a>'s <span class="code">post_to_array()</span> method.</p>
+
+<p>If <span class="code">$require_validation</span> is set to <span class="code">TRUE</span>, a validation key will be stored with the user's record.  By default, an email will be sent out explaining that the user must validate their email or their access will be revoked.  Indeed, this is what happens.  The user can login without validation for 24 hours but, after 24 hours, they will be denied access until the validate.  So, don't delete the email that hooks to the <strong>member_validate</strong> hook or users will have no way of confirming their email!</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li><span class="code">$email</span> - Email Address</li>
+<li><span class="code">$password</span> - Password to use</li>
+<li><span class="code">$username</span> - Username</li>
+<li><span class="code">$first_name</span> - First name</li>
+<li><span class="code">$last_name</span> - Last name</li>
+<li><span class="code">$groups</span> - Array of group ID's to be entered into (default: FALSE)</li>
+<li><span class="code">$affiliate</span> - Affiliate ID of referrer.  Ignored for now. (default: FALSE)</li>
+<li><span class="code">$is_admin</span> - Set to TRUE to make an administrator (default: fALSE)</li>
+<li><span class="code">$custom_fields</span> - An array of custom field data (default: array())</li>
+<li><span class="code">$require_validation</span> - Should we require email validation? (default: FALSE)</li>
+</ul>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">update_user</span> <span class="arguments">(int <span class="variable">$user_id</span> , string <span class="variable">$email</span> , string <span class="variable">$password</span> , string <span class="variable">$username</span> , string <span class="variable">$first_name</span> , string <span class="variable">$last_name</span> [, array <span class="variable">$groups</span> = FALSE [, boolean <span class="variable">$is_admin</span> = FALSE [, array <span class="variable">$custom_fields</span> = array()]]])</span></h3>
+
+<p>Update an existing user record.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">update_billing_address</span> <span class="arguments">(int <span class="variable">$user_id</span> , array <span class="variable">$new_address</span> )</span></h3>
+
+<p>Update a customer record with a new billing address.  Must include the keys:</p>
+
+<ul>
+<li><strong>first_name</strong></li>
+<li><strong>last_name</strong></li>
+<li><strong>address_1</strong></li>
+<li><strong>address_2</strong></li>
+<li><strong>city</strong></li>
+<li><strong>state</strong> (possibly blank, if not in the USA or Canada)</li>
+<li><strong>country</strong></li>
+<li><strong>postal_code</strong></li>
+</ul>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">delete_user</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Mark a user as deleted in the database.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">update_password</span> <span class="arguments">(int <span class="variable">$user_id</span> , string <span class="variable">$new_password</span>)</span></h3>
+
+<p>Update a user's password.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">reset_password</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Reset a password randomly.  This will trigger the <strong>member_change_password</strong> hook which, unless deleted, will send an email with the new password.</p>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">suspend_user</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Suspend a user.  This removes their ability to login.</p>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">unsuspend_user</span> <span class="arguments">(int <span class="variable">$user_id</span>)</span></h3>
+
+<p>Unsuspend a user.  Re-activate logins.</p>
+
+<h3 class="method"><span class="return_type">void</span> <span class="method_name">get_user</span> <span class="arguments">(int <span class="variable">$user_id</span> , boolean <span class="variable">$any_status</span>)</span></h3>
+
+<p>Retrieve a user record, in the format of <span class="code">get_users</span>.  If <span class="code">$any_status</span> is set to TRUE, a user record will be retrieved even if it has been deleted.</p>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">count_users</span> <span class="arguments">([array <span class="variable">$filters</span>])</span></h3>
+
+<p>Retrieve a count of the number of users who match the optional filters specified.  These filters match the <span class="code">get_users()</span> method.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_users</span> <span class="arguments">( [array <span class="variable">$filters</span> = array() [, boolean <span class="variable">$any_status</span> = FALSE ], [ boolean <span class="variable">$counting</span> = FALSE ]])</span></h3>
+
+<p>Retrieve an array of matching user records (as separate arrays) that match the optional filters.  If you specify <span class="code">$any_status</span> as TRUE, even deleted records will be matched against your filters and returned.</p>
+
+<p>Possible Filters:</p> </p>
+
+<ul>
+<li>int <strong>id</strong> - The user ID to select</li>
+<li>int <strong>group</strong> - The group ID to filter by</li>
+<li>int <strong>suspended</strong> - Set to 1 to retrieve suspended users</li>
+<li>string <strong>email</strong> - The email address to filter by</li>
+<li>string <strong>name</strong> - Search by first and last name</li>
+<li>string <strong>username</strong> - Member username</li>
+<li>string <strong>first_name</strong> - Search by first name</li>
+<li>string <strong>last_name</strong> - Search by last name</li>
+<li>date <strong>signup_start_date</strong> - Select after this signup date</li>
+<li>date <strong>signup_end_date</strong> - Select before this signup date</li>
+<li>string <strong>keyword</strong> - Search by ID, Name, Email, or Username</li>
+<li>string <strong>sort</strong> - Field to sort by</li>
+<li>string <strong>sort_dir</strong> - ASC or DESC</li>
+<li>int <strong>limit</strong> - How many records to retrieve</li>
+<li>int <strong>offset</strong> - Start records retrieval at this record</li>
+</ul>
+
+<div class="note">You may also use any member custom field name (e.g., "school_name" for a "School Name" custom field) as a search parameter.  Each comparison will be a LIKE comparison so that a school_name filter of "Cambridge" will match either "Cambridge" or "University of Cambridge", etc.</div>
+
+<p>Each user returns an array with the following data:</p>
+
+<ul>
+<li><strong>id</strong></li>
+<li><strong>is_admin</strong></li>
+<li><strong>customer_id</strong></li>
+<li><strong>usergroups</strong> - An array of usergroups that the user is part of</li>
+<li><strong>first_name</strong></li>
+<li><strong>last_name</strong></li>
+<li><strong>username</strong></li>
+<li><strong>email</strong></li>
+<li><strong>referrer</strong></li>
+<li><strong>signup_date</strong></li>
+<li><strong>last_login</strong></li>
+<li><strong>suspended</strong></li>
+<li><strong>admin_link</strong></li>
+<li><strong>remember_key</strong> - Their unique "remember me" key created by <span class="code">login()</span></li>
+<li><strong>validate_key</strong> - Their possible email validation key created by <span class="code">new_user()</span></li>
+<li><strong>cart</strong> - Their cart array, if available.  This is stored to the user record in the <a href="./../../developers/reference/cart_model.html">cart model</a>.</li>
+<li><strong>pending_charge_id</strong> - Their possible pending charge ID stored by <span class="code">set_charge_id()</span></li>
+<li>All <strong>custom member data fields</strong> will be returned with their field name as the key in the array</li>
+</ul>
+
+<h3 class="method"><span class="return_type">int</span> <span class="method_name">new_custom_field</span> <span class="arguments">(int <span class="variable">$custom_field_id</span> [, string <span class="variable">$billing_equiv</span> = '' [, boolean <span class="variable">$admin_only</span> = FALSE [, boolean <span class="variable">$registration_form</span> = TRUE]]])</span></h3>
+
+<p>After a custom field has been created in the <a href="./../../developers/reference/custom_fields_model.html">custom fields model</a>, a specific user custom field record must be created by this method because user custom fields have unique attributes.</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li><span class="code">$custom_field_id</span> - The ID corresponding to the custom field ID returned by <span class="code">new_custom_field()</span> in the <a href="./../../developers/reference/custom_fields_model.html">custom fields model</a>.</li>
+<li><span class="code">$billing_equiv</span> - If this field represents a billing address field (e.g, "address_1"), specify here:  options: address_1, address_2, state, country, postal_code, company (default: '')</li>
+<li><span class="code">$admin_only</span> - Is this an admin-only field? (default: FALSE)</li>
+<li><span class="code">$registration_form</span> - Should we show this in the registration form? (default: TRUE)</li>
+</ul>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">update_custom_field</span> <span class="arguments">(int <span class="variable">$user_field_id</span> [, string <span class="variable">$billing_equiv</span> = '' [, boolean <span class="variable">$admin_only</span> = FALSE [, boolean <span class="variable">$registration_form</span> = TRUE]]])</span></h3>
+
+<p>Update an existing user ustom field record's user field-specific attributes.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">delete_custom_field</span> <span class="arguments">(int <span class="variable">$id</span>)</span></h3>
+
+<p>Delete the corresponding user custom field record for a custom field.</p>
+
+<h3 class="method"><span class="return_type">boolean</span> <span class="method_name">get_custom_field</span> <span class="arguments">(int <span class="variable">$custom_field_id</span>)</span></h3>
+
+<p>Retrieve custom field data for a user custom field.  This is very similar to the <a href="./../../developers/reference/custom_fields_model.html">custom fields model</a> method of the same name, except that it returns the additional attributes stored by this model's <span class="code">new_custom_field()</span> method.</p>
+
+<h3 class="method"><span class="return_type">array</span> <span class="method_name">get_custom_fields</span> <span class="arguments">( [array <span class="variable">$filters</span> = array()])</span></h3>
+
+<p>Retrieve an array of user custom field data, based on optional filters.</p>
+
+<p>Possible Filters:</p>
+
+<ul>
+<li>int <strong>id</strong> - A custom field ID</li>
+<li>boolean <strong>registration_form</strong> - Set to TRUE to retrieve registration form fields</li>
+<li>boolean <strong>not_in_admin</strong> - Set to TRUE to not retrieve admin-only fields</li>
+</ul>
+
+
+			</div>
+		</div>
+	</body>
+</html>
+<!-- /developers/reference-->

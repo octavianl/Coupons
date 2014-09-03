@@ -1,0 +1,45 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+
+ERROR - 2013-04-25 02:44:06 --> Severity: Warning  --> XMLReader::open(http://lld2.linksynergy.com/services/restLinks/getProductLinks/ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746/36342/200074655/-1/1) [<a href='xmlreader.open'>xmlreader.open</a>]: failed to open stream: HTTP request failed!  /home/weblight/public_html/hero/app/modules/freedom/controllers/admincp.php 44
+ERROR - 2013-04-25 02:44:06 --> Severity: Warning  --> XMLReader::open() [<a href='xmlreader.open'>xmlreader.open</a>]: Unable to open source data /home/weblight/public_html/hero/app/modules/freedom/controllers/admincp.php 44
+ERROR - 2013-04-25 11:17:55 --> Severity: Warning  --> XMLReader::open(http://lld2.linksynergy.com/services/restLinks/getProductLinks/ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746/36342/200074655/-1/1) [<a href='xmlreader.open'>xmlreader.open</a>]: failed to open stream: HTTP request failed!  /home/weblight/public_html/hero/app/modules/freedom/controllers/admincp.php 44
+ERROR - 2013-04-25 11:17:55 --> Severity: Warning  --> XMLReader::open() [<a href='xmlreader.open'>xmlreader.open</a>]: Unable to open source data /home/weblight/public_html/hero/app/modules/freedom/controllers/admincp.php 44
+ERROR - 2013-04-25 14:27:52 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 14:30:19 --> 404 Page Not Found --> admincp/site_produse
+ERROR - 2013-04-25 14:52:27 --> 404 Page Not Found --> admincp/site_produse
+ERROR - 2013-04-25 15:01:07 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:01:10 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:02:09 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:02:12 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:04:18 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:04:22 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:05:24 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:06:16 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:09:30 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:10:41 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:10:48 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:10:52 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:10:57 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:06 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:10 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:15 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:23 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:27 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:32 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:11:37 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:12:52 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:12:55 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:13:03 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:13:08 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:13:23 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:15:46 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:17:25 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:17:33 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:17:44 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:21:55 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:22:19 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:26:19 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:29:40 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:29:46 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:29:54 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137
+ERROR - 2013-04-25 15:48:21 --> Severity: Notice  --> Undefined offset:  1 /home/weblight/public_html/hero/writeable/templates_compile/d4a1c19115f29c0506274922cedbe4204ec46924.file.frontpage.thtml.php 137

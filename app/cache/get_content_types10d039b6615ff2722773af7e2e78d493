@@ -1,0 +1,1 @@
+a:3:{s:4:"time";i:1409727501;s:3:"ttl";i:1800;s:4:"data";a:1:{i:0;a:9:{s:2:"id";s:1:"1";s:4:"name";s:4:"Blog";s:13:"singular_name";s:4:"Blog";s:11:"system_name";s:4:"blog";s:13:"is_privileged";b:1;s:11:"is_standard";b:1;s:8:"template";s:15:"blog_post.thtml";s:21:"custom_field_group_id";s:1:"2";s:8:"base_url";s:5:"blog/";}}}

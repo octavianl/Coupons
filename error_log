@@ -1,0 +1,137 @@
+[24-Jun-2012 06:48:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:48:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:23] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:23] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:49:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:23] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:23] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:50:43] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:51:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 06:51:03] PHP Fatal error:  Class 'linkshare' not found in /home/weblight/public_html/hero/app/core/MY_Loader.php on line 107
+[24-Jun-2012 07:05:32] PHP Fatal error:  Call to undefined method Magazin_model::get_magazine() in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[24-Jun-2012 15:22:26] PHP Fatal error:  Call to a member function update_categorie() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 261
+[24-Jun-2012 16:36:46] PHP Parse error:  syntax error, unexpected $end, expecting T_FUNCTION in /home/weblight/public_html/hero/app/modules/linkshare/models/categorie_model.php on line 131
+[06-Jan-2013 11:15:52] PHP Fatal error:  Call to a member function update_site() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 481
+[06-Jan-2013 11:26:17] PHP Fatal error:  Call to a member function delete_site() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 525
+[13-Jan-2013 13:43:16] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[13-Jan-2013 14:12:30] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[13-Jan-2013 14:23:49] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[23-Jan-2013 16:00:16] PHP Parse error:  syntax error, unexpected $end in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 999
+[27-Jan-2013 10:10:38] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 647
+[31-Jan-2013 17:09:27] PHP Parse error:  syntax error, unexpected T_ENCAPSED_AND_WHITESPACE, expecting T_STRING or T_VARIABLE or T_NUM_STRING in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 841
+[31-Jan-2013 17:10:07] PHP Parse error:  syntax error, unexpected T_ENCAPSED_AND_WHITESPACE, expecting T_STRING or T_VARIABLE or T_NUM_STRING in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 944
+[02-Feb-2013 13:45:08] PHP Parse error:  syntax error, unexpected ';' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1042
+[02-Feb-2013 14:13:45] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[02-Feb-2013 15:01:56] PHP Fatal error:  Call to undefined method Dataset::data() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1091
+[02-Feb-2013 15:02:43] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[02-Feb-2013 15:08:25] PHP Fatal error:  Cannot access empty property in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1091
+[02-Feb-2013 15:19:32] PHP Fatal error:  Method name must be a string in /home/weblight/public_html/hero/app/libraries/dataset.php on line 306
+[03-Feb-2013 06:32:08] PHP Fatal error:  Call to a member function get_site_name() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1042
+[03-Feb-2013 07:49:33] PHP Fatal error:  Call to undefined function  returnarray_slice() in /home/weblight/public_html/hero/app/modules/linkshare/models/magazin_model.php on line 133
+[09-Feb-2013 16:43:42] PHP Fatal error:  Call to undefined function  html_entities() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1164
+[10-Feb-2013 10:43:34] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1177
+[10-Feb-2013 10:44:40] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1178
+[10-Feb-2013 10:52:30] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1066
+[10-Feb-2013 11:01:17] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1071
+[10-Feb-2013 12:32:58] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1072
+[10-Feb-2013 12:43:58] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1072
+[10-Feb-2013 12:54:27] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1186
+[19-Feb-2013 13:09:21] PHP Fatal error:  Call to a member function get_categorie() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1359
+[19-Feb-2013 13:10:04] PHP Fatal error:  Call to a member function get_categorie() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1359
+[19-Feb-2013 13:10:58] PHP Fatal error:  Call to a member function update_categorie() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1348
+[24-Feb-2013 16:10:40] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1498
+[24-Feb-2013 16:11:38] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1498
+[24-Feb-2013 16:11:44] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1498
+[24-Feb-2013 16:11:48] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1498
+[27-Feb-2013 16:18:35] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1441
+[27-Feb-2013 16:35:08] PHP Fatal error:  Call to a member function getName() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1439
+[28-Feb-2013 11:07:05] PHP Fatal error:  Call to a member function getName() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1439
+[28-Feb-2013 13:45:13] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1471
+[28-Feb-2013 14:20:14] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1472
+[28-Feb-2013 15:55:35] PHP Fatal error:  Call to undefined method SimpleXMLElement::toString() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1448
+[25-Mar-2013 16:18:02] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 11274241 bytes) in /home/weblight/public_html/hero/app/modules/linkshare/views/list_categorii_creative.php on line 18
+[25-Mar-2013 16:41:25] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 11274241 bytes) in /home/weblight/public_html/hero/app/modules/linkshare/views/list_categorii_creative.php on line 12
+[03-Apr-2013 11:28:12] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1441
+[03-Apr-2013 11:28:22] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1441
+[03-Apr-2013 11:29:36] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[03-Apr-2013 11:29:36] PHP Parse error:  syntax error, unexpected T_STRING, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[03-Apr-2013 12:52:30] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[03-Apr-2013 12:52:30] PHP Parse error:  syntax error, unexpected T_STRING, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[03-Apr-2013 13:47:43] PHP Parse error:  syntax error, unexpected '}' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1615
+[08-Apr-2013 07:31:30] PHP Fatal error:  Call to undefined method Produs_model::exists_produs() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1614
+[08-Apr-2013 07:33:35] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 80 bytes) in /home/weblight/public_html/hero/system/database/DB_active_rec.php on line 1975
+[12-Apr-2013 15:50:25] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[12-Apr-2013 15:50:25] PHP Parse error:  syntax error, unexpected T_STRING, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1496
+[15-Apr-2013 16:58:03] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 16:59:09] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:02:46] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:03:10] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:05:55] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:06:18] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:08:01] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1549
+[15-Apr-2013 17:11:26] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1553
+[15-Apr-2013 17:13:34] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1553
+[15-Apr-2013 17:16:02] PHP Parse error:  syntax error, unexpected ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1655
+[15-Apr-2013 17:16:26] PHP Parse error:  syntax error, unexpected ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1655
+[15-Apr-2013 17:17:01] PHP Fatal error:  Call to a member function children() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1550
+[15-Apr-2013 18:00:51] PHP Fatal error:  Cannot use [] for reading in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1564
+[16-Apr-2013 02:36:57] PHP Fatal error:  Call to undefined method Produs_model::update_produs_by_linkid() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1617
+[19-Apr-2013 13:33:29] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1131
+[19-Apr-2013 14:00:37] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 461
+[19-Apr-2013 14:00:37] PHP Parse error:  syntax error, unexpected ':' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 461
+[19-Apr-2013 15:23:24] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1497
+[19-Apr-2013 15:25:06] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1497
+[19-Apr-2013 15:37:09] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1131
+[19-Apr-2013 15:38:36] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 461
+[19-Apr-2013 15:38:36] PHP Parse error:  syntax error, unexpected ':' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 461
+[19-Apr-2013 15:41:02] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1131
+[20-Apr-2013 17:05:54] PHP Fatal error:  Call to undefined method Admincp::query() in /home/weblight/public_html/hero/app/modules/linkshare/models/produs_new_model.php on line 211
+[21-Apr-2013 09:22:11] PHP Parse error:  syntax error, unexpected T_ELSEIF in /home/weblight/public_html/hero/app/modules/linkshare/views/list_produse.php on line 29
+[21-Apr-2013 09:23:53] PHP Parse error:  syntax error, unexpected T_ELSE in /home/weblight/public_html/hero/app/modules/linkshare/views/list_produse.php on line 29
+[21-Apr-2013 09:24:41] PHP Parse error:  syntax error, unexpected T_ELSE in /home/weblight/public_html/hero/app/modules/linkshare/views/list_produse.php on line 29
+[21-Apr-2013 09:46:32] PHP Fatal error:  Call to undefined method Produs_model::change_status() in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 377
+[22-Apr-2013 13:45:43] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 8192 bytes) in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1668
+[22-Apr-2013 14:15:38] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 262144 bytes) in /home/weblight/public_html/hero/system/database/DB_driver.php on line 292
+[23-Apr-2013 15:39:53] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 262144 bytes) in /home/weblight/public_html/hero/system/database/DB_driver.php on line 292
+[26-Apr-2013 19:49:27] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 3704 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_driver.php on line 550
+[28-Apr-2013 15:52:09] PHP Fatal error:  Call to a member function sterge() on a non-object in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1933
+[28-Apr-2013 16:29:56] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 4 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_result.php on line 147
+[28-Apr-2013 16:30:38] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 87 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_result.php on line 147
+[28-Apr-2013 16:31:27] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 24 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_result.php on line 147
+[28-Apr-2013 17:13:03] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 262144 bytes) in /home/weblight/public_html/hero/system/database/DB_driver.php on line 292
+[29-Apr-2013 04:01:31] PHP Parse error:  syntax error, unexpected $end in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 95
+[29-Apr-2013 05:32:52] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 562
+[29-Apr-2013 05:41:40] PHP Parse error:  syntax error, unexpected ';' in /home/weblight/public_html/hero/app/modules/linkshare/views/list_categorii_creative.php on line 2
+[29-Apr-2013 06:04:52] PHP Parse error:  syntax error, unexpected $end in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 95
+[29-Apr-2013 06:13:00] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1580
+[29-Apr-2013 06:14:37] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1580
+[29-Apr-2013 07:26:33] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 74 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_driver.php on line 489
+[29-Apr-2013 07:26:46] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 76 bytes) in /home/weblight/public_html/hero/system/database/DB_active_rec.php on line 1975
+[29-Apr-2013 07:58:28] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 74 bytes) in /home/weblight/public_html/hero/system/database/drivers/mysql/mysql_driver.php on line 489
+[29-Apr-2013 08:15:47] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 76 bytes) in /home/weblight/public_html/hero/system/database/DB_active_rec.php on line 1975
+[29-Apr-2013 16:19:48] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1207
+[04-May-2013 02:47:40] PHP Warning:  Unexpected character in input:  ''' (ASCII=39) state=1 in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1604
+[04-May-2013 02:47:40] PHP Parse error:  syntax error, unexpected T_STRING, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1604
+[04-May-2013 03:02:00] PHP Parse error:  syntax error, unexpected $end, expecting ')' in /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php on line 1604
+[09-May-2013 09:47:49] PHP Warning:  explode() [<a href='function.explode'>function.explode</a>]: Empty delimiter in /home/weblight/public_html/hero/test.php on line 10
+[09-May-2013 14:31:31] PHP Fatal error:  Non-abstract method MyClass::__construct() must contain body in /home/weblight/public_html/hero/test.php on line 8
+[09-May-2013 14:31:52] PHP Fatal error:  Call to a member function doSomething() on a non-object in /home/weblight/public_html/hero/test.php on line 18
+[09-May-2013 18:00:59] PHP Catchable fatal error:  Object of class DOMText could not be converted to string in /home/weblight/public_html/hero/test.php on line 50
+[09-May-2013 18:01:31] PHP Catchable fatal error:  Object of class DOMElement could not be converted to string in /home/weblight/public_html/hero/test.php on line 50
+[09-May-2013 18:02:45] PHP Warning:  DOMDocument::loadXML() [<a href='domdocument.loadxml'>domdocument.loadxml</a>]: Extra content at the end of the document in Entity, line: 8 in /home/weblight/public_html/hero/test.php on line 39
+[09-May-2013 18:02:45] PHP Warning:  Invalid argument supplied for foreach() in /home/weblight/public_html/hero/test.php on line 41
+[09-May-2013 18:03:18] PHP Warning:  DOMDocument::loadXML() [<a href='domdocument.loadxml'>domdocument.loadxml</a>]: Extra content at the end of the document in Entity, line: 8 in /home/weblight/public_html/hero/test.php on line 39
+[09-May-2013 18:03:18] PHP Warning:  Invalid argument supplied for foreach() in /home/weblight/public_html/hero/test.php on line 41
+[09-May-2013 18:03:19] PHP Warning:  DOMDocument::loadXML() [<a href='domdocument.loadxml'>domdocument.loadxml</a>]: Extra content at the end of the document in Entity, line: 8 in /home/weblight/public_html/hero/test.php on line 39
+[09-May-2013 18:03:19] PHP Warning:  Invalid argument supplied for foreach() in /home/weblight/public_html/hero/test.php on line 41
+[09-May-2013 18:03:33] PHP Warning:  DOMDocument::loadXML() [<a href='domdocument.loadxml'>domdocument.loadxml</a>]: Extra content at the end of the document in Entity, line: 8 in /home/weblight/public_html/hero/test.php on line 39
+[09-May-2013 18:03:33] PHP Warning:  Invalid argument supplied for foreach() in /home/weblight/public_html/hero/test.php on line 41
+[16-May-2013 07:26:54] PHP Fatal error:  Class BadTemplate contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (iTemplate::getHtml) in /home/weblight/public_html/hero/test.php on line 64
+[16-May-2013 07:28:51] PHP Fatal error:  Declaration of d::baz() must be compatible with that of b::baz() in /home/weblight/public_html/hero/test.php on line 49
+[16-May-2013 07:30:49] PHP Fatal error:  Cannot inherit previously-inherited or override constant b from interface a in /home/weblight/public_html/hero/test.php on line 37
