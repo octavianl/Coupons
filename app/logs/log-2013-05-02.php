@@ -1,8 +1,0 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
-
-ERROR - 2013-05-02 06:24:28 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php:1361) /home/weblight/public_html/hero/system/libraries/Session.php 671
-ERROR - 2013-05-02 06:24:44 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php:1361) /home/weblight/public_html/hero/system/libraries/Session.php 671
-ERROR - 2013-05-02 06:29:59 --> Severity: Notice  --> unserialize() [<a href='function.unserialize'>function.unserialize</a>]: Error at offset 0 of 66 bytes /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php 1361
-ERROR - 2013-05-02 06:29:59 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /home/weblight/public_html/hero/system/core/Exceptions.php:170) /home/weblight/public_html/hero/system/libraries/Session.php 671
-ERROR - 2013-05-02 06:30:34 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php:1362) /home/weblight/public_html/hero/system/libraries/Session.php 671
-ERROR - 2013-05-02 06:36:50 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /home/weblight/public_html/hero/app/modules/linkshare/controllers/admincp.php:1365) /home/weblight/public_html/hero/system/libraries/Session.php 671
