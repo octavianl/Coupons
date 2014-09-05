@@ -1,1 +1,3 @@
 app/logs/*
+app/cache/*
+writeable/*
