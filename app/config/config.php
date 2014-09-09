@@ -14,7 +14,7 @@
 |	http://example.com/
 |
 */
-$config['base_url'] = "http://hero.save-coupon.com/";
+$config['base_url'] = "http://coupons.dev/";
 
 // rewrite base URL to SSL if accessed via SSL
 if ($_SERVER["SERVER_PORT"] == "443" or (isset($_SERVER['https']) and $_SERVER['HTTPS'] == 'on')) {
