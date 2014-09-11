@@ -1,3 +1,9 @@
 app/logs/*
+<<<<<<< HEAD
+writeable/*
+app/cache/*
+
+=======
 app/cache/*
 writeable/*
+>>>>>>> 0782d7317f10d4ef3e7801bbcdaf7637bbbe3684
