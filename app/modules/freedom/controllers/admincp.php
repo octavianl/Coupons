@@ -20,6 +20,8 @@ class Admincp extends Admincp_Controller {
 		
 		//error_reporting(E_ALL^E_NOTICE);
 		//error_reporting(E_WARNING);
+                error_reporting(0);
+                ini_set('display_errors', 0);
 	}	
 	
 	function index () {		
@@ -59,7 +61,7 @@ class Admincp extends Admincp_Controller {
                 }
             }
             if($limit==NULL || $slice<$limit){
-                if($this->callback($subarray,&$cate)){
+                if($this->callback($subarray,$cate)){
                     $slice++;
                 }
                 unset($subarray);
@@ -84,15 +86,13 @@ class Admincp extends Admincp_Controller {
     }
 }
 
-        function xml(){
-            error_reporting(E_ALL);
-            ini_set('display_errors',1);            
+        function xml(){                   
             $file = 'http://lld2.linksynergy.com/services/restLinks/getProductLinks/ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746/35150/26/-1/1';
             $file = 'http://lld2.linksynergy.com/services/restLinks/getProductLinks/ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746/36342/200074226/-1/1';
             $file = 'http://lld2.linksynergy.com/services/restLinks/getProductLinks/ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746/36342/200074655/-1/1';
             $wrapperName = 'ns1:return';
             $cate = 1;
-            $this->xmlParse($file,$wrapperName,100,&$cate);
+            $this->xmlParse($file,$wrapperName,100,$cate);
             echo "cate = $cate<br/>";
         }
 	
