@@ -29,8 +29,8 @@
                                 <td align="center"><?=$row['sku'];?></td>
                                 <td align="center"><a href="<?=$row['click_url'];?>" target="_blank">Link</a></td>
                                 <td align="center">
-                                    <? if($row['available'] == 'yes') { ?><a href="<?= 'admincp/linkshare/change_produs_status/'.$row['id'].'/'.$url; ?>"><img src="<?=branded_include('images/ok.png');?>"/></a> <? } ?>
-                                    <? if($row['available'] == 'no'){ ?><a href="<?= 'admincp/linkshare/change_produs_status/'.$row['id'].'/'.$url; ?>"><img src="<?=branded_include('images/ko.png');?>"/></a> <?php } ?>
+                                    <?php if($row['available'] == 'yes') { ?><a href="<?= 'admincp/linkshare/change_produs_status/'.$row['id'].'/'.$url; ?>"><img src="<?=branded_include('images/ok.png');?>"/></a> <?php } ?>
+                                    <?php if($row['available'] == 'no'){ ?><a href="<?= 'admincp/linkshare/change_produs_status/'.$row['id'].'/'.$url; ?>"><img src="<?=branded_include('images/ko.png');?>"/></a> <?php } ?>
                                 </td>                                
 				<td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/edit_produs/' . $row['id']);?>">editeaza</a> 				
