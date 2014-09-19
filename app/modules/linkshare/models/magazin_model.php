@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Magazin Model
+ * Magazin Model - Manages magazine
  *
- * Manages magazine
+ * @category Admin Controller
+ * @package  Linkshare
+ * @author   Weblight <office@weblight.ro>
+ * @license  License http://www.weblight.ro/
+ * @link     http://www.weblight.ro/
  *
- * @author Weblight.ro
- * @copyright Weblight.ro
- * @package Save-Coupon
-
  */
-class Magazin_model extends CI_Model {
+
+class Magazin_model extends CI_Model
+{
 
     private $CI;
 
@@ -27,7 +29,8 @@ class Magazin_model extends CI_Model {
      *
      * @return array
      */
-    function get_magazine($filters) {
+    function get_magazine($filters)
+    {
         $row = array();
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
@@ -63,7 +66,8 @@ class Magazin_model extends CI_Model {
      *
      * @return array
      */
-    function get_magazin($id, $name = FALSE) {
+    function get_magazin($id, $name = false)
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_magazin');
@@ -90,7 +94,8 @@ class Magazin_model extends CI_Model {
      *
      * @return array
      */
-    function get_magazin_by_mid($mid, $id_site) {
+    function get_magazin_by_mid($mid, $id_site)
+    {
         $row = array();
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $id_site);
@@ -112,7 +117,8 @@ class Magazin_model extends CI_Model {
      *
      * @return array
      */
-    function get_count_produse_by_mid($mid, $id_site, $filters = array()) {
+    function get_count_produse_by_mid($mid, $id_site, $filters = array())
+    {
         /* $i = 0;
           $row = array(); */
         $this->db->where('mid', $mid);
@@ -142,7 +148,8 @@ class Magazin_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function new_magazin($insert_fields) {
+    function new_magazin($insert_fields)
+    {
         $this->db->insert('linkshare_magazin', $insert_fields);
         $insert_id = $this->db->insert_id();
 
@@ -158,7 +165,8 @@ class Magazin_model extends CI_Model {
      *
      * @return int $count
      */
-    function new_magazine($mids) {
+    function new_magazine($mids)
+    {
         $cate = count($mids);
         for ($i = 0; $i < $cate; $i++) {
             $this->db->insert('linkshare_magazin', $mids[$i]);
@@ -174,12 +182,13 @@ class Magazin_model extends CI_Model {
      * @param array $update_fields
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function update_magazin($update_fields, $id) {
+    function update_magazin($update_fields, $id)
+    {
         $this->db->update('linkshare_magazin', $update_fields, array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -189,16 +198,17 @@ class Magazin_model extends CI_Model {
      * 	
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function delete_magazin($id) {
-
+    function delete_magazin($id)
+    {
         $this->db->delete('linkshare_magazin', array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
-    function parse_magazin($params) {
+    function parse_magazin($params)
+    {
         if ($params[0]['limit'])
             $limit = $params[0]['limit'];
         else
@@ -207,19 +217,21 @@ class Magazin_model extends CI_Model {
             $offset = $params[0]['offset'];
         else
             $offset = 0;
-        return array_slice($params, $offset, $limit, TRUE);
+        return array_slice($params, $offset, $limit, true);
     }
 
     /**
      * Delete Magazin By Status	
+     * 
      * @param int $id_site	
      * @param int $id_status	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function delete_magazin_by_status($id_site, $id_status) {
+    function delete_magazin_by_status($id_site, $id_status)
+    {
         $this->db->query("DELETE FROM  linkshare_magazin WHERE id_site='$id_site' AND id_status='$id_status'");
-        return TRUE;
+        return true;
     }
 
 }

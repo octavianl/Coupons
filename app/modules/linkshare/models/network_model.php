@@ -1,20 +1,23 @@
 <?php
 
 /**
- * Network Model
+ * Network Model - Manages networks
  *
- * Manages networks
+ * @category Admin Controller
+ * @package  Linkshare
+ * @author   Weblight <office@weblight.ro>
+ * @license  License http://www.weblight.ro/
+ * @link     http://www.weblight.ro/
  *
- * @author Weblight.ro
- * @copyright Weblight.ro
- * @package Save-Coupon
-
  */
-class Network_model extends CI_Model {
+
+class Network_model extends CI_Model
+{
 
     private $CI;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         $this->CI = & get_instance();
@@ -26,7 +29,8 @@ class Network_model extends CI_Model {
      *
      * @return array
      */
-    function get_networks() {
+    function get_networks()
+    {
         $row = array();
         $result = $this->db->get('linkshare_network');
         foreach ($result->result_array() as $linie) {
@@ -43,7 +47,8 @@ class Network_model extends CI_Model {
      *
      * @return array
      */
-    function get_network($id) {
+    function get_network($id)
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_network');
@@ -64,7 +69,8 @@ class Network_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function new_network($insert_fields) {
+    function new_network($insert_fields)
+    {
         $this->db->insert('linkshare_network', $insert_fields);
         $insert_id = $this->db->insert_id();
 
@@ -79,13 +85,14 @@ class Network_model extends CI_Model {
      * @param array $update_fields
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function update_network($update_fields, $id) {
+    function update_network($update_fields, $id)
+    {
 
         $this->db->update('linkshare_network', $update_fields, array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -95,13 +102,13 @@ class Network_model extends CI_Model {
      * 	
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function delete_network($id) {
-
+    function delete_network($id)
+    {
         $this->db->delete('linkshare_network', array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
 }

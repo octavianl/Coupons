@@ -1,9 +1,16 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+* To change this template, choose Tools | Templates
+* and open the template in the editor.
+*
+* @category Admin Controller
+* @package  Linkshare
+* @author   Weblight <office@weblight.ro>
+* @license  License http://www.weblight.ro/
+* @link     http://www.weblight.ro/
+*
+**/
 
 function list_status()
 {
@@ -44,13 +51,14 @@ function list_status()
     $this->load->view('list_status');
 }
 
-function add_status() {
+function add_status()
+{
     $this->load->library('admin_form');
     $form = new Admin_form;
 
     $form->fieldset('status noua');
-    $form->text('Nume', 'name', '', 'Introduceti nume status', TRUE, 'e.g., U.S. status', TRUE);
-    $form->text('SID', 'id_status', '', 'Introduceti id status', TRUE, 'e.g., 1', TRUE);
+    $form->text('Nume', 'name', '', 'Introduceti nume status', true, 'e.g., U.S. status', true);
+    $form->text('SID', 'id_status', '', 'Introduceti id status', true, 'e.g., 1', true);
 
     $data = array(
         'form' => $form->display(),
@@ -62,23 +70,24 @@ function add_status() {
     $this->load->view('add_status', $data);
 }
 
-function add_status_validate($action = 'new', $id = false) {
+function add_status_validate($action = 'new', $id = false)
+{
     $this->load->library('form_validation');
     $this->form_validation->set_rules('name', 'Nume', 'required|trim');
     $this->form_validation->set_rules('sid', 'id status', 'required|trim');
 
-    if ($this->form_validation->run() === FALSE) {
+    if ($this->form_validation->run() === false) {
         $this->notices->SetError('Campuri obligatorii.');
-        $error = TRUE;
+        $error = true;
     }
 
     if (isset($error)) {
         if ($action == 'new') {
             redirect('admincp/linkshare/add_status');
-            return FALSE;
+            return false;
         } else {
             redirect('admincp/linkshare/edit_status/' . $id);
-            return FALSE;
+            return false;
         }
     }
 
@@ -100,10 +109,11 @@ function add_status_validate($action = 'new', $id = false) {
         redirect('admincp/linkshare/list_status/');
     }
 
-    return TRUE;
+    return true;
 }
 
-function edit_status($id) {
+function edit_status($id)
+{
     $this->load->model('status_model');
     $status = $this->status_model->get_status($id);
 
@@ -115,8 +125,8 @@ function edit_status($id) {
     $form = new Admin_form;
 
     $form->fieldset('status');
-    $form->text('Nume', 'name', $status['name'], 'Introduceti nume status.', TRUE, 'e.g., U.S. status', TRUE);
-    $form->text('SID', 'id_status', $status['id_status'], 'Introduceti status ID.', TRUE, 'e.g., approved', TRUE);
+    $form->text('Nume', 'name', $status['name'], 'Introduceti nume status.', true, 'e.g., U.S. status', true);
+    $form->text('SID', 'id_status', $status['id_status'], 'Introduceti status ID.', true, 'e.g., approved', true);
 
     $data = array(
         'form' => $form->display(),
@@ -128,7 +138,8 @@ function edit_status($id) {
     $this->load->view('add_status', $data);
 }
 
-function delete_status($contents, $return_url) {
+function delete_status($contents, $return_url)
+{
 
     $this->load->library('asciihex');
     $this->load->model('status_model');
@@ -144,7 +155,7 @@ function delete_status($contents, $return_url) {
 
     redirect($return_url);
 
-    return TRUE;
+    return true;
 }
 
 ?>

@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Site Model
+ * Site Model - Manages sites
  *
- * Manages sites
+ * @category Admin Controller
+ * @package  Linkshare
+ * @author   Weblight <office@weblight.ro>
+ * @license  License http://www.weblight.ro/
+ * @link     http://www.weblight.ro/
  *
- * @author Weblight.ro
- * @copyright Weblight.ro
- * @package Save-Coupon
-
  */
-class Site_model extends CI_Model {
+
+class Site_model extends CI_Model
+{
 
     private $CI;
 
@@ -27,7 +29,8 @@ class Site_model extends CI_Model {
      *
      * @return array
      */
-    function get_sites() {
+    function get_sites()
+    {
         $row = array();
         $result = $this->db->get('linkshare_site');
         foreach ($result->result_array() as $linie) {
@@ -44,7 +47,8 @@ class Site_model extends CI_Model {
      *
      * @return array
      */
-    function get_site($id) {
+    function get_site($id)
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_site');
@@ -63,7 +67,8 @@ class Site_model extends CI_Model {
      *
      * @return string
      */
-    function get_site_by_token($token) {
+    function get_site_by_token($token)
+    {
         $row = array();
         $this->db->where('token', $token);
         $result = $this->db->get('linkshare_site');
@@ -84,7 +89,8 @@ class Site_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function new_site($insert_fields) {
+    function new_site($insert_fields)
+    {
         $this->db->insert('linkshare_site', $insert_fields);
         $insert_id = $this->db->insert_id();
 
@@ -99,13 +105,14 @@ class Site_model extends CI_Model {
      * @param array $update_fields
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function update_site($update_fields, $id) {
+    function update_site($update_fields, $id)
+    {
 
         $this->db->update('linkshare_site', $update_fields, array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -115,13 +122,14 @@ class Site_model extends CI_Model {
      * 	
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function delete_site($id) {
+    function delete_site($id)
+    {
 
         $this->db->delete('linkshare_site', array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
 }

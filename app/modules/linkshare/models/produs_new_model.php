@@ -5,9 +5,9 @@
  *
  * Manages produs new
  *
- * @author Weblight.ro
- * @copyright Weblight.ro
- * @package Save-Coupon
+ * @author   Weblight <office@weblight.ro>
+ * @license  License http://www.weblight.ro/
+ * @link     http://www.weblight.ro/
 
  */
 class Produs_new_model extends CI_Model {
@@ -81,7 +81,8 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produs($id) {
+    function get_produs($id)
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_produs_new');
@@ -102,7 +103,8 @@ class Produs_new_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function new_produs($insert_fields) {
+    function new_produs($insert_fields)
+    {
         $this->db->insert('linkshare_produs_new', $insert_fields);
         $insert_id = $this->db->insert_id();
 
@@ -117,12 +119,13 @@ class Produs_new_model extends CI_Model {
      * @param array $update_fields
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function update_produs($update_fields, $id) {
+    function update_produs($update_fields, $id)
+    {
         $this->db->update('linkshare_produs_new', $update_fields, array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -133,12 +136,13 @@ class Produs_new_model extends CI_Model {
      * @param array $update_fields
      * @param int $linkid	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function update_produs_by_linkid($update_fields, $linkid) {
+    function update_produs_by_linkid($update_fields, $linkid)
+    {
         $this->db->update('linkshare_produs_new', $update_fields, array('linkid' => $linkid));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -148,13 +152,14 @@ class Produs_new_model extends CI_Model {
      * 	
      * @param int $id	
      *
-     * @return boolean TRUE
+     * @return boolean true
      */
-    function delete_produs($id) {
+    function delete_produs($id)
+    {
 
         $this->db->delete('linkshare_produs_new', array('id' => $id));
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -166,14 +171,15 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean
      */
-    function exists_produs($linkid) {
+    function exists_produs($linkid)
+    {
         $this->db->where('linkid', $linkid);
         $result = $this->db->get('linkshare_produs_new');
         foreach ($result->result_array() as $row) {
-            return TRUE;
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -185,7 +191,8 @@ class Produs_new_model extends CI_Model {
      *
      * @return int $i
      */
-    function mark_old($mid) {
+    function mark_old($mid)
+    {
         $i = $j = 0;
         $update_fields = array();
         $this->db->where('mid', $mid);

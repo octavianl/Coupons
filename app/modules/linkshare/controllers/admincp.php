@@ -7,8 +7,8 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  *
  * @category Admin Controller
  * @package  Linkshare
- * @author   Weblight 
- * @license  License
+ * @author   Weblight <office@weblight.ro>
+ * @license  License http://www.weblight.ro/
  * @link     http://www.weblight.ro/
  *
  */
