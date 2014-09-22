@@ -169,20 +169,20 @@ a:hover {
 	background-image: url(../images/nav_reports.png);
 }
 
-#navigation ul li.linkshare a.parent {
-	background-image: url(../images/nav_linkshare.png);
-}
-
-#navigation ul li.freedom a.parent {
-	background-image: url(../images/nav_freedom.png);
-}
-
 #navigation ul li.configuration a.parent {
 	background-image: url(../images/nav_configuration.png);
 }
 
 #navigation ul li.members a.parent {
 	background-image: url(../images/nav_members.png);
+}
+
+#navigation ul li.linkshare a.parent {
+	background-image: url(../images/nav_linkshare.png);
+}
+
+#navigation ul li.freedom a.parent {
+	background-image: url(../images/nav_freedom.png);
 }
 
 #navigation ul.children {

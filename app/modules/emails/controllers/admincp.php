@@ -120,7 +120,7 @@ class Admincp extends Admincp_Controller {
 			}
 		}
 		
-		if (empty($recipients)) {
+		if (empty($recipients) && !$this->input->post('new_template')) {
 			$this->notices->SetError('No recipients were selected.');
 			
 			return redirect('admincp/emails/send');
@@ -155,6 +155,7 @@ class Admincp extends Admincp_Controller {
 			
 			// we may be sending images with a relative link...
 			$body = str_ireplace('src="writeable/','src="' . base_url() . '/writeable/', $body);
+			$body = str_ireplace('src="/writeable/','src="' . base_url() . '/writeable/', $body);
 		
 			// send full email
 			$this->email->from(setting('site_email'), setting('site_name'));
@@ -177,6 +178,13 @@ class Admincp extends Admincp_Controller {
 		if ($this->input->post('new_template')) {
 			$this->load->model('emails/email_template_model');
 			$this->email_template_model->new_template($this->input->post('new_template_name'), $this->input->post('subject'), $this->input->post('body'), $is_html);
+		}
+		
+		// Did we only save a template and not send any emails.
+		if (empty($recipients) && $this->input->post('new_template'))
+		{
+			$this->notices->SetNotice('Email template saved.');
+			return redirect('admincp/emails/send');
 		}
 		
 		// app hook
@@ -645,13 +653,26 @@ class Admincp extends Admincp_Controller {
 	* @return string The email form view
 	*/
 	function edit_email($id) {
-		$this->load->model('billing/subscription_plan_model');
-		$this->load->model('store/products_model');
 		$this->load->model('emails/email_model');
 		
+		if (module_installed('billing')) {
+			$this->load->model('billing/subscription_plan_model');
+			$plans = $this->subscription_plan_model->get_plans();
+		}
+		else {
+			$plans = FALSE;
+		}
+		
+		
+		if (module_installed('store')) {
+			$this->load->model('store/products_model');
+			$products = $this->products_model->get_products();
+		}
+		else {
+			$products = FALSE;
+		}
+		
 		$email = $this->email_model->get_email($id);
-		$plans = $this->subscription_plan_model->get_plans();
-		$products = $this->products_model->get_products();
 		
 		// get email body from template file
 		$this->load->helper('file');
@@ -662,8 +683,8 @@ class Admincp extends Admincp_Controller {
 		$data = array(
 					'hook' => $hook,
 					'variables' => $this->email_variables($hook['email_data'], $hook['other_email_data']),
-					'products' => $products,
 					'plans' => $plans,
+					'products' => $products,
 					'form' => $email,
 					'form_title' => 'Edit Email',
 					'form_action' => site_url('admincp/emails/post_email/edit/' . $email['id'])

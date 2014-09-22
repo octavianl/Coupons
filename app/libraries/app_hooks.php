@@ -381,7 +381,7 @@ class App_hooks {
 	public function data_var ($name, $value) {
 		$this->data[$name] = $value;
 		
-		log_message('debug', 'Hook: "' . $name . '" => "' . $value . '" data registered to active hook.');
+		@log_message('debug', 'Hook: "' . $name . '" => "' . $value . '" data registered to active hook.');
 		
 		return;
 	}
@@ -643,6 +643,10 @@ class App_hooks {
 		// Build Body
 		$body = $this->CI->smarty_email->fetch($email['body_template']);
 		$this->CI->email->message($body);
+		
+		// rewrite uploaded image links to be absolute
+		$body = str_ireplace('src="writeable/','src="' . base_url() . '/writeable/', $body);
+		$body = str_ireplace('src="/writeable/','src="' . base_url() . '/writeable/', $body);
 		
 		// Send!
 		$this->CI->email->send();

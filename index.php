@@ -18,8 +18,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-    // for now development
-    define('ENVIRONMENT', 'development');
+	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -34,7 +33,7 @@ if (defined('ENVIRONMENT'))
 	switch (ENVIRONMENT)
 	{
 		case 'development':
-			error_reporting(E_ALL);
+			error_reporting(E_ALL & ~E_NOTICE);
 		break;
 	
 		case 'testing':
@@ -123,7 +122,20 @@ if (defined('ENVIRONMENT'))
  */
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
+/*
+|---------------------------------------------------------------
+| DEFAULT INI SETTINGS
+|---------------------------------------------------------------
+|
+| Necessary settings for a higher compatibility.
+|
+*/
 
+// PHP 5.3 requires this
+if(ini_get('date.timezone') == '')
+{
+	date_default_timezone_set('GMT');
+}
 
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE

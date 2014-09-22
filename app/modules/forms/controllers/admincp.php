@@ -101,6 +101,11 @@ class Admincp extends Admincp_Controller {
 		$this->dataset->datasource('form_model','get_responses', array('form_id' => $form_id));
 		$this->dataset->base_url(site_url('admincp/forms/responses'));
 		
+		// Set total rows here so we don't run out of memory 
+		// trying to pull all of our results at once.
+		$this->load->model('form_model');
+		$this->dataset->total_rows($this->form_model->count_responses($form_id, $this->dataset->get_filter_array()));
+		
 		// initialize the dataset
 		$this->dataset->initialize();
 
@@ -166,9 +171,9 @@ class Admincp extends Admincp_Controller {
 				$value = $response[$field['name']];
 				
 				// automatically parse links
-				$value = eregi_replace('(((f|ht){1}tp://)[-a-zA-Z0-9@:%_\+.~#?&//=]+)', '<a target="_blank" href="\\1">\\1</a>', $value);
-				$value = eregi_replace('([[:space:]()[{}])(www.[-a-zA-Z0-9@:%_\+.~#?&//=]+)','\\1<a target="_blank" href="http://\\2">\\2</a>', $value);
-				$value = eregi_replace('([_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,3})','<a href="mailto:\\1">\\1</a>', $value);
+				$value = preg_replace('/(http:\/\/[^ )\r\n!]+)/i', '<a target="_blank" href="\\1">\\1</a>', $value);
+				$value = preg_replace('/(https:\/\/[^ )\r\n!]+)/i', '<a target="_blank" href="\\1">\\1</a>', $value);
+				$value = preg_replace('/([_\.0-9a-z-]+@([0-9a-z][0-9a-z-]+\.)+[a-z]{2,4})/i','<a href="mailto:\\1">\\1</a>', $value);
 			}
 			
 			$lines[$field['friendly_name']] = $value;

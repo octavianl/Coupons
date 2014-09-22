@@ -5,8 +5,7 @@
 	<title><?=setting('site_name');?> | Control Panel</title>
 	<base href="<?=site_url();?>" />
 	
-	<link rel="shortcut icon" href="<?=branded_include('images/favicon.ico');?>" />
-        <link href="<?=branded_include('css/universal.css');?>" rel="stylesheet" type="text/css" media="screen" />
+	<link href="<?=branded_include('css/universal.css');?>" rel="stylesheet" type="text/css" media="screen" />
 	
 	<script type="text/javascript" src="<?=branded_include('js/jquery-1.4.2.js');?>"></script>
 	<script type="text/javascript" src="<?=branded_include('js/jquery.simplemodal.1.4.min.js');?>"></script>

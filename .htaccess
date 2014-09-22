@@ -2,8 +2,8 @@
     RewriteEngine On
     Options +FollowSymlinks
     
-    <FilesMatch "\.(txml|thtml|htaccess|htpasswd|protected)$">
-	 Order Allow,Deny
+    <FilesMatch "\.(txml|thtml|htaccess|htpasswd|protected|txt)$">
+   Order Allow,Deny
 	 Deny from all
 	</FilesMatch>
 

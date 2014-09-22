@@ -3,7 +3,7 @@
     Options +FollowSymlinks
     
     <FilesMatch "\.(txml|thtml|htaccess|htpasswd|protected|txt)$">
-	 Order Allow,Deny
+   Order Allow,Deny
 	 Deny from all
 	</FilesMatch>
 

@@ -133,7 +133,7 @@ class Admincp extends Admincp_Controller {
 		$options['email'] = array('name' => 'Email', 'type' => 'text', 'filter' => 'email', 'sort_column' => 'user_email');
 		$options['groups'] = array('name' => 'Groups', 'type' => 'select', 'options' => $usergroups, 'filter' => 'group');
 		$options['status'] = array('name' => 'Status', 'type' => 'select', 'filter' => 'suspended', 'options' => array('0' => 'Active', '1' => 'Suspended'));
-		$options['signup_date'] = array('name' => 'Signup Date', 'type' => 'date', 'sort_column' => 'user_signup_date', 'filter' => 'signup_date', 'field_start_date' => 'signup_start_date', 'field_end_date' => 'signup_end_date');
+		$options['signup_date'] = array('name' => 'Signup Date', 'type' => 'date', 'sort_column' => 'user_signup_date', 'filter' => 'signup_date', 'field_start_date' => 'signup_date_start', 'field_end_date' => 'signup_date_end');
 		
 		// custom fields
 		$custom_fields = $this->custom_fields_model->get_custom_fields(array('group' => '1'));
@@ -405,6 +405,9 @@ class Admincp extends Admincp_Controller {
 			$this->load->helper('admincp/dataset_link');
 			$url = dataset_link('admincp/reports/invoices', array('subscription_id' => $subscription_id));
 			header('Location: ' . $url);
+		}
+		elseif ($action == 'log') {
+			header('Location: ' . site_url('admincp/reports/subscription_log/' . $subscription_id));
 		}
 		
 		return TRUE;
