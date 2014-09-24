@@ -53,7 +53,7 @@ ini_set('display_errors', 'On');
 		
 		private function __construct()
 		{
-			$filepath = 'app/logs/logs.txt';
+			$filepath = FCPATH.APPPATH.'logs/logs.txt';
 
 			$this->_logFile = $filepath;
 
@@ -196,8 +196,7 @@ ini_set('display_errors', 'On');
 		}
 	}
 	
-	class LogFileCouldNotWriteException extends Exception{};
-	class LogFileCouldNotBeOpenedException extends Exception{};
-
+   class LogFileCouldNotWriteException extends \Exception {};
+   class LogFileCouldNotBeOpenedException extends \Exception {};
 
 ?>
