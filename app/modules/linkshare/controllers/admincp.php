@@ -2007,4 +2007,14 @@ class Admincp extends Admincp_Controller
         phpinfo();
     }
 
+    function logs_test()
+    {
+
+        include "app/third_party/LOG/logger.php";
+
+        $string = "hauhau";
+
+        Log::error($string);
+    }
+
 }
