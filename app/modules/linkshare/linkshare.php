@@ -40,6 +40,7 @@ class Linkshare extends Module
         $this->CI->admin_navigation->child_link('linkshare', 60, 'Export categorii presta', site_url('admincp/linkshare/export_categorii'));
         $this->CI->admin_navigation->child_link('linkshare', 70, 'Export produse presta', site_url('admincp/linkshare/export_produse'));
         $this->CI->admin_navigation->child_link('linkshare', 80, 'Purge produse linkshare', site_url('admincp/linkshare/purge_produse'));
+        $this->CI->admin_navigation->child_link('linkshare', 90, 'Logs Panel', site_url('admincp/linkshare/logs_panel'));
         //$this->CI->admin_navigation->child_link('linkshare',90,'test',site_url('admincp/linkshare/test'));
     }		
 }

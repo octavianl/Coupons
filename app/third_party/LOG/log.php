@@ -48,12 +48,12 @@ ini_set('display_errors', 'On');
 		private $_logFile;
 		private $_level = self::INFO;
 		
-		private $_newLines = '';
+		private $_newLines = array();
 		private $_fileHandle;
 		
 		private function __construct()
 		{
-			$filepath = FCPATH.APPPATH.'logs/logs.txt';
+			$filepath = FCPATH.APPPATH.'logs/logs.csv';
 
 			$this->_logFile = $filepath;
 
@@ -104,11 +104,11 @@ ini_set('display_errors', 'On');
 			self::getInstance()->Log($line, self::FATAL);
 		}
 		
-		public static function Log($line, $level)
+		protected function Log($line, $level)
 		{
 			if (self::getInstance()->_level <= $level && $level != self::OFF)
 			{
-			   self::getInstance()->_newLines .= self::getInstance()->_GetLogLine($level, $line);
+			   self::getInstance()->_newLines[] = self::getInstance()->_GetLogLine($level, $line);
 			}
 		}
 
@@ -160,15 +160,16 @@ ini_set('display_errors', 'On');
 		public function Save()
 		{
 			if (empty($this->_newLines)) return false;
-			
 			if ($this->_OpenFile())
 			{
-			    if (fwrite($this->_fileHandle , $this->_newLines) === false)
-			    {
-			        throw new LogFileCouldNotWriteException("The file could not be written to.".
-			        " Check that appropriate permissions have been set.");
-			    }
-			    $this->_newLines = '';
+				foreach ($this->_newLines as $arrNewLine) {
+				    if (fputcsv($this->_fileHandle , $arrNewLine) === false)
+				    {
+				        throw new LogFileCouldNotWriteException("The file could not be written to.".
+				        " Check that appropriate permissions have been set.");
+				    }
+				}
+			    $this->_newLines = array();
 			    $this->_CloseFile();
 			    return true;
 			}
@@ -177,11 +178,14 @@ ini_set('display_errors', 'On');
 		
 		protected function _GetLogLine($level, $message)
 		{
-			$time = date($this->dateFormat);
-			$line = str_replace(':date', $time, $this->logFormat);
-			$line = str_replace(':log_level', $this->_GetLevelName($level), $line);
-			$line = str_replace(':log_message', $message, $line);
-			return $line . PHP_EOL;
+
+			$arr = array(
+				'date' =>  date($this->dateFormat),
+				'log_level' =>  $this->_GetLevelName($level),
+				'message' => $message
+	        );
+
+			return $arr;
 		}
 		
 		protected function _GetLevelName($level) {
