@@ -13,6 +13,8 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  *
  */
 
+use app\third_party\LOG\Log;
+
 class Admincp extends Admincp_Controller
 {
     function __construct() 
@@ -2009,7 +2011,7 @@ class Admincp extends Admincp_Controller
 
     function logs_test()
     {
-        include "app/third_party/LOG/log.php";
+        include "app/third_party/LOG/Log.php";
 
         $string = "shut down";
 
