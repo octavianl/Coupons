@@ -18,6 +18,34 @@ $route['scaffolding_trigger'] = "";
 // reroute all callback/X calls to the main callback controller
 $route['callback:any'] = 'billing/callback/process';
 
+$route['admincp9/([a-zA-Z_-]+)/(:any)'] = "$1/admincp9/$2";
+$route['admincp9/([a-zA-Z_-]+)'] = "$1/admincp9/index";
+
+$route['admincp8/([a-zA-Z_-]+)/(:any)'] = "$1/admincp8/$2";
+$route['admincp8/([a-zA-Z_-]+)'] = "$1/admincp8/index";
+
+$route['admincp7/([a-zA-Z_-]+)/(:any)'] = "$1/admincp7/$2";
+$route['admincp7/([a-zA-Z_-]+)'] = "$1/admincp7/index";
+
+$route['admincp6/([a-zA-Z_-]+)/(:any)'] = "$1/admincp6/$2";
+$route['admincp6/([a-zA-Z_-]+)'] = "$1/admincp6/index";
+
+$route['admincp5/([a-zA-Z_-]+)/(:any)'] = "$1/admincp5/$2";
+$route['admincp5/([a-zA-Z_-]+)'] = "$1/admincp5/index";
+
+$route['admincp4/([a-zA-Z_-]+)/(:any)'] = "$1/admincp4/$2";
+$route['admincp4/([a-zA-Z_-]+)'] = "$1/admincp4/index";
+
+$route['admincp3/([a-zA-Z_-]+)/(:any)'] = "$1/admincp3/$2";
+$route['admincp3/([a-zA-Z_-]+)'] = "$1/admincp3/index";
+
+//second admin controller module
+$route['admincp2/([a-zA-Z_-]+)/(:any)'] = "$1/admincp2/$2";
+$route['admincp2/([a-zA-Z_-]+)'] = "$1/admincp2/index";
+
+// reroute all callback/X calls to the main callback controller
+$route['callback:any'] = 'billing/callback/process';
+
 // admin specific routes
 $route['admincp'] = 'admincp/dashboard';
 $route['admincp/dashboard/([a-zA-Z_-]+)'] = 'admincp/dashboard/$1';

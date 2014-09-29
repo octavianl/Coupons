@@ -1,6 +1,7 @@
 <?php
-
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 /**
  * Content Control Panel
@@ -17,7 +18,7 @@ use app\third_party\LOG\Log;
 
 class Admincp extends Admincp_Controller
 {
-    function __construct() 
+    public function __construct() 
     {
         parent::__construct();
 
@@ -27,15 +28,15 @@ class Admincp extends Admincp_Controller
         //error_reporting(E_WARNING);
     }
 
-    function index()
+    public function index()
     {
         redirect('admincp/linkshare/site_magazine/1');
     }
 
-    function list_categorii()
+    public function listCategories()
     {
-        $this->admin_navigation->module_link('Adauga categorie', site_url('admincp/linkshare/add_categorie'));
-        $this->admin_navigation->module_link('Parseaza categorii linkshare', site_url('admincp/linkshare/parse_categorii'));
+        $this->admin_navigation->module_link('Adauga categorie', site_url('admincp/linkshare/addCategory'));
+        $this->admin_navigation->module_link('Parseaza categorii linkshare', site_url('admincp/linkshare/parseCategories'));
 
         $this->load->library('dataset');
 
@@ -57,7 +58,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('categorie_model', 'get_categorii');
-        $this->dataset->base_url(site_url('admincp/linkshare/list_categorii'));
+        $this->dataset->base_url(site_url('admincp/linkshare/listCategories'));
         $this->dataset->rows_per_page(1000);
 
         // total rows
@@ -67,12 +68,12 @@ class Admincp extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp/linkshare/delete_categorie');
+        $this->dataset->action('Delete', 'admincp/linkshare/deleteCategory');
 
-        $this->load->view('list_categorii');
+        $this->load->view('listCategories');
     }
 
-    function add_categorie()
+    public function addCategory()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -84,14 +85,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Adauga categorie',
-            'form_action' => site_url('admincp/linkshare/add_categorie_validate'),
+            'form_action' => site_url('admincp/linkshare/addCategoryValidate'),
             'action' => 'new'
         );
 
-        $this->load->view('add_categorie', $data);
+        $this->load->view('addCategory', $data);
     }
 
-    function add_categorie_validate($action = 'new', $id = false)
+    public function addCategoryValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume', 'required|trim');
@@ -104,10 +105,10 @@ class Admincp extends Admincp_Controller
 
         if (isset($error)) {
             if ($action == 'new') {
-                redirect('admincp/linkshare/add_categorie');
+                redirect('admincp/linkshare/addCategory');
                 return false;
             } else {
-                redirect('admincp/linkshare/edit_categorie/' . $id);
+                redirect('admincp/linkshare/editCategory/' . $id);
                 return false;
             }
         }
@@ -121,18 +122,18 @@ class Admincp extends Admincp_Controller
 
             $this->notices->SetNotice('Categorie adaugata cu succes.');
 
-            redirect('admincp/linkshare/list_categorii/');
+            redirect('admincp/linkshare/listCategories/');
         } else {
             $this->categorie_model->update_categorie($fields, $id);
             $this->notices->SetNotice('Categorie actualizata cu succes.');
 
-            redirect('admincp/linkshare/list_categorii/');
+            redirect('admincp/linkshare/listCategories/');
         }
 
         return true;
     }
 
-    function edit_categorie($id)
+    public function editCategory($id)
     {
         $this->load->model('categorie_model');
         $categorie = $this->categorie_model->get_categorie($id);
@@ -151,14 +152,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Editare Categorie',
-            'form_action' => site_url('admincp/linkshare/add_categorie_validate/edit/' . $categorie['id']),
+            'form_action' => site_url('admincp/linkshare/addCategoryValidate/edit/' . $categorie['id']),
             'action' => 'edit',
         );
 
-        $this->load->view('add_categorie', $data);
+        $this->load->view('addCategory', $data);
     }
 
-    function delete_categorie($contents, $return_url)
+    public function deleteCategory($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -168,7 +169,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->categorie_model->delete_categorie($content);
+            $this->categorie_model->deleteCategory($content);
         }
 
         $this->notices->SetNotice('Categorie stearsa cu succes.');
@@ -178,7 +179,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function parseaza_categorii()
+    public function parseCategoryUrl()
     {
         $url = "http://helpcenter.linkshare.com/publisher/questions.php?questionid=709";
 
@@ -219,11 +220,11 @@ class Admincp extends Admincp_Controller
         return $categories;
     }
 
-    function parse_categorii()
+    public function parseCategories()
     {
         $this->admin_navigation->module_link('Actualizeaza categorii linkshare', site_url('admincp/linkshare/refresh_categorii/'));
 
-        $categories = $this->parseaza_categorii();
+        $categories = $this->parseCategoryUrl();
 
         $this->load->library('dataset');
 
@@ -244,7 +245,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('categorie_model', 'get_categorii_parse', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/parse_categorii'));
+        $this->dataset->base_url(site_url('admincp/linkshare/parseCategories'));
 
 
         // total rows
@@ -254,12 +255,12 @@ class Admincp extends Admincp_Controller
         $data['cate'] = $total_rows;
         $this->dataset->initialize();
 
-        $this->load->view('parse_categorii', $data);
+        $this->load->view('parseCategories', $data);
     }
 
-    function refresh_categorii() {
+    public function refresh_categorii() {
         $this->db->query("TRUNCATE TABLE linkshare_categorie");
-        $categories = $this->parseaza_categorii();
+        $categories = $this->parseCategoryUrl();
 
         foreach ($categories as $cat) {
             $this->db->query("INSERT INTO  linkshare_categorie(id_category,name) VALUES('{$cat['id_category']}','{$cat['name']}')");
@@ -270,7 +271,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('refresh_categorii', $data);
     }
 
-    function list_produse($id_site, $mid)
+    public function list_produse($id_site, $mid)
     {
         $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp/linkshare/site_magazine/' . $id_site));
 
@@ -405,7 +406,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('list_produse', $data);
     }
 
-    function change_produs_status($id_product, $ret_url)
+    public function change_produs_status($id_product, $ret_url)
     {
         $ret_url = base64_decode($ret_url);
         $this->load->model('produs_model');
@@ -413,7 +414,7 @@ class Admincp extends Admincp_Controller
         echo '<META http-equiv="refresh" content="0;URL=' . $ret_url . '">';
     }
 
-    function lista_sites()
+    public function lista_sites()
     {
         $this->admin_navigation->module_link('Adauga site', site_url('admincp/linkshare/adauga_site/'));
 
@@ -456,7 +457,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('lista_sites');
     }
 
-    function adauga_site()
+    public function adauga_site()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -476,7 +477,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_site', $data);
     }
 
-    function adauga_site_validate($action = 'new', $id = false)
+    public function adauga_site_validate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume site', 'required|trim');
@@ -518,7 +519,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function edit_site($id)
+    public function edit_site($id)
     {
         $this->load->model('site_model');
         $site = $this->site_model->get_site($id);
@@ -544,7 +545,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_site', $data);
     }
 
-    function info_site($id)
+    public function info_site($id)
     {
         $this->admin_navigation->module_link('Vezi categorii creative linkshare', site_url('admincp/linkshare/list_categorii_creative/' . $id));
         $this->admin_navigation->module_link('Vezi magazine linkshare', site_url('admincp/linkshare/site_magazine/' . $id));
@@ -563,7 +564,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('info_site', $data);
     }
 
-    function parse_categorii_site($id)
+    public function parse_categorii_site($id)
     {
         $this->admin_navigation->module_link('Actualizeaza categorii linkshare', site_url('admincp/linkshare/refresh_categorii_site/' . $id));
 
@@ -608,7 +609,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('categorie_model', 'get_categorii_parse', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/parse_categorii'));
+        $this->dataset->base_url(site_url('admincp/linkshare/parseCategories'));
 
 
         // total rows
@@ -618,10 +619,10 @@ class Admincp extends Admincp_Controller
         $data['cate'] = $total_rows;
         $this->dataset->initialize();
 
-        $this->load->view('parse_categorii', $data);
+        $this->load->view('parseCategories', $data);
     }
 
-    function delete_site($contents, $return_url)
+    public function delete_site($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -643,7 +644,7 @@ class Admincp extends Admincp_Controller
 
     /* networks */
 
-    function list_networks()
+    public function list_networks()
     {
         $this->admin_navigation->module_link('Adauga network', site_url('admincp/linkshare/add_network/'));
 
@@ -682,7 +683,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('list_networks');
     }
 
-    function add_network()
+    public function add_network()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -701,7 +702,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_network', $data);
     }
 
-    function add_network_validate($action = 'new', $id = false)
+    public function add_network_validate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume', 'required|trim');
@@ -743,7 +744,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function edit_network($id)
+    public function edit_network($id)
     {
         $this->load->model('network_model');
         $network = $this->network_model->get_network($id);
@@ -769,7 +770,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_network', $data);
     }
 
-    function delete_network($contents, $return_url)
+    public function delete_network($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -791,7 +792,7 @@ class Admincp extends Admincp_Controller
 
     /* status */
 
-    function list_status()
+    public function list_status()
     {
         $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/add_status/'));
 
@@ -833,7 +834,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('list_status');
     }
 
-    function add_status()
+    public function add_status()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -853,7 +854,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_status', $data);
     }
 
-    function add_status_validate($action = 'new', $id = false)
+    public function add_status_validate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_status', 'SID', 'required|trim');
@@ -898,7 +899,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function edit_status($id)
+    public function edit_status($id)
     {
         $this->load->model('status_model');
         $status = $this->status_model->get_status($id);
@@ -925,7 +926,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_status', $data);
     }
 
-    function delete_status($contents, $return_url)
+    public function delete_status($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -945,7 +946,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function site_magazine($id)
+    public function site_magazine($id)
     {
         $this->load->model('site_model');
         $site = $this->site_model->get_site($id);
@@ -1030,7 +1031,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('lista_magazine');
     }
 
-    function adauga_magazin()
+    public function adauga_magazin()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -1061,7 +1062,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('adauga_magazin', $data);
     }
 
-    function adauga_magazin_validate($action = 'new', $id = false)
+    public function adauga_magazin_validate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume magazin', 'required|trim');
@@ -1111,7 +1112,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function edit_magazin($id)
+    public function edit_magazin($id)
     {
         $this->load->model('magazin_model');
         $magazin = $this->magazin_model->get_magazin($id);
@@ -1145,7 +1146,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('adauga_magazin', $data);
     }
 
-    function delete_magazin($contents, $return_url)
+    public function delete_magazin($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -1165,7 +1166,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function parseaza_magazin($token, $status)
+    public function parseaza_magazin($token, $status)
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);
@@ -1282,7 +1283,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('lista_magazine_parsate');
     }
 
-    function parseaza_magazin_add($token, $status)
+    public function parseaza_magazin_add($token, $status)
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);            
@@ -1351,7 +1352,7 @@ class Admincp extends Admincp_Controller
         redirect('admincp/linkshare/site_magazine/' . $id_site);
     }
 
-    function list_categorii_creative($id = 1)
+    public function list_categorii_creative($id = 1)
     {
         $this->admin_navigation->module_link('Adauga categorie creative', site_url('admincp/linkshare/add_categorie_creative'));
         $this->admin_navigation->module_link('Parseaza categorii creative linkshare si adauga in db', site_url('admincp/linkshare/parse_categorie_creative/' . $id));
@@ -1423,7 +1424,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('list_categorii_creative');
     }
 
-    function add_categorie_creative()
+    public function add_categorie_creative()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -1445,7 +1446,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_categorie_creative', $data);
     }
 
-    function add_categorie_creative_validate($action = 'new', $id = false)
+    public function add_categorie_creative_validate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume', 'required|trim');
@@ -1490,7 +1491,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function edit_categorie_creative($id)
+    public function edit_categorie_creative($id)
     {
         $this->load->model('categorie_creative_model');
         $categorie = $this->categorie_creative_model->get_categorie($id);
@@ -1519,7 +1520,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('add_categorie_creative', $data);
     }
 
-    function delete_categorie_creative($contents, $return_url)
+    public function delete_categorie_creative($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -1529,7 +1530,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->categorie_creative_model->delete_categorie($content);
+            $this->categorie_creative_model->deleteCategory($content);
         }
 
         $this->notices->SetNotice('Categorie creative stearsa cu succes.');
@@ -1539,7 +1540,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    function parse_categorie_creative($id)
+    public function parse_categorie_creative($id)
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);
@@ -1636,7 +1637,7 @@ class Admincp extends Admincp_Controller
         $catz[0]['cate'] = $cate;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('categorie_creative_model', 'parse_categorii', $catz);
+        $this->dataset->datasource('categorie_creative_model', 'parseCategories', $catz);
         $this->dataset->base_url(site_url('admincp/linkshare/parse_categorie_creative/' . $id));
         $this->dataset->rows_per_page(10);
 
@@ -1649,7 +1650,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('list_categorii_creative_parsate');
     }
 
-    function parse_product_search($id, $mid, $creative_cat_id = 0)
+    public function parse_product_search($id, $mid, $creative_cat_id = 0)
     {
         error_reporting(E_ERROR);
         $aux = '';
@@ -1791,7 +1792,7 @@ class Admincp extends Admincp_Controller
         die;
     }
 
-    function parse_product_xml_reader_search($id, $mid, $creative_cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0)
+    public function parse_product_xml_reader_search($id, $mid, $creative_cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0)
     {
         error_reporting(E_ERROR);
         $aux = '';
@@ -2004,55 +2005,9 @@ class Admincp extends Admincp_Controller
         $this->load->view('parse_product_search', $data);
     }
 
-    function test()
+    public function test()
     {
         phpinfo();
     }
 
-    function logs_test()
-    {
-        include "app/third_party/LOG/Log.php";
-
-        $string = "shut down";
-
-        Log::warn($string);
-    }
-
-/**
- * Logs panel
- */
-
-    function logs_panel()
-    {
-        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp/linkshare/logs_panel'));
-
-        $this->load->library('dataset');
-
-        $columns = array(
-            array(
-                'name' => 'Row No',
-                'width' => '10%'),
-            array(
-                'name' => 'Date & Time',
-                'width' => '20%'),
-            array(
-                'name' => 'Log Level',
-                'width' => '20%'),
-            array(
-                'name' => 'Message',
-                'width' => '50%'
-            )
-        );
-
-        $this->dataset->datasource('log_model', 'get_logs');
-
-        $this->dataset->columns($columns);
-
-        $this->dataset->base_url(site_url('admincp/linkshare/logs_panel'));
-        $this->dataset->rows_per_page(10);
-
-        $this->dataset->initialize();
-        $this->load->view('logs_panel');
-
-    }
 }

@@ -139,7 +139,7 @@ class Categorie_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_categorie($id)
+    function deleteCategory($id)
     {
 
         $this->db->delete('linkshare_categorie', array('id' => $id));

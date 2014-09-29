@@ -192,7 +192,7 @@ class Categorie_creative_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_categorie($id)
+    function deleteCategory($id)
     {
         $this->db->delete('linkshare_categorie_creative', array('id' => $id));
 
@@ -215,7 +215,7 @@ class Categorie_creative_model extends CI_Model
         return $filters['categories'];
     }
 
-    function parse_categorii($params)
+    function parseCategories($params)
     {
         if (isset($params[0]['limit']))
             $limit = $params[0]['limit'];
