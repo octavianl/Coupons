@@ -12,10 +12,10 @@
                                 <td align="center"><?=$row['name'];?></td>
 				<td align="center"><?=$row['token'];?></td>                               
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/edit_site/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp/linkshare/editSite/' . $row['id']);?>">editeaza</a> 				
 				</td>
                                 <td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/info_site/' . $row['id']);?>">info</a> 				
+					<a href="<?=site_url('admincp/linkshare/infoSite/' . $row['id']);?>">info</a> 				
 				</td>
 			</tr>
 		<?

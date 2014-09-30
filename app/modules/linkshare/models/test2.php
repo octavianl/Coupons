@@ -103,7 +103,7 @@ class Status_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_status($id)
+    function deleteStatus($id)
     {
         $this->db->delete('linkshare_status', array('id' => $id));
 

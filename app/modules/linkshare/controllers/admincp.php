@@ -222,7 +222,7 @@ class Admincp extends Admincp_Controller
 
     public function parseCategories()
     {
-        $this->admin_navigation->module_link('Actualizeaza categorii linkshare', site_url('admincp/linkshare/refresh_categorii/'));
+        $this->admin_navigation->module_link('Actualizeaza categorii linkshare', site_url('admincp/linkshare/refreshCategories/'));
 
         $categories = $this->parseCategoryUrl();
 
@@ -258,7 +258,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('parseCategories', $data);
     }
 
-    public function refresh_categorii() {
+    public function refreshCategories() {
         $this->db->query("TRUNCATE TABLE linkshare_categorie");
         $categories = $this->parseCategoryUrl();
 
@@ -268,10 +268,10 @@ class Admincp extends Admincp_Controller
 
         $data['cate'] = count($categories);
 
-        $this->load->view('refresh_categorii', $data);
+        $this->load->view('refreshCategories', $data);
     }
 
-    public function list_produse($id_site, $mid)
+    public function listProducts($id_site, $mid)
     {
         $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp/linkshare/site_magazine/' . $id_site));
 
@@ -376,7 +376,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('produs_model', 'get_produse_by_mid', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/list_produse/' . $id_site . '/' . $mid));
+        $this->dataset->base_url(site_url('admincp/linkshare/listProducts/' . $id_site . '/' . $mid));
         $this->dataset->rows_per_page(20);
 
         $this->load->model('magazin_model');
@@ -403,7 +403,7 @@ class Admincp extends Admincp_Controller
             'magazin' => $magazin
         );
 
-        $this->load->view('list_produse', $data);
+        $this->load->view('listProducts', $data);
     }
 
     public function change_produs_status($id_product, $ret_url)
@@ -414,9 +414,9 @@ class Admincp extends Admincp_Controller
         echo '<META http-equiv="refresh" content="0;URL=' . $ret_url . '">';
     }
 
-    public function lista_sites()
+    public function listSites()
     {
-        $this->admin_navigation->module_link('Adauga site', site_url('admincp/linkshare/adauga_site/'));
+        $this->admin_navigation->module_link('Adauga site', site_url('admincp/linkshare/addSite/'));
 
         $this->load->library('dataset');
 
@@ -442,7 +442,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('site_model', 'get_sites');
-        $this->dataset->base_url(site_url('admincp/linkshare/lista_sites'));
+        $this->dataset->base_url(site_url('admincp/linkshare/listSites'));
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -452,12 +452,12 @@ class Admincp extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        //$this->dataset->action('Delete','admincp/linkshare/delete_site');
+        //$this->dataset->action('Delete','admincp/linkshare/deleteSite');
 
-        $this->load->view('lista_sites');
+        $this->load->view('listSites');
     }
 
-    public function adauga_site()
+    public function addSite()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -470,14 +470,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Adauga site',
-            'form_action' => site_url('admincp/linkshare/adauga_site_validate'),
+            'form_action' => site_url('admincp/linkshare/addSiteValidate'),
             'action' => 'new'
         );
 
-        $this->load->view('add_site', $data);
+        $this->load->view('addSite', $data);
     }
 
-    public function adauga_site_validate($action = 'new', $id = false)
+    public function addSiteValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume site', 'required|trim');
@@ -490,10 +490,10 @@ class Admincp extends Admincp_Controller
 
         if (isset($error)) {
             if ($action == 'new') {
-                redirect('admincp/linkshare/adauga_site');
+                redirect('admincp/linkshare/addSite');
                 return false;
             } else {
-                redirect('admincp/linkshare/edit_site/' . $id);
+                redirect('admincp/linkshare/editSite/' . $id);
                 return false;
             }
         }
@@ -508,18 +508,18 @@ class Admincp extends Admincp_Controller
 
             $this->notices->SetNotice('Site adaugat cu succes.');
 
-            redirect('admincp/linkshare/lista_sites/');
+            redirect('admincp/linkshare/listSites/');
         } else {
             $this->site_model->update_site($fields, $id);
             $this->notices->SetNotice('Site actualizat cu succes.');
 
-            redirect('admincp/linkshare/lista_sites/');
+            redirect('admincp/linkshare/listSites/');
         }
 
         return true;
     }
 
-    public function edit_site($id)
+    public function editSite($id)
     {
         $this->load->model('site_model');
         $site = $this->site_model->get_site($id);
@@ -538,17 +538,17 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Editare site',
-            'form_action' => site_url('admincp/linkshare/adauga_site_validate/edit/' . $site['id']),
+            'form_action' => site_url('admincp/linkshare/addSiteValidate/edit/' . $site['id']),
             'action' => 'edit',
         );
 
-        $this->load->view('add_site', $data);
+        $this->load->view('addSite', $data);
     }
 
-    public function info_site($id)
+    public function infoSite($id)
     {
         $this->admin_navigation->module_link('Vezi categorii creative linkshare', site_url('admincp/linkshare/list_categorii_creative/' . $id));
-        $this->admin_navigation->module_link('Vezi magazine linkshare', site_url('admincp/linkshare/site_magazine/' . $id));
+        $this->admin_navigation->module_link('Vezi magazine linkshare', site_url('admincp/linkshare/siteAdvertisers/' . $id));
         $this->admin_navigation->module_link('Vezi produse linkshare', site_url('admincp/linkshare/site_produse/' . $id));
 
         $this->load->model('site_model');
@@ -561,7 +561,7 @@ class Admincp extends Admincp_Controller
         $data = array();
         $data['name'] = $site['name'];
 
-        $this->load->view('info_site', $data);
+        $this->load->view('infoSite', $data);
     }
 
     public function parse_categorii_site($id)
@@ -581,12 +581,6 @@ class Admincp extends Admincp_Controller
             echo $child->mid . '<br/>';
             echo $child->nid . '<br/>----<br/>';
         }
-
-
-
-
-
-
 
         die;
 
@@ -622,7 +616,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('parseCategories', $data);
     }
 
-    public function delete_site($contents, $return_url)
+    public function deleteSite($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -632,7 +626,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->site_model->delete_site($content);
+            $this->site_model->deleteSite($content);
         }
 
         $this->notices->SetNotice('Site(-uri) sters(e) cu succes.');
@@ -644,9 +638,9 @@ class Admincp extends Admincp_Controller
 
     /* networks */
 
-    public function list_networks()
+    public function listNetworks()
     {
-        $this->admin_navigation->module_link('Adauga network', site_url('admincp/linkshare/add_network/'));
+        $this->admin_navigation->module_link('Adauga network', site_url('admincp/linkshare/addNetwork/'));
 
         $this->load->library('dataset');
 
@@ -668,7 +662,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('network_model', 'get_networks');
-        $this->dataset->base_url(site_url('admincp/linkshare/list_networks'));
+        $this->dataset->base_url(site_url('admincp/linkshare/listNetworks'));
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -678,12 +672,12 @@ class Admincp extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp/linkshare/delete_network');
+        $this->dataset->action('Delete', 'admincp/linkshare/deleteNetwork');
 
-        $this->load->view('list_networks');
+        $this->load->view('listNetworks');
     }
 
-    public function add_network()
+    public function addNetwork()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -695,14 +689,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Adauga network',
-            'form_action' => site_url('admincp/linkshare/add_network_validate'),
+            'form_action' => site_url('admincp/linkshare/addNetworkValidate'),
             'action' => 'new'
         );
 
-        $this->load->view('add_network', $data);
+        $this->load->view('addNetwork', $data);
     }
 
-    public function add_network_validate($action = 'new', $id = false)
+    public function addNetworkValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume', 'required|trim');
@@ -715,10 +709,10 @@ class Admincp extends Admincp_Controller
 
         if (isset($error)) {
             if ($action == 'new') {
-                redirect('admincp/linkshare/add_network');
+                redirect('admincp/linkshare/addNetwork');
                 return false;
             } else {
-                redirect('admincp/linkshare/edit_network/' . $id);
+                redirect('admincp/linkshare/editNetwork/' . $id);
                 return false;
             }
         }
@@ -733,18 +727,18 @@ class Admincp extends Admincp_Controller
 
             $this->notices->SetNotice('Network adaugata cu succes.');
 
-            redirect('admincp/linkshare/list_networks/');
+            redirect('admincp/linkshare/listNetworks/');
         } else {
             $this->network_model->update_network($fields, $id);
             $this->notices->SetNotice('network actualizata cu succes.');
 
-            redirect('admincp/linkshare/list_networks/');
+            redirect('admincp/linkshare/listNetworks/');
         }
 
         return true;
     }
 
-    public function edit_network($id)
+    public function editNetwork($id)
     {
         $this->load->model('network_model');
         $network = $this->network_model->get_network($id);
@@ -763,14 +757,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Editare network',
-            'form_action' => site_url('admincp/linkshare/add_network_validate/edit/' . $network['id']),
+            'form_action' => site_url('admincp/linkshare/addNetworkValidate/edit/' . $network['id']),
             'action' => 'edit',
         );
 
-        $this->load->view('add_network', $data);
+        $this->load->view('addNetwork', $data);
     }
 
-    public function delete_network($contents, $return_url)
+    public function deleteNetwork($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -780,7 +774,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->network_model->delete_network($content);
+            $this->network_model->deleteNetwork($content);
         }
 
         $this->notices->SetNotice('network stearsa cu succes.');
@@ -792,9 +786,9 @@ class Admincp extends Admincp_Controller
 
     /* status */
 
-    public function list_status()
+    public function listStatus()
     {
-        $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/add_status/'));
+        $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/addStatus/'));
 
         $this->load->library('dataset');
 
@@ -819,7 +813,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('status_model', 'get_statuses');
-        $this->dataset->base_url(site_url('admincp/linkshare/list_status'));
+        $this->dataset->base_url(site_url('admincp/linkshare/listStatus'));
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -829,12 +823,12 @@ class Admincp extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp/linkshare/delete_status');
+        $this->dataset->action('Delete', 'admincp/linkshare/deleteStatus');
 
-        $this->load->view('list_status');
+        $this->load->view('listStatus');
     }
 
-    public function add_status()
+    public function addStatus()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -847,14 +841,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Adauga status',
-            'form_action' => site_url('admincp/linkshare/add_status_validate'),
+            'form_action' => site_url('admincp/linkshare/addStatusValidate'),
             'action' => 'new'
         );
 
-        $this->load->view('add_status', $data);
+        $this->load->view('addStatus', $data);
     }
 
-    public function add_status_validate($action = 'new', $id = false)
+    public function addStatusValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_status', 'SID', 'required|trim');
@@ -868,10 +862,10 @@ class Admincp extends Admincp_Controller
 
         if (isset($error)) {
             if ($action == 'new') {
-                redirect('admincp/linkshare/add_status');
+                redirect('admincp/linkshare/addStatus');
                 return false;
             } else {
-                redirect('admincp/linkshare/edit_status/' . $id);
+                redirect('admincp/linkshare/editStatus/' . $id);
                 return false;
             }
         }
@@ -888,18 +882,18 @@ class Admincp extends Admincp_Controller
 
             $this->notices->SetNotice('status adaugat cu succes.');
 
-            redirect('admincp/linkshare/list_status/');
+            redirect('admincp/linkshare/listStatus/');
         } else {
             $this->status_model->update_status($fields, $id);
             $this->notices->SetNotice('status actualizat cu succes.');
 
-            redirect('admincp/linkshare/list_status/');
+            redirect('admincp/linkshare/listStatus/');
         }
 
         return true;
     }
 
-    public function edit_status($id)
+    public function editStatus($id)
     {
         $this->load->model('status_model');
         $status = $this->status_model->get_status($id);
@@ -919,14 +913,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Editare status',
-            'form_action' => site_url('admincp/linkshare/add_status_validate/edit/' . $status['id']),
+            'form_action' => site_url('admincp/linkshare/addStatusValidate/edit/' . $status['id']),
             'action' => 'edit',
         );
 
-        $this->load->view('add_status', $data);
+        $this->load->view('addStatus', $data);
     }
 
-    public function delete_status($contents, $return_url)
+    public function deleteStatus($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -936,7 +930,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->status_model->delete_status($content);
+            $this->status_model->deleteStatus($content);
         }
 
         $this->notices->SetNotice('status sters cu succes.');

@@ -104,7 +104,7 @@ class Network_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_network($id)
+    function deleteNetwork($id)
     {
         $this->db->delete('linkshare_network', array('id' => $id));
 

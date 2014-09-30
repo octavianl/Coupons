@@ -12,9 +12,9 @@
 *
 **/
 
-function list_status()
+function listStatus()
 {
-    $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/add_status/'));
+    $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/addStatus/'));
 
     $this->load->library('dataset');
 
@@ -36,7 +36,7 @@ function list_status()
 
     $this->dataset->columns($columns);
     $this->dataset->datasource('status_model', 'get_statuses');
-    $this->dataset->base_url(site_url('admincp/linkshare/list_status'));
+    $this->dataset->base_url(site_url('admincp/linkshare/listStatus'));
     $this->dataset->rows_per_page(10);
 
     // total rows
@@ -46,12 +46,12 @@ function list_status()
     $this->dataset->initialize();
 
     // add actions
-    $this->dataset->action('Delete', 'admincp/linkshare/delete_status');
+    $this->dataset->action('Delete', 'admincp/linkshare/deleteStatus');
 
-    $this->load->view('list_status');
+    $this->load->view('listStatus');
 }
 
-function add_status()
+function addStatus()
 {
     $this->load->library('admin_form');
     $form = new Admin_form;
@@ -63,14 +63,14 @@ function add_status()
     $data = array(
         'form' => $form->display(),
         'form_title' => 'Adauga status',
-        'form_action' => site_url('admincp/linkshare/add_status_validate'),
+        'form_action' => site_url('admincp/linkshare/addStatusValidate'),
         'action' => 'new'
     );
 
-    $this->load->view('add_status', $data);
+    $this->load->view('addStatus', $data);
 }
 
-function add_status_validate($action = 'new', $id = false)
+function addStatusValidate($action = 'new', $id = false)
 {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('name', 'Nume', 'required|trim');
@@ -83,10 +83,10 @@ function add_status_validate($action = 'new', $id = false)
 
     if (isset($error)) {
         if ($action == 'new') {
-            redirect('admincp/linkshare/add_status');
+            redirect('admincp/linkshare/addStatus');
             return false;
         } else {
-            redirect('admincp/linkshare/edit_status/' . $id);
+            redirect('admincp/linkshare/editStatus/' . $id);
             return false;
         }
     }
@@ -101,18 +101,18 @@ function add_status_validate($action = 'new', $id = false)
 
         $this->notices->SetNotice('status adaugat cu succes.');
 
-        redirect('admincp/linkshare/list_status/');
+        redirect('admincp/linkshare/listStatus/');
     } else {
         $this->status_model->update_status($fields, $id);
         $this->notices->SetNotice('status actualizat cu succes.');
 
-        redirect('admincp/linkshare/list_status/');
+        redirect('admincp/linkshare/listStatus/');
     }
 
     return true;
 }
 
-function edit_status($id)
+function editStatus($id)
 {
     $this->load->model('status_model');
     $status = $this->status_model->get_status($id);
@@ -131,14 +131,14 @@ function edit_status($id)
     $data = array(
         'form' => $form->display(),
         'form_title' => 'Editare status',
-        'form_action' => site_url('admincp/linkshare/add_status_validate/edit/' . $status['id_status']),
+        'form_action' => site_url('admincp/linkshare/addStatusValidate/edit/' . $status['id_status']),
         'action' => 'edit',
     );
 
-    $this->load->view('add_status', $data);
+    $this->load->view('addStatus', $data);
 }
 
-function delete_status($contents, $return_url)
+function deleteStatus($contents, $return_url)
 {
 
     $this->load->library('asciihex');
@@ -148,7 +148,7 @@ function delete_status($contents, $return_url)
     $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
     foreach ($contents as $content) {
-        $this->status_model->delete_status($content);
+        $this->status_model->deleteStatus($content);
     }
 
     $this->notices->SetNotice('status sters cu succes.');

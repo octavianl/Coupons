@@ -24,7 +24,7 @@
 					<a href="<?=site_url('admincp/linkshare/edit_magazin/' . $row['id']);?>">editeaza</a> 				
 				</td>
                                 <td align="center"><a href="<?=site_url('admincp/linkshare/parse_product_search/' . $row['id_site'].'/'.$row['mid']);?>">parseaza produse</a></td>
-                                <td align="center"><a href="<?=site_url('admincp/linkshare/list_produse/'.$row['id_site'].'/' . $row['mid']);?>">vezi produse</a></td>
+                                <td align="center"><a href="<?=site_url('admincp/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">vezi produse</a></td>
                                 <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
 			</tr>
 		<?

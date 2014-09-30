@@ -124,7 +124,7 @@ class Site_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_site($id)
+    function deleteSite($id)
     {
 
         $this->db->delete('linkshare_site', array('id' => $id));
