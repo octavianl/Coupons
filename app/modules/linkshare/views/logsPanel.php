@@ -7,16 +7,16 @@
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
 			$color = "";
-			if($row[2]['Log Level'] === "ERROR"){$color = "#EEA2A2";}
-			if($row[2]['Log Level'] === "WARN"){$color = "#EED859";}
-			if($row[2]['Log Level'] === "INFO"){$color = "#60AAE8";}
+			if($row[2]['LogLevel'] === "ERROR"){$color = "#EEA2A2";}
+			if($row[2]['LogLevel'] === "WARN"){$color = "#EED859";}
+			if($row[2]['LogLevel'] === "INFO"){$color = "#60AAE8";}
 
 		?>
 
 			<tr>			
-				<td align="left" style="background-color:<?=$color;?> !important;"><?=$row[0]['Row No'];?></td>                                
-				<td align="left" style="background-color:<?=$color;?> !important;"><?=$row[1]['Date & Time'];?></td>
-                <td align="left" style="background-color:<?=$color;?> !important;"><?=$row[2]['Log Level'];?></td>
+				<td align="left" style="background-color:<?=$color;?> !important;"><?=$row[0]['RowNo'];?></td>                                
+				<td align="left" style="background-color:<?=$color;?> !important;"><?=$row[1]['DateTime'];?></td>
+                <td align="left" style="background-color:<?=$color;?> !important;"><?=$row[2]['LogLevel'];?></td>
                 <td align="left" style="background-color:<?=$color;?> !important;"><?=$row[3]['Message'];?></td>
 			</tr>
 		<?

@@ -37,9 +37,9 @@ class Admincp3 extends Admincp_Controller
     {
         include "app/third_party/LOG/Log.php";
 
-        $string = "shut down";
+        $string = "sssss ssss wd64a iduawhd 8987";
 
-        Log::error($string);
+        Log::info($string);
     }
 
 /**
@@ -48,7 +48,7 @@ class Admincp3 extends Admincp_Controller
 
     public function logsPanel()
     {
-        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp/linkshare/logs_panel'));
+        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp/linkshare/logsPanel'));
 
         $this->load->library('dataset');
 
@@ -67,16 +67,23 @@ class Admincp3 extends Admincp_Controller
                 'width' => '50%'
             )
         );
-
-        $this->dataset->datasource('log_model', 'get_logs');
-
+        
+        $filters = array();
+        $filters['limit'] = 5;
+        
         $this->dataset->columns($columns);
+        $this->dataset->datasource('log_model', 'get_logs', $filters);
 
-        $this->dataset->base_url(site_url('admincp/linkshare/logs_panel'));
-        $this->dataset->rows_per_page(10);
-
+        $this->dataset->base_url(site_url('admincp3/linkshare/logsPanel'));
+        $this->dataset->rows_per_page($filters['limit']);
+       
+//        echo "<pre>";
+//        print_r($filters);
+//        echo "</pre>";
+//        die;
+        
         $this->dataset->initialize();
-        $this->load->view('logs_panel');
+        $this->load->view('logsPanel');
 
     }
     
