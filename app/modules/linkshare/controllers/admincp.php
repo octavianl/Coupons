@@ -30,7 +30,7 @@ class Admincp extends Admincp_Controller
 
     public function index()
     {
-        redirect('admincp/linkshare/site_magazine/1');
+        redirect('admincp/linkshare/siteAdvertisers/1');
     }
 
     public function listCategories()
@@ -273,7 +273,7 @@ class Admincp extends Admincp_Controller
 
     public function listProducts($id_site, $mid)
     {
-        $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp/linkshare/site_magazine/' . $id_site));
+        $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp/linkshare/siteAdvertisers/' . $id_site));
 
         $this->load->library('dataset');
 
@@ -940,12 +940,12 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function site_magazine($id)
+    public function siteAdvertisers($id = 1)
     {
         $this->load->model('site_model');
         $site = $this->site_model->get_site($id);
 
-        $this->admin_navigation->module_link('Adauga magazin', site_url('admincp/linkshare/adauga_magazin/'));
+        $this->admin_navigation->module_link('Adauga magazin', site_url('admincp/linkshare/addAdvertiser/'));
         $this->admin_navigation->module_link('Parseaza magazinele aprobate', site_url('admincp/linkshare/parseaza_magazin/' . $site['token'] . '/approved'));
         //$this->admin_navigation->module_link('Parseaza magazine temp removed',site_url('admincp/linkshare/parseaza_magazin/'.$site['token'].'/temp removed'));             
         $this->admin_navigation->module_link('Parseaza TOATE magazinele ', site_url('admincp/linkshare/parseaza_magazin/' . $site['token'] . '/all'));
@@ -1009,7 +1009,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('magazin_model', 'get_magazine', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/site_magazine/' . $id));
+        $this->dataset->base_url(site_url('admincp/linkshare/siteAdvertisers/' . $id));
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -1020,12 +1020,12 @@ class Admincp extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp/linkshare/delete_magazin');
+        $this->dataset->action('Delete', 'admincp/linkshare/deleteAdvertiser');
 
-        $this->load->view('lista_magazine');
+        $this->load->view('listAdvertisers');
     }
 
-    public function adauga_magazin()
+    public function addAdvertiser()
     {
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -1049,14 +1049,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Adauga magazin',
-            'form_action' => site_url('admincp/linkshare/adauga_magazin_validate'),
+            'form_action' => site_url('admincp/linkshare/addAdvertiserValidate'),
             'action' => 'new'
         );
 
-        $this->load->view('adauga_magazin', $data);
+        $this->load->view('addAdvertiser', $data);
     }
 
-    public function adauga_magazin_validate($action = 'new', $id = false)
+    public function addAdvertiserValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Nume magazin', 'required|trim');
@@ -1069,10 +1069,10 @@ class Admincp extends Admincp_Controller
 
         if (isset($error)) {
             if ($action == 'new') {
-                redirect('admincp/linkshare/adauga_magazin');
+                redirect('admincp/linkshare/addAdvertiser');
                 return false;
             } else {
-                redirect('admincp/linkshare/edit_magazin/' . $id);
+                redirect('admincp/linkshare/editAdvertiser/' . $id);
                 return false;
             }
         }
@@ -1095,18 +1095,18 @@ class Admincp extends Admincp_Controller
 
             $this->notices->SetNotice('Magazin adaugat cu succes.');
 
-            redirect('admincp/linkshare/site_magazine/1');
+            redirect('admincp/linkshare/siteAdvertisers/1');
         } else {
             $this->magazin_model->update_magazin($fields, $id);
             $this->notices->SetNotice('Magazin actualizat cu succes.');
 
-            redirect('admincp/linkshare/site_magazine/1');
+            redirect('admincp/linkshare/siteAdvertisers/1');
         }
 
         return true;
     }
 
-    public function edit_magazin($id)
+    public function editAdvertiser($id)
     {
         $this->load->model('magazin_model');
         $magazin = $this->magazin_model->get_magazin($id);
@@ -1133,14 +1133,14 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Editare magazin',
-            'form_action' => site_url('admincp/linkshare/adauga_magazin_validate/edit/' . $magazin['id']),
+            'form_action' => site_url('admincp/linkshare/addAdvertiserValidate/edit/' . $magazin['id']),
             'action' => 'edit',
         );
 
-        $this->load->view('adauga_magazin', $data);
+        $this->load->view('addAdvertiser', $data);
     }
 
-    public function delete_magazin($contents, $return_url)
+    public function deleteAdvertiser($contents, $return_url)
     {
 
         $this->load->library('asciihex');
@@ -1150,7 +1150,7 @@ class Admincp extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
 
         foreach ($contents as $content) {
-            $this->magazin_model->delete_magazin($content);
+            $this->magazin_model->deleteAdvertiser($content);
         }
 
         $this->notices->SetNotice('Magazin(e) sters(e) cu succes.');
@@ -1333,7 +1333,7 @@ class Admincp extends Admincp_Controller
             $id_status = $this->status_model->get_status_by_name($statuses[$j - 1]);
 
             $this->load->model('magazin_model');
-            $this->magazin_model->delete_magazin_by_status($id_site, $id_status);
+            $this->magazin_model->deleteAdvertiserByStatus($id_site, $id_status);
             $cate += $this->magazin_model->new_magazine($mids);
 
             $i = 0;
@@ -1343,7 +1343,7 @@ class Admincp extends Admincp_Controller
 
 
         $this->notices->SetNotice($cate . ' magazine parsate adaugate cu succes.');
-        redirect('admincp/linkshare/site_magazine/' . $id_site);
+        redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
 
     public function list_categorii_creative($id = 1)

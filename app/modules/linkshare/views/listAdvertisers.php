@@ -1,6 +1,6 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <br/><br/><br/>
-<h1>Lista magazine</h1>
+<h1>Lista Advertiseri</h1>
 <div style="width:1800px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<?
@@ -21,7 +21,7 @@
                                 <td align="center"><?=$row['offer_id'];?></td>
                                 <td align="center"><?=$row['offer_name'];?></td>
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/edit_magazin/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">editeaza</a>
 				</td>
                                 <td align="center"><a href="<?=site_url('admincp/linkshare/parse_product_search/' . $row['id_site'].'/'.$row['mid']);?>">parseaza produse</a></td>
                                 <td align="center"><a href="<?=site_url('admincp/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">vezi produse</a></td>

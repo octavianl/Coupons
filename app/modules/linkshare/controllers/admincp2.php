@@ -30,7 +30,7 @@ class Admincp2 extends Admincp_Controller
 
     public function index()
     {
-        redirect('admincp/linkshare/site_magazine/1');
+        redirect('admincp/linkshare/siteAdvertisers/1');
     }
     
    

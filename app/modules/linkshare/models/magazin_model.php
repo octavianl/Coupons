@@ -200,7 +200,7 @@ class Magazin_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_magazin($id)
+    function deleteAdvertiser($id)
     {
         $this->db->delete('linkshare_magazin', array('id' => $id));
 
@@ -228,7 +228,7 @@ class Magazin_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_magazin_by_status($id_site, $id_status)
+    function deleteAdvertiserByStatus($id_site, $id_status)
     {
         $this->db->query("DELETE FROM  linkshare_magazin WHERE id_site='$id_site' AND id_status='$id_status'");
         return true;
