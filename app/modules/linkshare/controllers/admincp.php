@@ -995,25 +995,19 @@ class Admincp extends Admincp_Controller
                 'width' => '10%'),
             array(
                 'name' => 'Operatii',
-                'width' => '10%'
-            ),
+                'width' => '10%'),
             array(
                 'name' => 'Parseaza produse',
-                'width' => '5%'
-            ),
+                'width' => '5%'),
             array('name' => 'Produse',
-                'width' => '5%'
-            ),
+                'width' => '5%'),
             array('name' => 'NR',
-                'width' => '1%'
-            ),
+                'width' => '1%'),
         );
 
         $filters = array();
         $filters['limit'] = 10;
 
-        if (isset($_GET['offset']))
-        $filters['offset'] = $_GET['offset'];
         $filters['id_site'] = $id;
 
         $this->dataset->columns($columns);
@@ -1022,8 +1016,16 @@ class Admincp extends Admincp_Controller
         $this->dataset->rows_per_page(10);
 
         // total rows
-        $this->db->where('id_site', $id);
-        $total_rows = $this->db->get('linkshare_magazin')->num_rows();
+        if (isset($_GET['offset']))
+            $filters['offset'] = $_GET['offset'];
+        if (isset($_GET['name']))
+            $filters['name'] = $_GET['name'];
+        if (isset($_GET['mid']))
+            $filters['mid'] = $_GET['mid'];
+        if (isset($_GET['id_categories']))
+            $filters['id_categories'] = $_GET['id_categories'];
+
+        $total_rows = $this->magazin_model->get_num_rows($filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();

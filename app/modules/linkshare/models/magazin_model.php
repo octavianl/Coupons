@@ -253,7 +253,20 @@ class Magazin_model extends CI_Model
         return true;
     }
 
-    function get_num_rows($filters = array()) {
+    function get_num_rows($filters = array())
+    {
+
+        if (isset($filters['id_categories'])) {
+            $this->db->like('id_categories', $filters['id_categories']);
+        }
+
+        if (isset($filters['name'])) {
+            $this->db->like('name', $filters['name']);
+        }
+
+        if (isset($filters['mid'])) {
+            $this->db->where('mid', $filters['mid']);
+        }
 
         $result = $this->db->get('linkshare_magazin');
         return $result->num_rows();
