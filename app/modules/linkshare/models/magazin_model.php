@@ -29,27 +29,46 @@ class Magazin_model extends CI_Model
      *
      * @return array
      */
-    function get_magazine($filters)
+    function get_magazine($filters = array())
     {
         $row = array();
+        $order_dir = (isset($filters['sort_dir'])) ? $filters['sort_dir'] : 'ASC';
+
+        $this->load->model('site_model');
+
+        if(isset($filters['sort']))  $this->db->order_by($filters['sort'], $order_dir);
+
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
         }
-        if (isset($filters['id_site']))
+
+        if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
+        }
+
+        if (isset($filters['id_categories'])) {
+            $this->db->like('id_categories', $filters['id_categories']);
+        }
+
+        if (isset($filters['name'])) {
+            $this->db->like('name', $filters['name']);
+        }
+
+        if (isset($filters['mid'])) {
+            $this->db->where('mid', $filters['mid']);
+        }
+
         if (isset($filters['id_status']))
             $this->db->where('id_status', $filters['id_status']);
-        $this->db->order_by('id');
-        $result = $this->db->get('linkshare_magazin');
-        if (isset($filters['name']))
-            $this->load->model('site_model');
+            $this->db->order_by('id');
+            $result = $this->db->get('linkshare_magazin');
 
         foreach ($result->result_array() as $linie) {
-            if (isset($filters['name'])) {
-                $site = $this->site_model->get_site($linie['id_site']);
-                $linie['name_site'] = $site['name'];
-            }
+
+            $site = $this->site_model->get_site($linie['id_site']);
+            $linie['name_site'] = $site['name'];
+
             $nr_products = $this->get_count_produse_by_mid($linie['mid'], $linie['id_site']);
             $linie['nr_products'] = $nr_products;
             $row[] = $linie;
@@ -232,6 +251,12 @@ class Magazin_model extends CI_Model
     {
         $this->db->query("DELETE FROM  linkshare_magazin WHERE id_site='$id_site' AND id_status='$id_status'");
         return true;
+    }
+
+    function get_num_rows($filters = array()) {
+
+        $result = $this->db->get('linkshare_magazin');
+        return $result->num_rows();
     }
 
 }

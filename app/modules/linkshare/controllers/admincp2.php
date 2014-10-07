@@ -32,7 +32,5 @@ class Admincp2 extends Admincp_Controller
     {
         redirect('admincp/linkshare/siteAdvertisers/1');
     }
-    
-   
-    
+
 }

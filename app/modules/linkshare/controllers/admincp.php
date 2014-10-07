@@ -943,12 +943,13 @@ class Admincp extends Admincp_Controller
     public function siteAdvertisers($id = 1)
     {
         $this->load->model('site_model');
+        $this->load->model('magazin_model');
         $site = $this->site_model->get_site($id);
 
-        $this->admin_navigation->module_link('Adauga magazin', site_url('admincp/linkshare/addAdvertiser/'));
-        $this->admin_navigation->module_link('Parseaza magazinele aprobate', site_url('admincp/linkshare/parseaza_magazin/' . $site['token'] . '/approved'));
-        //$this->admin_navigation->module_link('Parseaza magazine temp removed',site_url('admincp/linkshare/parseaza_magazin/'.$site['token'].'/temp removed'));             
-        $this->admin_navigation->module_link('Parseaza TOATE magazinele ', site_url('admincp/linkshare/parseaza_magazin/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Adauga advertiser', site_url('admincp/linkshare/addAdvertiser/'));
+        $this->admin_navigation->module_link('Parseaza advertiserii aprobati', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
+        //$this->admin_navigation->module_link('Parseaza magazine temp removed',site_url('admincp/linkshare/parseAdvertisers/'.$site['token'].'/temp removed'));
+        $this->admin_navigation->module_link('Parseaza TOATI advertiserii', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
 
         $this->load->library('dataset');
 
@@ -964,16 +965,25 @@ class Admincp extends Admincp_Controller
                 'width' => '4%'),
             array(
                 'name' => 'Status',
-                'width' => '8%'),
+                'width' => '8%',
+                'type' => 'text',
+                'sort_column' => 'status'),
             array(
                 'name' => 'Categorii',
-                'width' => '10%'),
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'id_categories'),
             array(
                 'name' => 'Mid',
-                'width' => '10%'),
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'mid',
+                'sort_column' => 'status'),
             array(
                 'name' => 'Nume',
-                'width' => '10%'),
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'name'),
             array(
                 'name' => 'Comision',
                 'width' => '10%'),
@@ -1003,9 +1013,8 @@ class Admincp extends Admincp_Controller
         $filters['limit'] = 10;
 
         if (isset($_GET['offset']))
-            $filters['offset'] = $_GET['offset'];
+        $filters['offset'] = $_GET['offset'];
         $filters['id_site'] = $id;
-        $filters['name'] = true;
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('magazin_model', 'get_magazine', $filters);
@@ -1160,7 +1169,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function parseaza_magazin($token, $status)
+    public function parseAdvertisers($token, $status)
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);
@@ -1222,7 +1231,7 @@ class Admincp extends Admincp_Controller
             //print '<pre>';print_r($mids);die;
         }
 
-        $this->admin_navigation->module_link('Adauga magazinele parsate', site_url('admincp/linkshare/parseaza_magazin_add/' . $token . '/' . $status));
+        $this->admin_navigation->module_link('Adauga advertiseri parsati', site_url('admincp/linkshare/parseAdvertisersAdd/' . $token . '/' . $status));
 
         $this->load->library('dataset');
 
@@ -1265,7 +1274,7 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('magazin_model', 'parse_magazin', $mids);
-        $this->dataset->base_url(site_url('admincp/linkshare/parseaza_magazin/' . $token) . '/' . $status);
+        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisers/' . $token) . '/' . $status);
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -1274,10 +1283,10 @@ class Admincp extends Admincp_Controller
 
         $this->dataset->initialize();
 
-        $this->load->view('lista_magazine_parsate');
+        $this->load->view('listAdvertisersParsed');
     }
 
-    public function parseaza_magazin_add($token, $status)
+    public function parseAdvertisersAdd($token, $status)
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);            

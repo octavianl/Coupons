@@ -37,7 +37,7 @@ class Admincp3 extends Admincp_Controller
     {
         include "app/third_party/LOG/Log.php";
 
-        $string = "sssss ssss wd64a iduawhd 8987";
+        $string = "Test";
 
         Log::info($string);
     }
@@ -48,7 +48,7 @@ class Admincp3 extends Admincp_Controller
 
     public function logsPanel()
     {
-        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp/linkshare/logsPanel'));
+        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp3/linkshare/logsPanel'));
 
         $this->load->library('dataset');
 
