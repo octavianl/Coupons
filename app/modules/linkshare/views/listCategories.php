@@ -13,7 +13,7 @@
                                 <td align="center"><?=$row['id_category'];?></td>
 				<td align="center"><?=$row['name'];?></td>			
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/editCategory/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp2/linkshare/editCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
 		<?

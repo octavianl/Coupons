@@ -16,7 +16,7 @@
                                  <td align="center"><?=$row['mid'];?></td>
                                   <td align="center"><?=$row['nid'];?></td>
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/edit_categorie_creative/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
 		<?

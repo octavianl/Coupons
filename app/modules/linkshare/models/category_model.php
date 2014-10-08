@@ -10,7 +10,7 @@
  * @link     http://www.weblight.ro/
  *
  */
-class Categorie_model extends CI_Model
+class Category_model extends CI_Model
 {
     private $CI;
 
@@ -29,7 +29,7 @@ class Categorie_model extends CI_Model
     function get_categorii()
     {
         $row = array();
-        $result = $this->db->get('linkshare_categorie');
+        $result = $this->db->get('linkshare_categories');
 
         foreach ($result->result_array() as $linie) {
             $row[] = $linie;
@@ -46,7 +46,7 @@ class Categorie_model extends CI_Model
     function get_categorie_status()
     {
         $row = array();
-        $result = $this->db->get('linkshare_categorie');
+        $result = $this->db->get('linkshare_categories');
 
         foreach ($result->result_array() as $value) {
             $row[$value['id']] = $value['name'];
@@ -66,7 +66,7 @@ class Categorie_model extends CI_Model
     {
         $row = array();
         $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_categorie');
+        $result = $this->db->get('linkshare_categories');
 
         foreach ($result->result_array() as $row) {
             return $row;
@@ -86,7 +86,7 @@ class Categorie_model extends CI_Model
     {
         $row = array();
         $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_categorie');
+        $result = $this->db->get('linkshare_categories');
 
         foreach ($result->result_array() as $row) {
             return $row['name'];
@@ -106,7 +106,7 @@ class Categorie_model extends CI_Model
      */
     function new_categorie($insert_fields)
     {
-        $this->db->insert('linkshare_categorie', $insert_fields);
+        $this->db->insert('linkshare_categories', $insert_fields);
         $insert_id = $this->db->insert_id();
 
         return $insert_id;
@@ -125,7 +125,7 @@ class Categorie_model extends CI_Model
     function update_categorie($update_fields, $id)
     {
 
-        $this->db->update('linkshare_categorie', $update_fields, array('id' => $id));
+        $this->db->update('linkshare_categories', $update_fields, array('id' => $id));
 
         return true;
     }
@@ -142,7 +142,7 @@ class Categorie_model extends CI_Model
     function deleteCategory($id)
     {
 
-        $this->db->delete('linkshare_categorie', array('id' => $id));
+        $this->db->delete('linkshare_categories', array('id' => $id));
 
         return true;
     }

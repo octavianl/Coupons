@@ -33,58 +33,6 @@ class Admincp3 extends Admincp_Controller
         redirect('admincp/linkshare/siteAdvertisers/1');
     }
     
-    public function logsTest()
-    {
-        include "app/third_party/LOG/Log.php";
 
-        $string = "Test";
-
-        Log::info($string);
-    }
-
-/**
- * Logs panel
- */
-
-    public function logsPanel()
-    {
-        $this->admin_navigation->module_link('Refresh Logs', site_url('admincp3/linkshare/logsPanel'));
-
-        $this->load->library('dataset');
-
-        $columns = array(
-            array(
-                'name' => 'Row No',
-                'width' => '10%'),
-            array(
-                'name' => 'Date & Time',
-                'width' => '20%'),
-            array(
-                'name' => 'Log Level',
-                'width' => '20%'),
-            array(
-                'name' => 'Message',
-                'width' => '50%'
-            )
-        );
-        
-        $filters = array();
-        $filters['limit'] = 5;
-        
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('log_model', 'get_logs', $filters);
-
-        $this->dataset->base_url(site_url('admincp3/linkshare/logsPanel'));
-        $this->dataset->rows_per_page($filters['limit']);
-       
-//        echo "<pre>";
-//        print_r($filters);
-//        echo "</pre>";
-//        die;
-        
-        $this->dataset->initialize();
-        $this->load->view('logsPanel');
-
-    }
     
 }

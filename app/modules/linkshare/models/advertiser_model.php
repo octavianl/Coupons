@@ -11,7 +11,7 @@
  *
  */
 
-class Magazin_model extends CI_Model
+class Advertiser_model extends CI_Model
 {
 
     private $CI;
@@ -62,7 +62,7 @@ class Magazin_model extends CI_Model
         if (isset($filters['id_status']))
             $this->db->where('id_status', $filters['id_status']);
             $this->db->order_by('id');
-            $result = $this->db->get('linkshare_magazin');
+            $result = $this->db->get('linkshare_advertisers');
 
         foreach ($result->result_array() as $linie) {
 
@@ -89,7 +89,7 @@ class Magazin_model extends CI_Model
     {
         $row = array();
         $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_magazin');
+        $result = $this->db->get('linkshare_advertisers');
 
         if ($name)
             $this->load->model('site_model');
@@ -118,7 +118,7 @@ class Magazin_model extends CI_Model
         $row = array();
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $id_site);
-        $result = $this->db->get('linkshare_magazin');
+        $result = $this->db->get('linkshare_advertisers');
 
         foreach ($result->result_array() as $row) {
             return $row;
@@ -169,7 +169,7 @@ class Magazin_model extends CI_Model
      */
     function new_magazin($insert_fields)
     {
-        $this->db->insert('linkshare_magazin', $insert_fields);
+        $this->db->insert('linkshare_advertisers', $insert_fields);
         $insert_id = $this->db->insert_id();
 
         return $insert_id;
@@ -188,7 +188,7 @@ class Magazin_model extends CI_Model
     {
         $cate = count($mids);
         for ($i = 0; $i < $cate; $i++) {
-            $this->db->insert('linkshare_magazin', $mids[$i]);
+            $this->db->insert('linkshare_advertisers', $mids[$i]);
         }
         return $cate;
     }
@@ -205,7 +205,7 @@ class Magazin_model extends CI_Model
      */
     function update_magazin($update_fields, $id)
     {
-        $this->db->update('linkshare_magazin', $update_fields, array('id' => $id));
+        $this->db->update('linkshare_advertisers', $update_fields, array('id' => $id));
 
         return true;
     }
@@ -221,7 +221,7 @@ class Magazin_model extends CI_Model
      */
     function deleteAdvertiser($id)
     {
-        $this->db->delete('linkshare_magazin', array('id' => $id));
+        $this->db->delete('linkshare_advertisers', array('id' => $id));
 
         return true;
     }
@@ -249,7 +249,7 @@ class Magazin_model extends CI_Model
      */
     function deleteAdvertiserByStatus($id_site, $id_status)
     {
-        $this->db->query("DELETE FROM  linkshare_magazin WHERE id_site='$id_site' AND id_status='$id_status'");
+        $this->db->query("DELETE FROM  linkshare_advertisers WHERE id_site='$id_site' AND id_status='$id_status'");
         return true;
     }
 
@@ -268,7 +268,7 @@ class Magazin_model extends CI_Model
             $this->db->where('mid', $filters['mid']);
         }
 
-        $result = $this->db->get('linkshare_magazin');
+        $result = $this->db->get('linkshare_advertisers');
         return $result->num_rows();
     }
 

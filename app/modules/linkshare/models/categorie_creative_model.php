@@ -52,7 +52,7 @@ class Categorie_creative_model extends CI_Model
             $this->db->like('name', $filters['nume']);
         }
 
-        $result = $this->db->get('linkshare_categorie_creative');
+        $result = $this->db->get('linkshare_categories_creative');
         if (isset($filters['name']))
             $this->load->model('site_model');
 
@@ -88,7 +88,7 @@ class Categorie_creative_model extends CI_Model
             $this->db->like('name', $filters['nume']);
         }
 
-        $result = $this->db->get('linkshare_categorie_creative');
+        $result = $this->db->get('linkshare_categories_creative');
 
         return $result->num_rows();
     }
@@ -104,7 +104,7 @@ class Categorie_creative_model extends CI_Model
     {
         $row = array();
         $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_categorie_creative');
+        $result = $this->db->get('linkshare_categories_creative');
 
         foreach ($result->result_array() as $row) {
             return $row;
@@ -124,7 +124,7 @@ class Categorie_creative_model extends CI_Model
     {
         $row = array();
         $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_categorie_creative');
+        $result = $this->db->get('linkshare_categories_creative');
 
         foreach ($result->result_array() as $row) {
             return $row['name'];
@@ -144,7 +144,7 @@ class Categorie_creative_model extends CI_Model
      */
     function new_categorie($insert_fields)
     {
-        $this->db->insert('linkshare_categorie_creative', $insert_fields);
+        $this->db->insert('linkshare_categories_creative', $insert_fields);
         $insert_id = $this->db->insert_id();
 
         return $insert_id;
@@ -161,7 +161,7 @@ class Categorie_creative_model extends CI_Model
      */
     function delete_categorie_by_mid($id_site, $mid)
     {
-        $this->db->delete('linkshare_categorie_creative', array('id_site' => $id_site, 'mid' => $mid));
+        $this->db->delete('linkshare_categories_creative', array('id_site' => $id_site, 'mid' => $mid));
 
         return true;
     }
@@ -178,7 +178,7 @@ class Categorie_creative_model extends CI_Model
      */
     function update_categorie($update_fields, $id)
     {
-        $this->db->update('linkshare_categorie_creative', $update_fields, array('id' => $id));
+        $this->db->update('linkshare_categories_creative', $update_fields, array('id' => $id));
 
         return true;
     }
@@ -194,7 +194,7 @@ class Categorie_creative_model extends CI_Model
      */
     function deleteCategory($id)
     {
-        $this->db->delete('linkshare_categorie_creative', array('id' => $id));
+        $this->db->delete('linkshare_categories_creative', array('id' => $id));
 
         return true;
     }
