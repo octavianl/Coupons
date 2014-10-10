@@ -1,10 +1,25 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <br/><br/><br/>
-<h1>Lista Advertiseri</h1>
+<h1 style="display:inline-block;">Lista Advertiseri</h1>
+<div style="padding: 0 0 0 40px; display:inline-block;">
+    <h3>Select Site</h3>
+    <form>
+    <select name="sites">
+        <?
+            foreach ($allSites as $site){
+            ?>
+                        <option value="<?=$site['id']?>"><?=$site['name']?></option>
+            <?
+                }
+        ?>
+    </select>
+    <button type="submit">Go</button>
+    </form>
+</div>
 <div style="width:1800px;text-align:center;" align="center">
-	<?=$this->dataset->table_head();?>
+
+    <?=$this->dataset->table_head();?>
 	<?
-		
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
 		?>
