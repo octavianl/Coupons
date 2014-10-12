@@ -515,8 +515,8 @@ class Admincp extends Admincp_Controller
 
         $this->admin_navigation->module_link('Adauga advertiser', site_url('admincp/linkshare/addAdvertiser/'));
         $this->admin_navigation->module_link('Parseaza advertiserii aprobati', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
-        //$this->admin_navigation->module_link('Parseaza magazine temp removed',site_url('admincp/linkshare/parseAdvertisers/'.$site['token'].'/temp removed'));
-        $this->admin_navigation->module_link('Parseaza TOATI advertiserii', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Parseaza TOTI advertiserii', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Refresh TOTI advertiserii', site_url('admincp/linkshare/refreshAdvertisers/' . $site['token'] . '/all'));
 
         $this->load->library('dataset');
 
@@ -742,6 +742,74 @@ class Admincp extends Admincp_Controller
         redirect($return_url);
 
         return true;
+    }
+
+    public function refreshAdvertisers($token, $status)
+    {
+        $this->db->query("TRUNCATE TABLE linkshare_advertisers");
+        $this->load->model('site_model');
+        $aux = $this->site_model->get_site_by_token($token);
+        $id_site = $aux['id'];
+        $aux = '';
+        $i = 0;
+        $cate = 0;
+
+        $j = 1;
+        $statuses = array();
+        if ($status == 'all') {
+            $this->load->model('status_model');
+            $aux = $this->status_model->get_statuses();
+            foreach ($aux as $val) {
+                $statuses[] = str_replace(' ', '%20', $val['id_status']);
+            }
+            $j = count($statuses);
+        } else {
+            $statuses[] = $status;
+        }
+
+        while ($j > 0) {
+            $mids = array();
+            $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
+
+            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
+            //echo $categories->getName().'<br/>';
+            if (isset($categories)) {
+                $kids = $categories->children('ns1', true);
+                //var_dump(count($kids));
+
+                $this->load->model('status_model');
+
+                foreach ($kids as $child) {
+                    $mids[$i]['id_site'] = $id_site;
+                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->get_status_by_application_status($child->applicationStatus));
+                    $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
+                    $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
+                    $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
+                    $mids[$i]['name'] = mysql_real_escape_string($child->name);
+                    $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
+                    $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
+                    $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
+                    $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
+                    $i++;
+                }
+            }
+
+            $statuses[$j - 1] = str_replace('%20', ' ', $statuses[$j - 1]);
+            $this->load->model('status_model');
+            $id_status = $this->status_model->get_status_by_name($statuses[$j - 1]);
+
+            $this->load->model('advertiser_model');
+            $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
+            $cate += $this->advertiser_model->new_magazine($mids);
+
+            $i = 0;
+            unset($mids);
+            $j--;
+        }
+
+
+        $this->notices->SetNotice($cate . ' magazine au fost updatate cu succes.');
+        redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
 
     public function parseAdvertisers($token, $status)

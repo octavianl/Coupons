@@ -167,7 +167,7 @@ class Admincp3 extends Admincp_Controller
 
         $this->load->view('listProducts', $data);
     }
-
+    
     public function change_produs_status($id_product, $ret_url)
     {
         $ret_url = base64_decode($ret_url);
@@ -179,6 +179,8 @@ class Admincp3 extends Admincp_Controller
     public function parse_product_search($id, $mid, $creative_cat_id = 0)
     {
         error_reporting(E_ERROR);
+        include "app/third_party/LOG/Log.php";
+        
         $aux = '';
         $this->load->model('site_model');
         $aux = $this->site_model->get_site($id);
@@ -221,7 +223,10 @@ class Admincp3 extends Admincp_Controller
             $message = '';
 
             $categories = simplexml_load_file("http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page", "SimpleXMLElement", LIBXML_NOCDATA);
-
+            //  print '<pre>';
+            //  print_r($categories);
+            // eg. http://lld2.linksynergy.com/services/restLinks/getProductLinks/c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f/37557/200338012/-1/1
+                        
             if (is_object($categories) && isset($categories)) {
                 $copii = $categories->children('ns1', true);
                 $kids = count($copii);
@@ -243,7 +248,11 @@ class Admincp3 extends Admincp_Controller
                         $product[$i]['last_update_date'] = date("Y-m-d H:i:s");
 
                         $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=$token&keyword=\"{$child->linkName}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
-
+            //  http://productsearch.linksynergy.com/productsearch?token=c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f&keyword=%22Heart%20Brooch%20in%2014%20Karat%20Gold%22&MaxResults=1&pagenumber=1&mid=37557
+ 
+                        print '<pre>';
+                        print_r($product);
+                       
                         if (is_object($produs) && isset($produs)) {
                             $x = $produs->item[0];
                             $product[$i]['merchantname'] = addslashes($x->merchantname);
@@ -283,9 +292,6 @@ class Admincp3 extends Admincp_Controller
                             $product[$i]['price_final'] = 0;
                         }
 
-                        //print '<pre>';
-                        //print_r($product);
-
                         $this->produs_new_model->new_produs($product[$i]);
 
                         $exista = $this->produs_model->exists_produs($product[$i]['linkid']);
@@ -301,10 +307,11 @@ class Admincp3 extends Admincp_Controller
                     }
                 }
             }
+            
+            $logMessage = "http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page $i total products $j inserted $k updated ";
 
-            $fp = fopen("loguri.txt", "a");
-            fwrite($fp, "http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page $i total products $j inserted $k updated  " . date("Y-m-d H:i:s") . PHP_EOL);
-            fclose($fp);
+            Log::warn($logMessage);
+ 
             $message .= "cat_id $creative_cat_id creative_category $creative_category page $page " . count($product) . " products parsed<br/>";
             $page++;
         } while ($kids > 0);

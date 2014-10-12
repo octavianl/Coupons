@@ -348,7 +348,9 @@ class Admincp2 extends Admincp_Controller
                 'filter' => 'nume'),
             array(
                 'name' => 'Mid',
-                'width' => '15%'),
+                'width' => '15%',
+                'type' => 'text',
+                'filter' => 'mid'),
             array(
                 'name' => 'Nid',
                 'width' => '5%'),
@@ -367,6 +369,8 @@ class Admincp2 extends Admincp_Controller
         $filters['name'] = true;
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
+        if (isset($_GET['mid']))
+            $filters['mid'] = $_GET['mid'];
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');
@@ -515,6 +519,8 @@ class Admincp2 extends Admincp_Controller
     {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);
+        include "app/third_party/LOG/Log.php";
+        
         $mids = array();
         $aux = '';
         $this->load->model('site_model');
@@ -537,12 +543,6 @@ class Admincp2 extends Admincp_Controller
         }
 
         $j = count($mids);
-
-        /* print '<pre>';
-          print_r($mids);
-          die; */
-
-        $fp = fopen('erori_parsare.txt', 'a');
 
         $cate = 0;
 
@@ -580,15 +580,11 @@ class Admincp2 extends Admincp_Controller
 
                 //print '<pre>';print_r($cats);die;
             } else {
-                //log_message('debug', 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/'.$token.'/'.$mids[$j-1].' xml eroare');
-                //error_log('http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/'.$token.'/'.$mids[$j-1].' xml eroare', 3, "/public_html/hero/app/logs/my-errors.log");
-                $data = date('Y-m-d H:i:s');
-                fwrite($fp, 'erori_parsare.txt', 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $token . '/' . $mids[$j - 1] . ' xml eroare ' . $data);
+                $message = 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $token . '/' . $mids[$j - 1] . ' xml eroare ';
+                Log::error($message);
             }
             $j--;
         }
-
-        fclose($fp);
 
         $this->admin_navigation->module_link('Vezi categoriile creative parsate', site_url('admincp2/linkshare/listCreativeCategory/' . $id));
 

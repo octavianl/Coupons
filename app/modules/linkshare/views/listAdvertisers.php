@@ -1,8 +1,7 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<br/><br/><br/>
-<h1 style="display:inline-block;">Lista Advertiseri</h1>
+<h1>Lista Advertiseri
 <div style="padding: 0 0 0 40px; display:inline-block;">
-    <h3>Select Site</h3>
+    <h6>Select Site</h6>
     <form>
     <select name="sites">
         <?
@@ -16,6 +15,8 @@
     <button type="submit">Go</button>
     </form>
 </div>
+</h1>
+
 <div style="width:1800px;text-align:center;" align="center">
 
     <?=$this->dataset->table_head();?>
@@ -38,8 +39,8 @@
 				<td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">editeaza</a>
 				</td>
-                                <td align="center"><a href="<?=site_url('admincp/linkshare/parse_product_search/' . $row['id_site'].'/'.$row['mid']);?>">parseaza produse</a></td>
-                                <td align="center"><a href="<?=site_url('admincp/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">vezi produse</a></td>
+                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parse_product_search/' . $row['id_site'].'/'.$row['mid']);?>">parseaza produse</a></td>
+                                <td align="center"><a href="<?=site_url('admincp3/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">vezi produse</a></td>
                                 <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
 			</tr>
 		<?
