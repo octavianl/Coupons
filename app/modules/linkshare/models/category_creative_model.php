@@ -3,14 +3,14 @@
 /**
  * Categorie Creative Model
  *
- * @category Categorie_Creative_Model
+ * @category Category_Creative_Model
  * @package  Linkshare
  * @author   Weblight <office@weblight.ro>
  * @license  License http://www.weblight.ro/
  * @link     http://www.weblight.ro/
  *
  */
-class Categorie_creative_model extends CI_Model
+class Category_creative_model extends CI_Model
 {
     private $CI;
 

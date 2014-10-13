@@ -190,10 +190,10 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('produs_new_model');
 
         $creative_categories = array();
-        $this->load->model('categorie_creative_model');
+        $this->load->model('category_creative_model');
         $filters['id_site'] = $id;
         $filters['mid'] = $mid;
-        $creative_categories = $this->categorie_creative_model->get_categorii($filters);
+        $creative_categories = $this->category_creative_model->get_categorii($filters);
 
         $data = array();
 
@@ -338,10 +338,10 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('produs_new_model');
 
         $creative_categories = array();
-        $this->load->model('categorie_creative_model');
+        $this->load->model('category_creative_model');
         $filters['id_site'] = $id;
         $filters['mid'] = $mid;
-        $creative_categories = $this->categorie_creative_model->get_categorii($filters);
+        $creative_categories = $this->category_creative_model->get_categorii($filters);
 
         $data = array();
 
