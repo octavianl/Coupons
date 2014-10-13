@@ -362,11 +362,17 @@ class Admincp2 extends Admincp_Controller
 
         $filters = array();
         $filters['limit'] = 50;
+        $filters['id_site'] = $id;
+        $filters['name'] = true;
+
+        $this->dataset->columns($columns);
+        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
+        $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/' . $id));
+        $this->dataset->rows_per_page(50);
 
         if (isset($_GET['offset']))
             $filters['offset'] = $_GET['offset'];
-        $filters['id_site'] = $id;
-        $filters['name'] = true;
+
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
         if (isset($_GET['mid']))
@@ -380,11 +386,6 @@ class Admincp2 extends Admincp_Controller
             if (isset($aux['nume']))
                 $filters['nume'] = $aux['nume'];
         }
-
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
-        $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/' . $id));
-        $this->dataset->rows_per_page(50);
 
         // total rows
         $this->db->where('id_site', $id);
@@ -627,6 +628,9 @@ class Admincp2 extends Admincp_Controller
         $columns = array(
             array(
                 'name' => 'ID #',
+                'width' => '5%'),
+            array(
+                'name' => 'SELECT CATEG TO MERGE',
                 'width' => '15%'),
             array(
                 'name' => 'SITE',
@@ -641,7 +645,7 @@ class Admincp2 extends Admincp_Controller
                 'filter' => 'nume'),
             array(
                 'name' => 'Mid',
-                'width' => '15%',
+                'width' => '10%',
                 'type' => 'text',
                 'filter' => 'mid'),
             array(
@@ -655,11 +659,17 @@ class Admincp2 extends Admincp_Controller
 
         $filters = array();
         $filters['limit'] = 50;
-
-        if (isset($_GET['offset']))
-            $filters['offset'] = $_GET['offset'];
         $filters['id_site'] = $id;
         $filters['name'] = true;
+ 
+        $this->dataset->columns($columns);
+        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
+        $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
+        $this->dataset->rows_per_page(50);
+        
+        if (isset($_GET['offset']))
+            $filters['offset'] = $_GET['offset'];
+
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
         if (isset($_GET['mid']))
@@ -674,10 +684,6 @@ class Admincp2 extends Admincp_Controller
                 $filters['nume'] = $aux['nume'];
         }
 
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
-        $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/' . $id));
-        $this->dataset->rows_per_page(50);
 
         // total rows
         $this->db->where('id_site', $id);
