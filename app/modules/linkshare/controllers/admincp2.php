@@ -658,14 +658,23 @@ class Admincp2 extends Admincp_Controller
         );
 
         $filters = array();
-        $filters['limit'] = 50;
+        $filters['limit'] = 10;
         $filters['id_site'] = $id;
         $filters['name'] = true;
  
+        if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
+            $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
+            $this->category_creative_model->new_join_category($id_merged_category,$_GET['check_category']);
+            $data['message'] = "Categoria ".$_GET['merged_category']." a fost adaugata cu success!";
+            unset($_GET['merged_category']);
+            unset($_GET['check_category']);
+        }else{
+            $data['message'] = "Nu ai selectat nici o categorie din lista si nici nu ai scris numele unei noi categorii";
+        }
+        
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
-        $this->dataset->rows_per_page(50);
         
         if (isset($_GET['offset']))
             $filters['offset'] = $_GET['offset'];
@@ -688,12 +697,12 @@ class Admincp2 extends Admincp_Controller
         // total rows
         $this->db->where('id_site', $id);
         $total_rows = $this->category_creative_model->get_categorii_linii($filters);
-        $this->dataset->total_rows($total_rows);
 
+        $this->dataset->total_rows($total_rows); 
+        
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp2/linkshare/deleteCreativeCategory');
 
         $this->load->view('joinCreativeCategory');
     } 
