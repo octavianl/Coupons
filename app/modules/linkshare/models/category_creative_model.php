@@ -249,4 +249,73 @@ class Category_creative_model extends CI_Model
         }
         return $insert_id;
     }
+    
+    /**
+     * Get Creative for merge
+     *
+     * @param array $filters 
+     *
+     * @return array
+     */
+    function get_creative_for_merge($filters)
+    {
+        $row = array();
+
+        if (isset($filters['limit'])) {
+            $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
+            $this->db->limit($filters['limit'], $offset);
+        }
+        if (isset($filters['id_site']))
+            $this->db->where('id_site', $filters['id_site']);
+        if (isset($filters['mid']))
+            $this->db->where('mid', $filters['mid']);
+        if (isset($filters['mid']))
+            $this->db->order_by('cat_id');
+        else
+            $this->db->order_by('id');
+
+        if (isset($filters['nume'])) {
+            $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
+            $filters['nume'] = str_replace('%26', '&', $filters['nume']);
+            $filters['nume'] = str_replace('+', ' ', $filters['nume']);
+            $this->db->like('name', $filters['nume']);
+        }
+
+        $result = $this->db->get('linkshare_categories_creative');
+        if (isset($filters['name']))
+            $this->load->model('site_model');
+
+        foreach ($result->result_array() as $linie) {
+            if (isset($filters['name'])) {
+                $site = $this->site_model->get_site($linie['id_site']);
+                $linie['id_site'] = $site['name'];
+            }
+            
+            $merge_categories = $this->category_creative_model->get_creative_merged($linie['cat_id']);
+            $linie['merge_categories'] = $merge_categories;
+            
+            $row[] = $linie;
+
+        }
+//        echo "<pre>";
+//            print_r($row);
+        return $row;
+    }
+    
+    function get_creative_merged($id)
+    {
+        $row = array();
+        $names = array();
+        $this->db->where('id_categ_advertiser', $id);
+        $this->db->join('linkshare_categories_merged','linkshare_categories_joins.id_categ_merged = linkshare_categories_merged.id','left');
+        $result = $this->db->get('linkshare_categories_joins');
+
+        foreach ($result->result_array() as $row) {
+            
+            $names[]=$row['name'];
+            
+        }
+        
+        return $names;
+    }
 }

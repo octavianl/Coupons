@@ -12,7 +12,12 @@
 				<td align="left"><?=$row['id'];?></td>
                                 <td align="left"><input type="checkbox" name="check_category[]" value="<?=$row['cat_id']?>" class="action_items" ></td>
                                 <td align="left"><?=$row['id_site'];?></td>
-                                <td align="left"><?=$row['cat_id'];?></td>
+                                <td align="left"><?=$row['cat_id'];?> 
+                                    <?php if(!empty($row['merge_categories'])){ ?>
+                                    <span style="color:#FF0000;">| included in: </span>
+                                    <strong><?php foreach($row['merge_categories'] as $name){ echo $name." &nbsp;<span style='color:#ff0000'>/</span> &nbsp;"; }?></strong>
+                                    <?php } else { echo "<span style='color:#ff0000'>|</span> Not merged!"; } ?>
+                                </td>
 				<td align="center"><?=$row['name'];?></td>
                                 <td align="center"><?=$row['mid'];?></td>
                                 <td align="left"><?=$row['nid'];?></td>

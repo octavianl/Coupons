@@ -631,13 +631,13 @@ class Admincp2 extends Admincp_Controller
                 'width' => '5%'),
             array(
                 'name' => 'SELECT CATEG TO MERGE',
-                'width' => '15%'),
+                'width' => '10%'),
             array(
                 'name' => 'SITE',
                 'width' => '15%'),
             array(
                 'name' => 'CATEGORY ID #',
-                'width' => '10%'),
+                'width' => '30%'),
             array(
                 'name' => 'Nume',
                 'width' => '20%',
@@ -653,7 +653,7 @@ class Admincp2 extends Admincp_Controller
                 'width' => '5%'),
             array(
                 'name' => 'Operatii',
-                'width' => '20%'
+                'width' => '5%'
             )
         );
 
@@ -673,7 +673,7 @@ class Admincp2 extends Admincp_Controller
         }
         
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
+        $this->dataset->datasource('category_creative_model', 'get_creative_for_merge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
         
         if (isset($_GET['offset']))
@@ -706,5 +706,5 @@ class Admincp2 extends Admincp_Controller
 
         $this->load->view('joinCreativeCategory');
     } 
-    
+
 }
