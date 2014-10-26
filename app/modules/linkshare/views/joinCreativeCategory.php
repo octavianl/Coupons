@@ -1,9 +1,28 @@
 <?=$this->load->view(branded_view('cp/header'));?>
+<script>
+jQuery(document).ready(function(){
+    $('#test').on('click', function(event){
+        var merged_category = $('input[name="merged_category"]').val();
+        var check_category = $('input[name="check_category[]"]').val();
+        $.ajax({
+            type: 'post',
+            url: '/admincp2/linkshare/update_filters/',
+            data: 'check_category='+check_category+'&merged_category='+merged_category,
+            dataType:'html',
+            success: function(data, textStatus, XMLHttpRequest) {
+                console.log('filters '+data);
+                $('input[name="filters"]').val(data);
+                document.forms['dataset_form'].submit();
+            }
+        });
+    });
+});
+</script>
 <h1>Join Creative Categories</h1>
 <div><strong>INSTRUCTION</strong>: First search a keyword on Name filter, chose category ( checkboxes ) you want to merge then write a name for the NEW category and press SAVE !<br/><br/></div>
 
 <?=$this->dataset->table_head();?>
-<form>
+
     	<?
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
@@ -36,9 +55,9 @@
 	<? } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category"><button type="submit">Save</button></div></td>
+            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category"><button id="Save" type="submit">Save</button></div></td>
         </tr>
-</form>
+
 <?=$this->dataset->table_close();?>
 
 <?=$this->load->view(branded_view('cp/footer'));?>
