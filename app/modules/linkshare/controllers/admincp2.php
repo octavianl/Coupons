@@ -617,6 +617,24 @@ class Admincp2 extends Admincp_Controller
 
         $this->load->view('listCreativeCategoryParsed');
     }
+    
+     function update_filters() {
+        $this->load->library('asciihex');
+        $filters = array();
+        foreach ($_POST as $key => $val) {
+            if (in_array($val, array('filter results'))) {
+                unset($_POST[$key]);
+            }
+        }
+        if (!empty($_POST['merged_category'])) {
+            $filters['merged_category'] = $_POST['merged_category'];
+        }
+        if (!empty($_POST['check_category'])) {
+            $filters['check_category'] = $_POST['check_category'];
+        }
+        $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
+        echo $filters;
+    }
 
     public function joinCreativeCategory($id = 1)
     {
@@ -661,6 +679,33 @@ class Admincp2 extends Admincp_Controller
         $filters['limit'] = 10;
         $filters['id_site'] = $id;
         $filters['name'] = true;
+        
+        if (isset($_GET['filters'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));
+            if (isset($filters_decode['nume']))
+                $filters['nume'] = $filters_decode['nume'];
+        } elseif (isset($_POST['filters'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
+            if (isset($filters_decode['nume']))
+                $filters['nume'] = $filters_decode['nume'];
+        }
+        
+        if (isset($filters_decode) && !empty($filters_decode)) {
+            foreach ($filters_decode as $key => $val) {
+                $filters[$key] = $val;
+            }
+        }
+        
+        foreach ($_POST as $key => $val) {
+            if (in_array($val, array('filter results'))) {
+                unset($_POST[$key]);
+            }
+        }
+        
+        print '<pre>';
+        print_r($filters_decode);
+        //echo $this->update_filters();
+        print '</pre>';
  
         if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
             $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
@@ -687,11 +732,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');
 
-        if (isset($_GET['filters'])) {
-            $aux = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));
-            if (isset($aux['nume']))
-                $filters['nume'] = $aux['nume'];
-        }
+        
 
 
         // total rows
