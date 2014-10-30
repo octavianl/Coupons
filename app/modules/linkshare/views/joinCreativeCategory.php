@@ -4,24 +4,17 @@ jQuery(document).ready(function(){
     $('.pagination .number a').on('click', function(event){
         event.preventDefault();
         var merged_category = $('input[name="merged_category"]').val();
-        //alert(merged_category);
-        //var check_category = $('input[name="check_category[]"]').val();
         var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
-        //alert(check_category);
+        var ajax_var = 'true';
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
-            data: 'check_category='+check_category+'&merged_category='+merged_category,
+            data: 'check_category='+check_category+'&merged_category='+merged_category+'&ajax_var='+ajax_var,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {                
-                console.log('zzz');
-                console.log('before='+$('input[name="filters"]').val());
-                //alert(data);
-                //alert($('input[name="filters"]').val());
                 $('input[name="filters"]').val(data);
-                //alert($('input[name="filters"]').val());
-                console.log('after='+$('input[name="filters"]').val());
-                //console.log($("#dataset_form").attr("method"));
+                //console.log('after='+$('input[name="filters"]').val());
+                //document.forms['dataset_form'].action('post');
                 document.forms['dataset_form'].submit();
             }
         });
@@ -67,7 +60,7 @@ jQuery(document).ready(function(){
 	<? } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category"><button id="savex" type="button">Save</button></div></td>
+            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category"><button id="save" type="submit">Save</button></div></td>
         </tr>
 
 <?=$this->dataset->table_close();?>

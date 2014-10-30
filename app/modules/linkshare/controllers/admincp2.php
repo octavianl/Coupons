@@ -632,6 +632,9 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['check_category'])) {
             $filters['check_category'] = $_POST['check_category'];
         }
+        if (!empty($_POST['ajax_var'])) {
+            $filters['ajax_var'] = $_POST['ajax_var'];
+        }
         $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
         echo $filters;
     }
@@ -689,12 +692,14 @@ class Admincp2 extends Admincp_Controller
             if (isset($filters_decode['nume']))
                 $filters['nume'] = $filters_decode['nume'];
         }
-        
+
+       
         if (isset($filters_decode) && !empty($filters_decode)) {
             foreach ($filters_decode as $key => $val) {
                 $filters[$key] = $val;
             }
         }
+
         
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
@@ -705,24 +710,26 @@ class Admincp2 extends Admincp_Controller
         print '<pre>';
         print_r($filters_decode);
         //echo $this->update_filters();
-        print '</pre>';
+        print '</pre>';      
  
-        if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
-            $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
-            $this->category_creative_model->new_join_category($id_merged_category,$_GET['check_category']);
-            $data['message'] = "Categoria ".$_GET['merged_category']." a fost adaugata cu success!";
-            unset($_GET['merged_category']);
-            unset($_GET['check_category']);
-        }else{
-            $data['message'] = "Nu ai selectat nici o categorie din lista si nici nu ai scris numele unei noi categorii";
+        if ($filters_decode['ajax_var']!=='true'){
+            if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
+                $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
+                $this->category_creative_model->new_join_category($id_merged_category,$_GET['check_category']);
+                $data['message'] = "Categoria ".$_GET['merged_category']." a fost adaugata cu success!";
+                unset($_GET['merged_category']);
+                unset($_GET['check_category']);
+            }else{
+                $data['message'] = "Nu ai selectat nici o categorie din lista si nici nu ai scris numele unei noi categorii";
+            }
         }
+                
+        if (isset($_GET['offset'])){
+        $filters['offset'] = $_GET['offset'];}
         
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'get_creative_for_merge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
-        
-        if (isset($_GET['offset']))
-            $filters['offset'] = $_GET['offset'];
 
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
@@ -731,9 +738,6 @@ class Admincp2 extends Admincp_Controller
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');
-
-        
-
 
         // total rows
         $this->db->where('id_site', $id);
