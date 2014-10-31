@@ -3,23 +3,31 @@
 jQuery(document).ready(function(){
     $('.pagination .number a').on('click', function(event){
         event.preventDefault();
+        var link_array = this.href;
+        var filter_var = link_array.split('=')
         var merged_category = $('input[name="merged_category"]').val();
         var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
         var ajax_var = 'true';
+        var name_var = $('input[name="nume"]').val();
+        var mid_var = $('input[name="mid"]').val();
+//        var limit_split = filter_var[4].split('&');
+//        var limit_var = limit_split[0];
+        var offset_var = filter_var[5];
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
-            data: 'check_category='+check_category+'&merged_category='+merged_category+'&ajax_var='+ajax_var,
+            data: 'check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset_var,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {                
                 $('input[name="filters"]').val(data);
                 //console.log('after='+$('input[name="filters"]').val());
-                //document.forms['dataset_form'].action('post');
+                document.forms['dataset_form'].method='post';
                 document.forms['dataset_form'].submit();
             }
         });
         console.log('end='+$('input[name="filters"]').val());
         //alert($('input[name="filters"]').val());
+ 
     });
 });
 </script>
@@ -45,8 +53,13 @@ jQuery(document).ready(function(){
 				<td align="center"><?=$row['name'];?></td>
                                 <td align="center"><?=$row['mid'];?></td>
                                 <td align="left"><?=$row['nid'];?></td>
-				<td  align="left" class="options">
-					<a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
+                                <td  align="left" class="options">
+                                <?=$row['mid_filter'];?> <?=$row['nume_filter'];?>
+                                    <script>
+                                        $('input[name="nume"]').val('<?=$row['nume_filter'];?>');
+                                        $('input[name="mid_filter"]').val('<?=$row['mid_filter'];?>');
+                                    </script>
+                                    <a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
 		<?

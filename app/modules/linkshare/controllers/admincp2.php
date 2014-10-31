@@ -635,6 +635,15 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['ajax_var'])) {
             $filters['ajax_var'] = $_POST['ajax_var'];
         }
+        if (!empty($_POST['nume'])) {
+            $filters['nume'] = $_POST['nume'];
+        }
+        if (!empty($_POST['mid'])) {
+            $filters['mid'] = $_POST['mid'];
+        }
+        if (!empty($_POST['offset'])) {
+            $filters['offset'] = $_POST['offset'];
+        }
         $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
         echo $filters;
     }
@@ -679,10 +688,13 @@ class Admincp2 extends Admincp_Controller
         );
 
         $filters = array();
-        $filters['limit'] = 10;
+        $filters['limit'] = 50;
         $filters['id_site'] = $id;
-        $filters['name'] = true;
+        $filters['name'] = true; 
         
+        if (isset($_GET['offset'])){
+        $filters['offset'] = $_GET['offset'];}
+       
         if (isset($_GET['filters'])) {
             $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));
             if (isset($filters_decode['nume']))
@@ -692,7 +704,8 @@ class Admincp2 extends Admincp_Controller
             if (isset($filters_decode['nume']))
                 $filters['nume'] = $filters_decode['nume'];
         }
-
+        
+        $filters['offset'] = $filters_decode['offset'];
        
         if (isset($filters_decode) && !empty($filters_decode)) {
             foreach ($filters_decode as $key => $val) {
@@ -709,7 +722,7 @@ class Admincp2 extends Admincp_Controller
         
         print '<pre>';
         print_r($filters_decode);
-        //echo $this->update_filters();
+
         print '</pre>';      
  
         if ($filters_decode['ajax_var']!=='true'){
@@ -723,16 +736,19 @@ class Admincp2 extends Admincp_Controller
                 $data['message'] = "Nu ai selectat nici o categorie din lista si nici nu ai scris numele unei noi categorii";
             }
         }
-                
-        if (isset($_GET['offset'])){
-        $filters['offset'] = $_GET['offset'];}
+
+        $filters['nume'] = $filters_decode['nume'];
+        
+        $filters['mid'] = $filters_decode['mid'];
         
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'get_creative_for_merge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
 
+
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
+
         if (isset($_GET['mid']))
             $filters['mid'] = $_GET['mid'];
 

@@ -260,7 +260,7 @@ class Category_creative_model extends CI_Model
     function get_creative_for_merge($filters)
     {
         $row = array();
-
+print_r ($filters);
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
@@ -293,12 +293,14 @@ class Category_creative_model extends CI_Model
             
             $merge_categories = $this->category_creative_model->get_creative_merged($linie['cat_id']);
             $linie['merge_categories'] = $merge_categories;
+            $linie['nume_filter'] = $filters['nume'];
+            $linie['mid_filter'] = $filters['mid'];
             
             $row[] = $linie;
 
         }
 //        echo "<pre>";
-//            print_r($row);
+//        print_r($row);
         return $row;
     }
     
@@ -315,7 +317,7 @@ class Category_creative_model extends CI_Model
             $names[]=$row['name'];
             
         }
-        
+  
         return $names;
     }
 }
