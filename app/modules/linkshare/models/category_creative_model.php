@@ -259,8 +259,10 @@ class Category_creative_model extends CI_Model
      */
     function get_creative_for_merge($filters)
     {
+        $this->load->model('site_model');
         $row = array();
 print_r ($filters);
+
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
@@ -283,9 +285,9 @@ print_r ($filters);
 
         $result = $this->db->get('linkshare_categories_creative');
         if (isset($filters['name']))
-            $this->load->model('site_model');
 
         foreach ($result->result_array() as $linie) {
+            
             if (isset($filters['name'])) {
                 $site = $this->site_model->get_site($linie['id_site']);
                 $linie['id_site'] = $site['name'];
@@ -293,14 +295,22 @@ print_r ($filters);
             
             $merge_categories = $this->category_creative_model->get_creative_merged($linie['cat_id']);
             $linie['merge_categories'] = $merge_categories;
+            // teamp values for Merged name category and for checkbox
+            $linie['temp_name_merged'] = $filters['merged_category'];
+            $linie['temp_check_category'] = $filters['check_category'];
+            // search filters for persistency
             $linie['nume_filter'] = $filters['nume'];
             $linie['mid_filter'] = $filters['mid'];
+
+            $check_array = explode(',', $filters['check_category']);
+            in_array($linie['cat_id'], $check_array, true) ? $linie['checked'] = 1 : $linie['checked'] = 0;            
             
             $row[] = $linie;
 
         }
 //        echo "<pre>";
 //        print_r($row);
+//        echo "</pre>";
         return $row;
     }
     

@@ -712,8 +712,7 @@ class Admincp2 extends Admincp_Controller
                 $filters[$key] = $val;
             }
         }
-
-        
+       
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
                 unset($_POST[$key]);

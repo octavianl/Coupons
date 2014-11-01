@@ -6,7 +6,8 @@ jQuery(document).ready(function(){
         var link_array = this.href;
         var filter_var = link_array.split('=')
         var merged_category = $('input[name="merged_category"]').val();
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
+        var temp_cecked = $('input[name="temp_checked"]').val();
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
         var ajax_var = 'true';
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
@@ -42,7 +43,7 @@ jQuery(document).ready(function(){
 		?>
 			<tr>			
 				<td align="left"><?=$row['id'];?></td>
-                                <td align="left"><input type="checkbox" name="check_category[]" value="<?=$row['cat_id']?>" class="action_items" ></td>
+                                <td align="left"><input type="checkbox" name="check_category[]" value="<?=$row['cat_id']?>" class="action_items" <?php if(($row['checked'])==1){echo 'checked';}?>></td>
                                 <td align="left"><?=$row['id_site'];?></td>
                                 <td align="left"><?=$row['cat_id'];?> 
                                     <?php if(!empty($row['merge_categories'])){ ?>
@@ -54,11 +55,11 @@ jQuery(document).ready(function(){
                                 <td align="center"><?=$row['mid'];?></td>
                                 <td align="left"><?=$row['nid'];?></td>
                                 <td  align="left" class="options">
-                                <?=$row['mid_filter'];?> <?=$row['nume_filter'];?>
                                     <script>
                                         $('input[name="nume"]').val('<?=$row['nume_filter'];?>');
                                         $('input[name="mid_filter"]').val('<?=$row['mid_filter'];?>');
                                     </script>
+                                    <input type="hidden" name="temp_checked" value="<?php if(isset($row['temp_check_category'])){echo $row['temp_check_category'];}; ?>">
                                     <a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
@@ -73,7 +74,7 @@ jQuery(document).ready(function(){
 	<? } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category"><button id="save" type="submit">Save</button></div></td>
+            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category" value="<?php if(isset($row['temp_name_merged'])){echo $row['temp_name_merged'];}?>"><button id="save" type="submit">Save</button></div></td>
         </tr>
 
 <?=$this->dataset->table_close();?>
