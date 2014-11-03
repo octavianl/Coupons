@@ -724,7 +724,7 @@ class Admincp2 extends Admincp_Controller
 
         print '</pre>';      
  
-        if ($filters_decode['ajax_var']!=='true'){
+        if (isset($filters_decode['ajax_var'])){
             if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
                 $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
                 $this->category_creative_model->new_join_category($id_merged_category,$_GET['check_category']);
@@ -750,6 +750,24 @@ class Admincp2 extends Admincp_Controller
 
         if (isset($_GET['mid']))
             $filters['mid'] = $_GET['mid'];
+        
+        // &limit=10&offset=20
+        //if (isset($_POST['offset'])) {
+            //$_GET['offset'] = $_POST['offset'];
+            $_GET['offset'] = $filters['offset'];
+        //}
+        
+        if (isset($_POST['limit'])) {
+            $_GET['limit'] = $_POST['limit'];
+        }
+        
+        print '<pre>POST';
+        print_r($_POST);        
+        print '</pre>';
+        
+        print '<pre>GET';        
+        print_r($_GET);
+        print '</pre>';
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');

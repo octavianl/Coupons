@@ -1,7 +1,7 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <script>
 jQuery(document).ready(function(){
-    $('.pagination .number a').on('click', function(event){
+    $('.pagination .number a, .pagination .last a, .pagination .first a, .pagination .next a, .pagination .previous a').on('click', function(event){
         event.preventDefault();
         var link_array = this.href;
         var filter_var = link_array.split('=')
@@ -13,11 +13,14 @@ jQuery(document).ready(function(){
         var mid_var = $('input[name="mid"]').val();
 //        var limit_split = filter_var[4].split('&');
 //        var limit_var = limit_split[0];
-        var offset_var = filter_var[5];
+        var offset_var = parseInt(filter_var[5]);
+        //alert(offset_var);
+        var limit = parseInt(filter_var[4]);       
+        //for(i=0;i<filter_var.length;i++) alert('i='+i+' => '+filter_var[i]);
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
-            data: 'check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset_var,
+            data: 'check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset_var+'&limit='+limit,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {                
                 $('input[name="filters"]').val(data);
@@ -28,8 +31,8 @@ jQuery(document).ready(function(){
         });
         console.log('end='+$('input[name="filters"]').val());
         //alert($('input[name="filters"]').val());
- 
     });
+
 });
 </script>
 <h1>Join Creative Categories</h1>
