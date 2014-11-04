@@ -620,6 +620,10 @@ class Admincp2 extends Admincp_Controller
     
      function update_filters() {
         $this->load->library('asciihex');
+        
+        // old filters
+        $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
+        
         $filters = array();
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
@@ -629,9 +633,59 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['merged_category'])) {
             $filters['merged_category'] = $_POST['merged_category'];
         }
+        
+        if (!empty($_POST['all_page_category'])) {
+            $filters['all_page_category'] = $_POST['all_page_category'];
+        }
+        
+        $all_page_category = explode(',', $filters['all_page_category']);
+        // remove 0
+        foreach ($all_page_category as $cat) {
+            if ($cat) {
+                // current page checkboxes
+                $all_page_category_ok[] = $cat;
+            }
+        }                
+        
         if (!empty($_POST['check_category'])) {
             $filters['check_category'] = $_POST['check_category'];
         }
+        
+        $check_category = explode(',', $filters['check_category']);
+        
+        // remove 0
+        foreach ($check_category as $cat) {
+            if ($cat) {
+                //current checkboxes
+                $check_category_ok[] = $cat;
+            }
+        }
+        
+        $filters_decode_check_category = explode(',', $filters_decode['check_category']);
+        
+        // remove 0
+        foreach ($filters_decode_check_category as $cat) {
+            if ($cat) {
+                //past checkboxes
+                $filters_decode_check_category_ok[] = $cat;
+            }
+        }
+
+        // add new checkboxes
+        foreach ($check_category_ok as $cat) {
+            if (!in_array($cat, $filters_decode_check_category_ok)) {
+                $filters_decode_check_category_ok[] = $cat;
+            }
+        }
+        
+        $checkboxes_to_remove = array_diff($all_page_category_ok, $check_category_ok);
+        // remove old checkboxes from this page
+        $filters_decode_check_category_ok = array_diff($filters_decode_check_category_ok, $checkboxes_to_remove);                
+        
+        $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
+        
+        $filters['check_category'] = $filters_decode_check_category_ok;
+        
         if (!empty($_POST['ajax_var'])) {
             $filters['ajax_var'] = $_POST['ajax_var'];
         }
@@ -644,6 +698,11 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['offset'])) {
             $filters['offset'] = $_POST['offset'];
         }
+        
+        if (!empty($_POST['limit'])) {
+            $filters['limit'] = $_POST['limit'];
+        }
+        
         $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
         echo $filters;
     }
@@ -687,8 +746,8 @@ class Admincp2 extends Admincp_Controller
             )
         );
 
-        $filters = array();
-        $filters['limit'] = 50;
+        $filters = $filters_decode = array();
+        //$filters['limit'] = 50;
         $filters['id_site'] = $id;
         $filters['name'] = true; 
         
@@ -696,16 +755,15 @@ class Admincp2 extends Admincp_Controller
         $filters['offset'] = $_GET['offset'];}
        
         if (isset($_GET['filters'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));
-            if (isset($filters_decode['nume']))
-                $filters['nume'] = $filters_decode['nume'];
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));            
         } elseif (isset($_POST['filters'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
-            if (isset($filters_decode['nume']))
-                $filters['nume'] = $filters_decode['nume'];
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));            
         }
         
-        $filters['offset'] = $filters_decode['offset'];
+//        if (isset($filters_decode['nume']))
+//                $filters['nume'] = $filters_decode['nume'];
+//        
+//        $filters['offset'] = $filters_decode['offset'];
        
         if (isset($filters_decode) && !empty($filters_decode)) {
             foreach ($filters_decode as $key => $val) {
@@ -719,7 +777,7 @@ class Admincp2 extends Admincp_Controller
             }
         }
         
-        print '<pre>';
+        print '<pre>FILTERS DECODE';
         print_r($filters_decode);
         print '</pre>';      
  
@@ -733,9 +791,9 @@ class Admincp2 extends Admincp_Controller
             }
         }
 
-        $filters['nume'] = $filters_decode['nume'];
-        
-        $filters['mid'] = $filters_decode['mid'];
+//        $filters['nume'] = $filters_decode['nume'];
+//        
+//        $filters['mid'] = $filters_decode['mid'];
         
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'get_creative_for_merge', $filters);
@@ -749,10 +807,11 @@ class Admincp2 extends Admincp_Controller
             $filters['mid'] = $_GET['mid'];
         
         // &limit=10&offset=20
-        //if (isset($_POST['offset'])) {
-            //$_GET['offset'] = $_POST['offset'];
-            $_GET['offset'] = $filters['offset'];
-        //}
+        if (isset($_POST['offset'])) {
+            $_GET['offset'] = $_POST['offset'];
+        } else {
+            $_GET['offset'] = $filters_decode['offset'];
+        }
         
         if (isset($_POST['limit'])) {
             $_GET['limit'] = $_POST['limit'];

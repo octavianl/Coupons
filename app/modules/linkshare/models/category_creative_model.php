@@ -261,7 +261,9 @@ class Category_creative_model extends CI_Model
     {
         $this->load->model('site_model');
         $row = array();
-print_r ($filters);
+        print '<pre>MERGE';
+        print_r ($filters);
+        print '</pre>';
 
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;

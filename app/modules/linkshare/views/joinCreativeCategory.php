@@ -3,24 +3,30 @@
 jQuery(document).ready(function(){
     $('.pagination .number a, .pagination .last a, .pagination .first a, .pagination .next a, .pagination .previous a').on('click', function(event){
         event.preventDefault();
+        var filters = $('input[name="filters"]').val();
         var link_array = this.href;
         var filter_var = link_array.split('=')
         var merged_category = $('input[name="merged_category"]').val();
         var temp_cecked = $('input[name="temp_checked"]').val();
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
+        //var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
+        var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
         var ajax_var = 'true';
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
 //        var limit_split = filter_var[4].split('&');
 //        var limit_var = limit_split[0];
-        var offset_var = parseInt(filter_var[5]);
+        var offset = parseInt(filter_var[5]);
+        if(true === isNaN(offset)) {
+            offset = 0;
+        }
         //alert(offset_var);
         var limit = parseInt(filter_var[4]);       
         //for(i=0;i<filter_var.length;i++) alert('i='+i+' => '+filter_var[i]);
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
-            data: 'check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset_var+'&limit='+limit,
+            data: 'filters='+filters+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset+'&limit='+limit,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {                
                 $('input[name="filters"]').val(data);
