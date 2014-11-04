@@ -721,18 +721,15 @@ class Admincp2 extends Admincp_Controller
         
         print '<pre>';
         print_r($filters_decode);
-
         print '</pre>';      
  
-        if (isset($filters_decode['ajax_var'])){
-            if (isset($_GET['merged_category']) && isset($_GET['check_category'])){
-                $id_merged_category = $this->category_creative_model->new_merged_category($_GET['merged_category']);            
-                $this->category_creative_model->new_join_category($id_merged_category,$_GET['check_category']);
-                $data['message'] = "Categoria ".$_GET['merged_category']." a fost adaugata cu success!";
-                unset($_GET['merged_category']);
-                unset($_GET['check_category']);
-            }else{
-                $data['message'] = "Nu ai selectat nici o categorie din lista si nici nu ai scris numele unei noi categorii";
+        if (!isset($filters_decode['ajax_var'])){
+            if (isset($_POST['merged_category']) && isset($_POST['check_category'])){
+                $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
+                $this->category_creative_model->new_join_category($id_merged_category,$_POST['check_category']);
+                $data['message'] = "Categoria ".$_POST['merged_category']." a fost adaugata cu success!";
+                unset($_POST['merged_category']);
+                unset($_POST['check_category']);
             }
         }
 

@@ -32,7 +32,9 @@ jQuery(document).ready(function(){
         console.log('end='+$('input[name="filters"]').val());
         //alert($('input[name="filters"]').val());
     });
-
+    $('#save').on('click', function(event){
+        document.forms['dataset_form'].method='post';
+    });
 });
 </script>
 <h1>Join Creative Categories</h1>
