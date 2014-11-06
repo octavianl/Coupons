@@ -625,6 +625,7 @@ class Admincp2 extends Admincp_Controller
         $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
         
         $filters = array();
+        
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
                 unset($_POST[$key]);
@@ -651,6 +652,7 @@ class Admincp2 extends Admincp_Controller
             $filters['check_category'] = $_POST['check_category'];
         }
         
+        $check_category_ok = array();
         $check_category = explode(',', $filters['check_category']);
         
         // remove 0
@@ -661,6 +663,7 @@ class Admincp2 extends Admincp_Controller
             }
         }
         
+        $filters_decode_check_category_ok = array();
         $filters_decode_check_category = explode(',', $filters_decode['check_category']);
         
         // remove 0
@@ -685,6 +688,7 @@ class Admincp2 extends Admincp_Controller
         $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
         
         $filters['check_category'] = $filters_decode_check_category_ok;
+
         
         if (!empty($_POST['ajax_var'])) {
             $filters['ajax_var'] = $_POST['ajax_var'];
@@ -820,10 +824,10 @@ class Admincp2 extends Admincp_Controller
         print '<pre>POST';
         print_r($_POST);        
         print '</pre>';
-        
-        print '<pre>GET';        
-        print_r($_GET);
-        print '</pre>';
+//        
+//        print '<pre>GET';        
+//        print_r($_GET);
+//        print '</pre>';
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');

@@ -261,9 +261,9 @@ class Category_creative_model extends CI_Model
     {
         $this->load->model('site_model');
         $row = array();
-        print '<pre>MERGE';
-        print_r ($filters);
-        print '</pre>';
+//        print '<pre>MERGE';
+//        print_r ($filters);
+//        print '</pre>';
 
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
@@ -299,7 +299,6 @@ class Category_creative_model extends CI_Model
             $linie['merge_categories'] = $merge_categories;
             // teamp values for Merged name category and for checkbox
             $linie['temp_name_merged'] = $filters['merged_category'];
-            $linie['temp_check_category'] = $filters['check_category'];
             // search filters for persistency
             $linie['nume_filter'] = $filters['nume'];
             $linie['mid_filter'] = $filters['mid'];

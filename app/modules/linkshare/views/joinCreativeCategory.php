@@ -5,9 +5,9 @@ jQuery(document).ready(function(){
         event.preventDefault();
         var filters = $('input[name="filters"]').val();
         var link_array = this.href;
-        var filter_var = link_array.split('=')
+        var filter_var = link_array.split('=');
         var merged_category = $('input[name="merged_category"]').val();
-        var temp_cecked = $('input[name="temp_checked"]').val();
+        //var temp_cecked = $('input[name="temp_checked"]').val();
         //var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
         var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
         var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
@@ -20,7 +20,7 @@ jQuery(document).ready(function(){
         if(true === isNaN(offset)) {
             offset = 0;
         }
-        //alert(offset_var);
+        //alert(filters);
         var limit = parseInt(filter_var[4]);       
         //for(i=0;i<filter_var.length;i++) alert('i='+i+' => '+filter_var[i]);
         $.ajax({
@@ -39,6 +39,11 @@ jQuery(document).ready(function(){
         //alert($('input[name="filters"]').val());
     });
     $('#save').on('click', function(event){
+        if($('#merged_category').val() == ''){
+            alert('Field Merged Category is empty!');
+            $('#merged_category').css("border-color", "#ff0000");
+            return false;
+        }
         document.forms['dataset_form'].method='post';
     });
 });
@@ -70,7 +75,7 @@ jQuery(document).ready(function(){
                                         $('input[name="nume"]').val('<?=$row['nume_filter'];?>');
                                         $('input[name="mid_filter"]').val('<?=$row['mid_filter'];?>');
                                     </script>
-                                    <input type="hidden" name="temp_checked" value="<?php if(isset($row['temp_check_category'])){echo $row['temp_check_category'];}; ?>">
+                                    
                                     <a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
@@ -85,7 +90,7 @@ jQuery(document).ready(function(){
 	<? } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new category: </span><input type="text" name="merged_category" value="<?php if(isset($row['temp_name_merged'])){echo $row['temp_name_merged'];}?>"><button id="save" type="submit">Save</button></div></td>
+            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($row['temp_name_merged'])){echo $row['temp_name_merged'];}?>"><button id="save" type="submit">Save</button></div></td>
         </tr>
 
 <?=$this->dataset->table_close();?>
