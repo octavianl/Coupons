@@ -240,6 +240,10 @@ class Category_creative_model extends CI_Model
     function new_join_category($id_merged_category,$check_category)
     {
         foreach ($check_category as $category) {
+            $category = (int) $category;
+            if (!$category) {
+                continue;
+            }    
             $insert_fields = array (
                 'id_categ_advertiser' => $category,
                 'id_categ_merged' => $id_merged_category,

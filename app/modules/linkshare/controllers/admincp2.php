@@ -622,7 +622,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->library('asciihex');
         
         // old filters
-        $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
+        $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));
         
         $filters = array();
         
@@ -688,11 +688,7 @@ class Admincp2 extends Admincp_Controller
         $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
         
         $filters['check_category'] = $filters_decode_check_category_ok;
-
-        
-        if (!empty($_POST['ajax_var'])) {
-            $filters['ajax_var'] = $_POST['ajax_var'];
-        }
+               
         if (!empty($_POST['nume'])) {
             $filters['nume'] = $_POST['nume'];
         }
@@ -706,6 +702,8 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['limit'])) {
             $filters['limit'] = $_POST['limit'];
         }
+        
+        //print_r($filters);
         
         $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
         echo $filters;
@@ -758,10 +756,10 @@ class Admincp2 extends Admincp_Controller
         if (isset($_GET['offset'])){
         $filters['offset'] = $_GET['offset'];}
        
-        if (isset($_GET['filters'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));            
-        } elseif (isset($_POST['filters'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));            
+        if (isset($_GET['filterz'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filterz'])));            
+        } elseif (isset($_POST['filterz'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));            
         }
         
 //        if (isset($filters_decode['nume']))
@@ -785,13 +783,14 @@ class Admincp2 extends Admincp_Controller
         print_r($filters_decode);
         print '</pre>';      
  
-        if (!isset($filters_decode['ajax_var'])){
-            if (isset($_POST['merged_category']) && isset($_POST['check_category'])){
+        if ($_POST['saving'] == 'ok'){
+            if (isset($_POST['merged_category']) && isset($filters_decode['check_category'])){
                 $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
-                $this->category_creative_model->new_join_category($id_merged_category,$_POST['check_category']);
+                $this->category_creative_model->new_join_category($id_merged_category,explode(',', $filters_decode['check_category']));
                 $data['message'] = "Categoria ".$_POST['merged_category']." a fost adaugata cu success!";
                 unset($_POST['merged_category']);
                 unset($_POST['check_category']);
+                
             }
         }
 
@@ -841,8 +840,12 @@ class Admincp2 extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
+        
+        $data = array(
+          'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz']
+        );
 
-        $this->load->view('joinCreativeCategory');
+        $this->load->view('joinCreativeCategory', $data);
     } 
 
 }

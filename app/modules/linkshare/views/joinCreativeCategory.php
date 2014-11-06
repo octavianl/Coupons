@@ -3,15 +3,14 @@
 jQuery(document).ready(function(){
     $('.pagination .number a, .pagination .last a, .pagination .first a, .pagination .next a, .pagination .previous a').on('click', function(event){
         event.preventDefault();
-        var filters = $('input[name="filters"]').val();
+        var filterz = $('input[name="filterz"]').val();
         var link_array = this.href;
         var filter_var = link_array.split('=');
         var merged_category = $('input[name="merged_category"]').val();
         //var temp_cecked = $('input[name="temp_checked"]').val();
         //var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
         var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
-        var ajax_var = 'true';
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');        
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
 //        var limit_split = filter_var[4].split('&');
@@ -26,17 +25,17 @@ jQuery(document).ready(function(){
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
-            data: 'filters='+filters+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&ajax_var='+ajax_var+'&offset='+offset+'&limit='+limit,
+            data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
             dataType:'html',
-            success: function(data, textStatus, XMLHttpRequest) {                
-                $('input[name="filters"]').val(data);
-                //console.log('after='+$('input[name="filters"]').val());
+            success: function(data, textStatus, XMLHttpRequest) {
+                $('input[name="filterz"]').val(data);
+                console.log('after='+$('input[name="filterz"]').val());
                 document.forms['dataset_form'].method='post';
                 document.forms['dataset_form'].submit();
             }
         });
-        console.log('end='+$('input[name="filters"]').val());
-        //alert($('input[name="filters"]').val());
+        console.log('end='+$('input[name="filterz"]').val());
+        //alert($('input[name="filterz"]').val());
     });
     $('#save').on('click', function(event){
         if($('#merged_category').val() == ''){
@@ -44,7 +43,9 @@ jQuery(document).ready(function(){
             $('#merged_category').css("border-color", "#ff0000");
             return false;
         }
+        $('input[name="saving"]').val('ok');
         document.forms['dataset_form'].method='post';
+        document.forms['dataset_form'].submit();
     });
 });
 </script>
@@ -52,7 +53,8 @@ jQuery(document).ready(function(){
 <div><strong>INSTRUCTION</strong>: First search a keyword on Name filter, chose category ( checkboxes ) you want to merge then write a name for the NEW category and press SAVE !<br/><br/></div>
 
 <?=$this->dataset->table_head();?>
-
+    <input name="filterz" value="<?php echo $filterz; ?>"/>
+    <input name="saving" value=""/>
     	<?
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
