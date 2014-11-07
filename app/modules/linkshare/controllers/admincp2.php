@@ -638,7 +638,7 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['all_page_category'])) {
             $filters['all_page_category'] = $_POST['all_page_category'];
         }
-        
+        $all_page_category_ok = array();
         $all_page_category = explode(',', $filters['all_page_category']);
         // remove 0
         foreach ($all_page_category as $cat) {
@@ -647,10 +647,6 @@ class Admincp2 extends Admincp_Controller
                 $all_page_category_ok[] = $cat;
             }
         }                
-        
-        if (!empty($_POST['check_category'])) {
-            $filters['check_category'] = $_POST['check_category'];
-        }
         
         $check_category_ok = array();
         $check_category = explode(',', $filters['check_category']);
@@ -681,6 +677,7 @@ class Admincp2 extends Admincp_Controller
             }
         }
         
+        $checkboxes_to_remove = array();
         $checkboxes_to_remove = array_diff($all_page_category_ok, $check_category_ok);
         // remove old checkboxes from this page
         $filters_decode_check_category_ok = array_diff($filters_decode_check_category_ok, $checkboxes_to_remove);                
@@ -688,7 +685,11 @@ class Admincp2 extends Admincp_Controller
         $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
         
         $filters['check_category'] = $filters_decode_check_category_ok;
-               
+        
+        if (!empty($_POST['check_category'])) {
+            $filters['check_category'] = $_POST['check_category'];
+        }
+        
         if (!empty($_POST['nume'])) {
             $filters['nume'] = $_POST['nume'];
         }
@@ -784,13 +785,25 @@ class Admincp2 extends Admincp_Controller
         print '</pre>';      
  
         if ($_POST['saving'] == 'ok'){
-            if (isset($_POST['merged_category']) && isset($filters_decode['check_category'])){
+            if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])){
                 $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
-                $this->category_creative_model->new_join_category($id_merged_category,explode(',', $filters_decode['check_category']));
-                $data['message'] = "Categoria ".$_POST['merged_category']." a fost adaugata cu success!";
-                unset($_POST['merged_category']);
-                unset($_POST['check_category']);
+                $id_join_category = $this->category_creative_model->new_join_category($id_merged_category,explode(',', $filters_decode['check_category']));
                 
+                $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
+                $this->notices->SetNotice($message);
+                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
+                
+            }elseif(isset($_POST['merged_category']) && !empty($_POST['check_category'])){
+                $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
+                $this->category_creative_model->new_join_category($id_merged_category,$_POST['check_category']);
+
+                $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
+                $this->notices->SetNotice($message);
+                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
+
+            }  else {
+                $this->notices->SetNotice('Check if any checkboxes are selected!');
+                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
             }
         }
 
@@ -823,10 +836,10 @@ class Admincp2 extends Admincp_Controller
         print '<pre>POST';
         print_r($_POST);        
         print '</pre>';
-//        
-//        print '<pre>GET';        
-//        print_r($_GET);
-//        print '</pre>';
+        
+        print '<pre>GET';        
+        print_r($_GET);
+        print '</pre>';
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');
@@ -842,7 +855,10 @@ class Admincp2 extends Admincp_Controller
         // add actions
         
         $data = array(
-          'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz']
+          'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz'],
+          'name_search' => $filters['nume'],
+          'mid_search' => $filters['mid'],
+          'name_merged' => $filters['merged_category']
         );
 
         $this->load->view('joinCreativeCategory', $data);

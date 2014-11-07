@@ -7,14 +7,10 @@ jQuery(document).ready(function(){
         var link_array = this.href;
         var filter_var = link_array.split('=');
         var merged_category = $('input[name="merged_category"]').val();
-        //var temp_cecked = $('input[name="temp_checked"]').val();
-        //var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',')+','+temp_cecked;
         var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
         var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');        
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
-//        var limit_split = filter_var[4].split('&');
-//        var limit_var = limit_split[0];
         var offset = parseInt(filter_var[5]);
         if(true === isNaN(offset)) {
             offset = 0;
@@ -29,12 +25,12 @@ jQuery(document).ready(function(){
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {
                 $('input[name="filterz"]').val(data);
-                console.log('after='+$('input[name="filterz"]').val());
+                //console.log('after='+$('input[name="filterz"]').val());
                 document.forms['dataset_form'].method='post';
                 document.forms['dataset_form'].submit();
             }
         });
-        console.log('end='+$('input[name="filterz"]').val());
+        //console.log('end='+$('input[name="filterz"]').val());
         //alert($('input[name="filterz"]').val());
     });
     $('#save').on('click', function(event){
@@ -43,6 +39,10 @@ jQuery(document).ready(function(){
             $('#merged_category').css("border-color", "#ff0000");
             return false;
         }
+        
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');  
+        alert(check_category);
+        
         $('input[name="saving"]').val('ok');
         document.forms['dataset_form'].method='post';
         document.forms['dataset_form'].submit();
@@ -53,8 +53,8 @@ jQuery(document).ready(function(){
 <div><strong>INSTRUCTION</strong>: First search a keyword on Name filter, chose category ( checkboxes ) you want to merge then write a name for the NEW category and press SAVE !<br/><br/></div>
 
 <?=$this->dataset->table_head();?>
-    <input name="filterz" value="<?php echo $filterz; ?>"/>
-    <input name="saving" value=""/>
+    <input type="hidden" name="filterz" value="<?php echo $filterz; ?>"/>
+    <input type="hidden" name="saving" value=""/>
     	<?
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
@@ -74,8 +74,8 @@ jQuery(document).ready(function(){
                                 <td align="left"><?=$row['nid'];?></td>
                                 <td  align="left" class="options">
                                     <script>
-                                        $('input[name="nume"]').val('<?=$row['nume_filter'];?>');
-                                        $('input[name="mid_filter"]').val('<?=$row['mid_filter'];?>');
+                                        $('input[name="nume"]').val('<?=$name_search;?>');
+                                        $('input[name="mid"]').val('<?=$mid_search;?>');
                                     </script>
                                     
                                     <a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
@@ -92,7 +92,7 @@ jQuery(document).ready(function(){
 	<? } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($row['temp_name_merged'])){echo $row['temp_name_merged'];}?>"><button id="save" type="submit">Save</button></div></td>
+            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($name_merged)){echo $name_merged;}?>"><button id="save" type="button">Save</button></div></td>
         </tr>
 
 <?=$this->dataset->table_close();?>

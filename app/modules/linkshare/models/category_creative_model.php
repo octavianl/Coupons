@@ -265,29 +265,29 @@ class Category_creative_model extends CI_Model
     {
         $this->load->model('site_model');
         $row = array();
-//        print '<pre>MERGE';
-//        print_r ($filters);
-//        print '</pre>';
-
+        
+    print '<pre>MODEL';
+    print_r($filters);
+    print '</pre>'; 
+    
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
         }
         if (isset($filters['id_site']))
             $this->db->where('id_site', $filters['id_site']);
-        if (isset($filters['mid']))
-            $this->db->where('mid', $filters['mid']);
-        if (isset($filters['mid']))
-            $this->db->order_by('cat_id');
-        else
-            $this->db->order_by('id');
-
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
             $filters['nume'] = str_replace('%26', '&', $filters['nume']);
             $filters['nume'] = str_replace('+', ' ', $filters['nume']);
             $this->db->like('name', $filters['nume']);
         }
+        if (isset($filters['mid']))
+            $this->db->where('mid', $filters['mid']);
+        if (isset($filters['mid']))
+            $this->db->order_by('cat_id');
+        else
+            $this->db->order_by('id');
 
         $result = $this->db->get('linkshare_categories_creative');
         if (isset($filters['name']))
@@ -301,11 +301,6 @@ class Category_creative_model extends CI_Model
             
             $merge_categories = $this->category_creative_model->get_creative_merged($linie['cat_id']);
             $linie['merge_categories'] = $merge_categories;
-            // teamp values for Merged name category and for checkbox
-            $linie['temp_name_merged'] = $filters['merged_category'];
-            // search filters for persistency
-            $linie['nume_filter'] = $filters['nume'];
-            $linie['mid_filter'] = $filters['mid'];
 
             $check_array = explode(',', $filters['check_category']);
             in_array($linie['cat_id'], $check_array, true) ? $linie['checked'] = 1 : $linie['checked'] = 0;            
@@ -313,9 +308,6 @@ class Category_creative_model extends CI_Model
             $row[] = $linie;
 
         }
-//        echo "<pre>";
-//        print_r($row);
-//        echo "</pre>";
         return $row;
     }
     
