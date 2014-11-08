@@ -17,7 +17,7 @@ jQuery(document).ready(function(){
         }
         //alert(filters);
         var limit = parseInt(filter_var[4]);       
-        //for(i=0;i<filter_var.length;i++) alert('i='+i+' => '+filter_var[i]);
+
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/update_filters/',
@@ -30,8 +30,6 @@ jQuery(document).ready(function(){
                 document.forms['dataset_form'].submit();
             }
         });
-        //console.log('end='+$('input[name="filterz"]').val());
-        //alert($('input[name="filterz"]').val());
     });
     $('#save').on('click', function(event){
         if($('#merged_category').val() == ''){
@@ -39,10 +37,7 @@ jQuery(document).ready(function(){
             $('#merged_category').css("border-color", "#ff0000");
             return false;
         }
-        
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');  
-        alert(check_category);
-        
+  
         $('input[name="saving"]').val('ok');
         document.forms['dataset_form'].method='post';
         document.forms['dataset_form'].submit();

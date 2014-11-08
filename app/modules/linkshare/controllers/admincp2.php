@@ -648,6 +648,10 @@ class Admincp2 extends Admincp_Controller
             }
         }                
         
+        if (!empty($_POST['check_category'])) {
+            $filters['check_category'] = $_POST['check_category'];
+        }
+        
         $check_category_ok = array();
         $check_category = explode(',', $filters['check_category']);
         
@@ -685,10 +689,6 @@ class Admincp2 extends Admincp_Controller
         $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
         
         $filters['check_category'] = $filters_decode_check_category_ok;
-        
-        if (!empty($_POST['check_category'])) {
-            $filters['check_category'] = $_POST['check_category'];
-        }
         
         if (!empty($_POST['nume'])) {
             $filters['nume'] = $_POST['nume'];
@@ -786,8 +786,18 @@ class Admincp2 extends Admincp_Controller
  
         if ($_POST['saving'] == 'ok'){
             if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])){
+                $checked_values = array();
+                $checked_values = explode(',', $filters_decode['check_category']);
+                if(!empty($_POST['check_category'])){
+                    foreach ($_POST['check_category'] as $cat) {
+                        if ($cat) {
+                            //curent checkboxes
+                            $checked_values[] = $cat;
+                        }
+                    }
+                }  
                 $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
-                $id_join_category = $this->category_creative_model->new_join_category($id_merged_category,explode(',', $filters_decode['check_category']));
+                $id_join_category = $this->category_creative_model->new_join_category($id_merged_category,$checked_values);
                 
                 $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
                 $this->notices->SetNotice($message);
