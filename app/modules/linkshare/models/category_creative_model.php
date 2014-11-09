@@ -327,4 +327,46 @@ class Category_creative_model extends CI_Model
   
         return $names;
     }
+    
+    function get_merged_category()
+    {  
+        $result = $this->db->get('linkshare_categories_merged');
+
+        return $result->result_array();
+    }
+   
+    function get_joins_category($id)
+    {
+        $this->db->where('id_categ_merged', $id);
+        //$this->db->join('linkshare_categories_creative','linkshare_categories_creative.cat_id = linkshare_categories_joins.id_categ_merged','left');
+        $result = $this->db->get('linkshare_categories_joins');
+
+        return $result->result_array();
+    }
+    
+    function list_merged_category()
+    {  
+        $id_merged_category = $this->get_merged_category();
+
+        foreach ($id_merged_category as $key=>$row) {
+            $list_merged_category = array();
+            
+            $categories = $this->get_joins_category($row['ID']);
+            
+            foreach ($categories as $categ) {
+                $category_merged[] = $categ['id_categ_advertiser'];
+            } 
+            
+            $name = $row['name'];
+
+            $list_merged_category['category_merged_name'] = $name;
+            $list_merged_category['categories_merged'] = $category_merged;
+            
+            $result[] = $list_merged_category;
+            unset($category_merged);
+ 
+        }
+        
+        return $result;
+    }
 }

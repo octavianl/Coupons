@@ -712,7 +712,7 @@ class Admincp2 extends Admincp_Controller
 
     public function joinCreativeCategory($id = 1)
     {
-        // $this->admin_navigation->module_link('Save NEW CATEGORY', site_url('admincp2/linkshare/parseCreativeCategories/' . $id));
+        $this->admin_navigation->module_link('View Merged Categories', site_url('admincp2/linkshare/listMergedCategories/'));
 
         $this->load->library('dataset');
         $this->load->model('category_creative_model');
@@ -872,6 +872,54 @@ class Admincp2 extends Admincp_Controller
         );
 
         $this->load->view('joinCreativeCategory', $data);
-    } 
+    }
+    
+    public function listMergedCategories()
+    {
+        $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
+
+        $this->load->library('dataset');
+        $this->load->model('category_creative_model');
+
+        $columns = array(
+            array(
+                'name' => 'Merged Category Name',
+                'width' => '20%'),
+            array(
+                'name' => 'ID merged categories',
+                'width' => '20%'),
+//            array(
+//                'name' => 'Contained Categ Name',
+//                'width' => '20%'),
+//            array(
+//                'name' => 'Contained Categ MID',
+//                'width' => '20%'),
+            array(
+                'name' => 'Operatii',
+                'width' => '15%'
+            )
+        );
+
+//        echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
+//        die;
+        
+        $this->dataset->columns($columns);
+        $this->dataset->datasource('category_creative_model','list_merged_category', $filters);
+        $this->dataset->base_url(site_url('admincp2/linkshare/listMergedCategories'));
+        $this->dataset->rows_per_page(10);
+
+        // total rows
+        //$total_rows = $this->db->get('linkshare_categories')->num_rows();
+        $this->dataset->total_rows($total_rows);
+
+        $this->dataset->initialize();
+
+        // add actions
+        $this->dataset->action('Delete', 'admincp2/linkshare/deleteCategory');
+
+        $this->load->view('listMergedCategory');
+    }
 
 }
