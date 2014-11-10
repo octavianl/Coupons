@@ -328,6 +328,14 @@ class Category_creative_model extends CI_Model
         return $names;
     }
     
+    function get_merged_category_by_id($id)
+    {  
+        $this->db->where('ID', $id);
+        $result = $this->db->get('linkshare_categories_merged');
+
+        return $result->result_array();
+    }
+    
     function get_merged_category()
     {  
         $result = $this->db->get('linkshare_categories_merged');
@@ -355,18 +363,28 @@ class Category_creative_model extends CI_Model
             
             foreach ($categories as $categ) {
                 $category_merged[] = $categ['id_categ_advertiser'];
-            } 
-            
-            $name = $row['name'];
+            }
 
-            $list_merged_category['category_merged_name'] = $name;
+            $list_merged_category['category_merged_ID'] = $row['ID'];
+            $list_merged_category['category_merged_name'] = $row['name'];
             $list_merged_category['categories_merged'] = $category_merged;
             
             $result[] = $list_merged_category;
             unset($category_merged);
- 
         }
-        
+
         return $result;
+    }
+    
+    function update_merged_category($update_fields,$id) 
+    {		
+        $this->db->update('linkshare_categories_merged', $update_fields, array('ID' => $id));	
+        return TRUE;
+    }
+    
+    function delete_merged_category($id)
+    {
+        $this->db->delete('linkshare_categories_merged', array('id' => $id));
+        return TRUE;
     }
 }

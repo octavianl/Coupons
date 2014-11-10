@@ -618,7 +618,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('listCreativeCategoryParsed');
     }
     
-     function update_filters() {
+     function updateFilters() {
         $this->load->library('asciihex');
         
         // old filters
@@ -917,9 +917,55 @@ class Admincp2 extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp2/linkshare/deleteCategory');
+        $this->dataset->action('Delete', 'admincp2/linkshare/deleteMergedCatory');
 
         $this->load->view('listMergedCategory');
+    }
+    
+    public function editMergedCategory($id)
+    {
+        $this->load->model('category_creative_model');
+        $fields['name'] = $this->input->post('category_name');
+        
+        $category_name = $this->category_creative_model->get_merged_category_by_id($id);
+                
+//        echo "<pre>";
+//        print_r($category_name);
+//        echo "</pre>";
+//        die;
+
+        if (!empty($fields['name']) && isset($fields['name'])) {
+            
+            $this->category_creative_model->update_merged_category($fields, $id);
+            $this->notices->SetNotice('Category updated successfully.');
+
+            redirect('admincp2/linkshare/listMergedCategories/');
+            return true;
+        }
+        
+        $data = array(
+               	'merged_category_name' => $category_name[0]['name'],
+                'form_action' => site_url('admincp2/linkshare/editMergedCategory/'.$id),
+	);
+        
+    	$this->load->view('editMergedCategory',$data);
+
+    }
+    
+    function deleteMergedCatory($contents, $return_url) {
+        $this->load->library('asciihex');
+        $this->load->model('category_creative_model');
+        
+        $contents = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
+        $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
+        
+        foreach ($contents as $content) {
+            $this->category_creative_model->delete_merged_category($content);
+        }
+        
+        $this->notices->SetNotice('Merged Category deleted successfully.');
+        redirect($return_url);
+        return TRUE;
     }
 
 }

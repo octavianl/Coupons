@@ -20,7 +20,7 @@ jQuery(document).ready(function(){
 
         $.ajax({
             type: 'post',
-            url: '/admincp2/linkshare/update_filters/',
+            url: '/admincp2/linkshare/updateFilters/',
             data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {

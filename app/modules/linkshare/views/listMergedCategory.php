@@ -8,12 +8,11 @@
 		foreach ($this->dataset->data as $row) {
 		?>
 			<tr>			
-				<td><input type="checkbox" name="check_<?=$row['id'];?>" value="1" class="action_items" /></td>
+				<td><input type="checkbox" name="check_<?=$row['category_merged_ID'];?>" value="1" class="action_items" /></td>
 				<td><?=$row['category_merged_name'];?></td>
                                 <td><?php foreach($row['categories_merged'] as $id){ echo "<div>".$id."<div>"; } ?></td>			
 				<td class="options" align="center">
-				<a href="<?=site_url('admincp2/linkshare/editMergedCategory/' . $row['id']);?>">editeaza nume</a>
-                                <a href="<?=site_url('admincp2/linkshare/editMergedCategory/' . $row['id']);?>">delete category</a>
+				<a href="<?=site_url('admincp2/linkshare/editMergedCategory/'.$row['category_merged_ID']);?>">editeaza nume</a>
 				</td>
 			</tr>
 		<?
