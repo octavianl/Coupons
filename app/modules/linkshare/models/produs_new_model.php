@@ -181,7 +181,58 @@ class Produs_new_model extends CI_Model {
 
         return false;
     }
+    
+    /**
+     * Get Produse By Linkid
+     * @param array $params
+     *
+     * @return array
+     */
+    function get_produse_by_linkid($linkid,$mid) {
+        $row = array();
 
+        $result = $this->db->get('linkshare_produs', array('linkid' => $linkid,'mid' => $mid));
+
+        foreach ($result->result_array() as $linie) {
+            $row[] = $linie;
+        }
+
+        return $row;
+    }
+
+    /**
+     * Copy to Old Produs
+     *
+     * Creates a new produs
+     *
+     * @param array $insert_fields	
+     *
+     * @return int $insert_id
+     */
+    function copy_to_old($insert_fields)
+    {
+        $this->db->insert('linkshare_produs_old', $insert_fields['0']);
+        $insert_id = $this->db->insert_id();
+
+        return $insert_id;
+    }
+    
+    /**
+     * Delete Old Product from 
+     *
+     * Deletes produs
+     * 	
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function delete_old_from_current($linkid,$mid)
+    {
+        $this->db->delete('linkshare_produs', array('linkid' => $linkid,'mid' => $mid));
+
+        return true;
+    }
+    
     /**
      * Mark Old Produs
      *
@@ -198,11 +249,19 @@ class Produs_new_model extends CI_Model {
         $this->db->where('mid', $mid);
         $result = $this->db->get('linkshare_produs');
         foreach ($result->result_array() as $row) {
-            //if the old product is not present among the new = current products...we mark it as old,not delete it
+            //if the old product is not present among the new = current products...we mark it as old move it to linkshare_produs_old
             $update_fields['available'] = 'no';
             $update_fields['last_update_date'] = date('Y-m-d H:i:s');
             if (!$this->exists_produs($row['linkid'])) {
                 $this->db->update('linkshare_produs', $update_fields, array('linkid' => $row['linkid']));
+                
+                // Copy product to linkshare_produs_old
+                $produs = $this->get_produse_by_linkid($row['linkid'],$mid);    
+                $this->copy_to_old($produs);
+                
+                // Delete product from linkshare_produs
+                $this->delete_old_from_current($row['linkid'],$mid);
+                
                 $i++;
             }
         }

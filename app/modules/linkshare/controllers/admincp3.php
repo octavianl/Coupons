@@ -538,4 +538,32 @@ class Admincp3 extends Admincp_Controller
         $this->load->view('parse_product_search', $data);
     }
     
+
+    public function test_mark_old()
+    {
+        $this->load->model('produs_model');
+        $this->load->model('produs_new_model');
+                
+        $id = 2; $mid = 37920; $creative_cat_id = 200260395;
+        $linkid = 78900666;
+        
+        // Delete product from linkshare_produs
+        $this->produs_new_model->delete_old_from_current($linkid,$mid);
+        
+        //$produs = array();
+        
+        //$produs = $this->produs_new_model->get_produse_by_linkid($linkid,$mid);
+       
+
+        
+//        echo "<pre>";
+//        print_r ($produs);
+//        echo "</pre>";
+//        die();
+       
+        //$this->produs_new_model->copy_to_old($produs);
+       
+    }
+    
+    
 }

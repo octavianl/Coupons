@@ -171,7 +171,7 @@ class Produs_model extends CI_Model
 
         return $insert_id;
     }
-
+    
     /**
      * Update Produs
      *

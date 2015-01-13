@@ -51,6 +51,10 @@ class Advertiser_model extends CI_Model
             $this->db->like('id_categories', $filters['id_categories']);
         }
 
+        if (isset($filters['name_status'])) {
+            $this->db->like('status', $filters['name_status']);
+        }
+        
         if (isset($filters['name'])) {
             $this->db->like('name', $filters['name']);
         }

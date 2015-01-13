@@ -534,6 +534,7 @@ class Admincp extends Admincp_Controller
                 'name' => 'Status',
                 'width' => '8%',
                 'type' => 'text',
+                'filter' => 'name_status',
                 'sort_column' => 'status'),
             array(
                 'name' => 'Categorii',
@@ -545,7 +546,7 @@ class Admincp extends Admincp_Controller
                 'width' => '10%',
                 'type' => 'text',
                 'filter' => 'mid',
-                'sort_column' => 'status'),
+                'sort_column' => 'mid'),
             array(
                 'name' => 'Nume',
                 'width' => '10%',

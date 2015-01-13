@@ -387,4 +387,18 @@ class Category_creative_model extends CI_Model
         $this->db->delete('linkshare_categories_merged', array('id' => $id));
         return TRUE;
     }
+    
+    function delete_join_category($MergedCategory_id, $JoinsCategory_id)
+    {
+//        echo "<pre>";
+//        echo "merge".$MergedCategory_id."<br>";
+//        echo "join".$JoinsCategory_id."<br>";
+//        die();
+//        echo "</pre>";
+        
+//        $this->db->where('id_categ_merged', $MergedCategory_id);
+//        $this->db->where('id_categ_advertiser', $JoinsCategory_id);
+        $this->db->delete('linkshare_categories_joins', array('id_categ_merged'=>$JoinsCategory_id,'id_categ_advertiser'=>$MergedCategory_id));
+        return TRUE;
+    }
 }

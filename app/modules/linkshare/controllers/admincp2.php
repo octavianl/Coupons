@@ -905,6 +905,7 @@ class Admincp2 extends Admincp_Controller
 //        echo "</pre>";
 //        die;
         
+        $filters = array();
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model','list_merged_category', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listMergedCategories'));
@@ -964,6 +965,18 @@ class Admincp2 extends Admincp_Controller
         }
         
         $this->notices->SetNotice('Merged Category deleted successfully.');
+        redirect($return_url);
+        return TRUE;
+    }
+    
+    function ajaxDeleteCategory($MergedCategory_id, $JoinsCategory_id){
+        $this->load->model('category_creative_model');
+        $this->category_creative_model->delete_join_category($MergedCategory_id, $JoinsCategory_id);
+        
+        $message = "Joins Category id:".$JoinsCategory_id." from Merged Category id:".$MergedCategory_id."deleted successfully.";
+        $this->notices->SetNotice($message);
+        
+        $return_url = site_url('admincp2/linkshare/listMergedCategories');
         redirect($return_url);
         return TRUE;
     }
