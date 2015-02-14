@@ -15,6 +15,7 @@ if (!defined('BASEPATH')) {
  */
 
 use app\third_party\LOG\Log;
+use app\third_party\Nmrkt\Linkshare\Client\Events;
 
 class Admincp extends Admincp_Controller
 {
@@ -24,8 +25,8 @@ class Admincp extends Admincp_Controller
 
         $this->admin_navigation->parent_active('annonces');
 
-        //error_reporting(E_ALL^E_NOTICE);
-        //error_reporting(E_WARNING);
+        error_reporting(E_ALL^E_NOTICE);
+        error_reporting(E_WARNING);
     }
 
     public function index()
@@ -207,7 +208,7 @@ class Admincp extends Admincp_Controller
 
     public function listNetworks()
     {
-        $this->admin_navigation->module_link('Adauga network', site_url('admincp/linkshare/addNetwork/'));
+        $this->admin_navigation->module_link('Add network', site_url('admincp/linkshare/addNetwork/'));
 
         $this->load->library('dataset');
 
@@ -219,10 +220,10 @@ class Admincp extends Admincp_Controller
                 'name' => 'Network ID',
                 'width' => '20%'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '40%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Operations',
                 'width' => '30%'
             )
         );
@@ -249,13 +250,13 @@ class Admincp extends Admincp_Controller
         $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $form->fieldset('Network noua');
-        $form->text('Nume', 'name', '', 'Introduceti nume network', true, 'e.g., U.S. Network', true);
-        $form->text('NID', 'nid', '', 'Introduceti id network', true, 'e.g., 1', true);
+        $form->fieldset('New network');
+        $form->text('Name', 'name', '', 'Add network name', true, 'e.g., U.S. Network', true);
+        $form->text('NID', 'nid', '', 'Add network id', true, 'e.g., 1', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Adauga network',
+            'form_title' => 'Add network',
             'form_action' => site_url('admincp/linkshare/addNetworkValidate'),
             'action' => 'new'
         );
@@ -266,11 +267,11 @@ class Admincp extends Admincp_Controller
     public function addNetworkValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('name', 'Nume', 'required|trim');
+        $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('nid', 'Network id', 'required|trim');
 
         if ($this->form_validation->run() === false) {
-            $this->notices->SetError('Campuri obligatorii.');
+            $this->notices->SetError('Mandatory fields.');
             $error = true;
         }
 
@@ -292,12 +293,12 @@ class Admincp extends Admincp_Controller
         if ($action == 'new') {
             $type_id = $this->network_model->new_network($fields);
 
-            $this->notices->SetNotice('Network adaugata cu succes.');
+            $this->notices->SetNotice('Successfully added network.');
 
             redirect('admincp/linkshare/listNetworks/');
         } else {
             $this->network_model->update_network($fields, $id);
-            $this->notices->SetNotice('network actualizata cu succes.');
+            $this->notices->SetNotice('Successfully updated network.');
 
             redirect('admincp/linkshare/listNetworks/');
         }
@@ -355,7 +356,7 @@ class Admincp extends Admincp_Controller
 
     public function listStatus()
     {
-        $this->admin_navigation->module_link('Adauga status', site_url('admincp/linkshare/addStatus/'));
+        $this->admin_navigation->module_link('Add status', site_url('admincp/linkshare/addStatus/'));
 
         $this->load->library('dataset');
 
@@ -400,14 +401,14 @@ class Admincp extends Admincp_Controller
         $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $form->fieldset('status nou');
-        $form->text('SID', 'id_status', '', 'Introduceti id status', true, 'e.g., approved', true);
-        $form->text('Nume', 'name', '', 'Introduceti nume status', true, 'e.g., Approved', true);
-        $form->textarea('Descriere', 'description', '', 'Introduceti descriere status', false, '', true);
+        $form->fieldset('New status');
+        $form->text('SID', 'id_status', '', 'Add status id', true, 'e.g., approved', true);
+        $form->text('Name', 'name', '', 'Add status name', true, 'e.g., Approved', true);
+        $form->textarea('Description', 'description', '', 'Add status description', false, '', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Adauga status',
+            'form_title' => 'Add status',
             'form_action' => site_url('admincp/linkshare/addStatusValidate'),
             'action' => 'new'
         );
@@ -419,11 +420,11 @@ class Admincp extends Admincp_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_status', 'SID', 'required|trim');
-        $this->form_validation->set_rules('name', 'Nume', 'required|trim');
+        $this->form_validation->set_rules('name', 'Name', 'required|trim');
 
 
         if ($this->form_validation->run() === false) {
-            $this->notices->SetError('Campuri obligatorii.');
+            $this->notices->SetError('Mandatory fields.');
             $error = true;
         }
 
@@ -447,12 +448,12 @@ class Admincp extends Admincp_Controller
         if ($action == 'new') {
             $type_id = $this->status_model->new_status($fields);
 
-            $this->notices->SetNotice('status adaugat cu succes.');
+            $this->notices->SetNotice('Status successfully added.');
 
             redirect('admincp/linkshare/listStatus/');
         } else {
             $this->status_model->update_status($fields, $id);
-            $this->notices->SetNotice('status actualizat cu succes.');
+            $this->notices->SetNotice('Status successfully updated.');
 
             redirect('admincp/linkshare/listStatus/');
         }
@@ -466,20 +467,20 @@ class Admincp extends Admincp_Controller
         $status = $this->status_model->get_status($id);
 
         if (empty($status)) {
-            die(show_error('Nu exista nici un status cu acest ID.'));
+            die(show_error('No status with this ID.'));
         }
 
         $this->load->library('admin_form');
         $form = new Admin_form;
 
         $form->fieldset('status');
-        $form->text('SID', 'id_status', $status['id_status'], 'Introduceti status ID.', true, 'e.g., approved', true);
-        $form->text('Nume', 'name', $status['name'], 'Introduceti nume status.', true, 'e.g., U.S. status', true);
-        $form->textarea('Descriere', 'description', $status['description'], 'Introduceti descriere status.', false, '', true);
+        $form->text('SID', 'id_status', $status['id_status'], 'Add status ID.', true, 'e.g., approved', true);
+        $form->text('Name', 'name', $status['name'], 'Add status name.', true, 'e.g., U.S. status', true);
+        $form->textarea('Description', 'description', $status['description'], 'Add description status.', false, '', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Editare status',
+            'form_title' => 'Edit status',
             'form_action' => site_url('admincp/linkshare/addStatusValidate/edit/' . $status['id']),
             'action' => 'edit',
         );
@@ -500,7 +501,7 @@ class Admincp extends Admincp_Controller
             $this->status_model->deleteStatus($content);
         }
 
-        $this->notices->SetNotice('status sters cu succes.');
+        $this->notices->SetNotice('Status successfully removed.');
 
         redirect($return_url);
 
@@ -998,5 +999,30 @@ class Admincp extends Admincp_Controller
         $this->notices->SetNotice($cate . ' magazine parsate adaugate cu succes.');
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
+    
+    public function api()
+    {error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+        $config = array(
+            'grant_type' => 'password',
+            'username' => 'thelichking',
+            'password' => 'arthas123',
+            'client_id' => '2531438',
+            'client_secret' => 'RDNSM0pUZnJldjFuWXlEZ1dpbFRzZjNUZk9JYTpiNTJlUHlvbVh2YkM3QVlPamhRVFQzRUdockVh',
+            'scope' => '2531438', // optional
+        );
+        //initialize the client with your API config
+        $client =  new Events($config);
+        //create the oauth subscirber
+        $subscriber = $client->getOauth2Subscriber();
+        //attach the oauth subscriber to the client
+        $client->attachOauth2Subscriber($subscriber);
+
+        // Now you can set params using the convenience methods following the 
+        $client->setProcessDateStart('2014-05-30 12:00:00');
+        $client->setLimit(1000);
+        //execute the query to the API
+        $transactions = $client->getTransactions();
+    }        
 
 }
