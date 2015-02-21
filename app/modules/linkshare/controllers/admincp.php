@@ -15,11 +15,13 @@ if (!defined('BASEPATH')) {
  */
 
 use app\third_party\LOG\Log;
-use app\third_party\Nmrkt\Linkshare\Client\Events;
+
+require_once APPPATH . 'third_party/OAUTH2/Config.php';
+require_once APPPATH . 'third_party/OAUTH2/HttpPost.php';
 
 class Admincp extends Admincp_Controller
 {
-    public function __construct() 
+    public function __construct()
     {
         parent::__construct();
 
@@ -1001,28 +1003,127 @@ class Admincp extends Admincp_Controller
     }
     
     public function api()
-    {error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
+        // https://login.rakutenmarketing.com
+        
         $config = array(
-            'grant_type' => 'password',
+            'application_name' => 'Linkshare',
+            'grant_type' => Config::PASSWORD,
             'username' => 'thelichking',
             'password' => 'arthas123',
-            'client_id' => '2531438',
-            'client_secret' => 'RDNSM0pUZnJldjFuWXlEZ1dpbFRzZjNUZk9JYTpiNTJlUHlvbVh2YkM3QVlPamhRVFQzRUdockVh',
+            'client_id' => 'D3R3JTfrev1nYyDgWilTsf3TfOIa',
+            'client_secret' => 'b52ePyomXvbC7AYOjhQTT3EGhrEa',
             'scope' => '2531438', // optional
+            'link_to_fetch' => 'https://api.rakutenmarketing.com//linklocator/1.0/getMerchByAppStatus/approved'
         );
-        //initialize the client with your API config
-        $client =  new Events($config);
-        //create the oauth subscirber
-        $subscriber = $client->getOauth2Subscriber();
-        //attach the oauth subscriber to the client
-        $client->attachOauth2Subscriber($subscriber);
+        
+        /*
+         * Consumer Key <=> Client ID           D3R3JTfrev1nYyDgWilTsf3TfOIa     
+         * Consumer Secret <=> Client Secret    b52ePyomXvbC7AYOjhQTT3EGhrEa
+         * Basic: RDNSM0pUZnJldjFuWXlEZ1dpbFRzZjNUZk9JYTpiNTJlUHlvbVh2YkM3QVlPamhRVFQzRUdockVh
+         * 
+         * 
+         * 
+         * 
+         */
+        
 
-        // Now you can set params using the convenience methods following the 
-        $client->setProcessDateStart('2014-05-30 12:00:00');
-        $client->setLimit(1000);
-        //execute the query to the API
-        $transactions = $client->getTransactions();
-    }        
+        $client = new Google_Client();
+        $client->setApplicationName($config['application_name']);
+        $client->setClientId($config['client_id']);
+        $client->setClientSecret($config['client_secret']);
+        $client->addScope($config['scope']);
+        $client->authenticate($code);
+    }
+    
+    public function apilinkshare()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
+        $config = new Config();
+        
+        // this will be our POST data to send back to the OAuth server in exchange
+        // for an access token
+        $params = array(
+            //"redirect_uri" => $config->getUrlRedirect(),
+            "grant_type" => $config->getGrantType(Config::PASSWORD),
+            "username" => $config->getUsername(),
+            "password" => $config->getPassword(),
+            "scope" => $config->getScope()
+        );
+        
+        $headers = array(
+            "Content-type: application/x-www-form-urlencoded",
+            "Accept: */*",
+            "Cache-Control: no-cache",
+            "Pragma: no-cache",
+            "Authorization: Basic " . $config->getCredentials()
+        );
+        
+        // build a new HTTP POST request
+        //$request = new HttpPost($config->getUrlToken(), $headers);
+        
+        //$request->setPostData($params);
+        //$request->send();
+        
+        // decode the incoming string as JSON
+        //$responseObj = json_decode($request->getResponse());
+        
+        //print '<pre>';
+        //print_r($responseObj);
+        
+        /*
+            [token_type] => bearer
+            [expires_in] => 3101
+            [refresh_token] => 16405f47463b56fda13a16c9bcfd44cd
+            [access_token] => b97d4b68362ab3c98b2fcc22956f666
+         */
+        
+        // refresh token
+        //$params['grant_type'] = $config->getGrantType(Config::REFRESH);
+        //$params['refresh_token'] = $responseObj->refresh_token;
+        //$params['scope'] = 'PRODUCTION';
+        //unset($params['username']);
+        //unset($params['password']);
+        
+        //$request->setPostData($params);
+        //$request->send();
+        
+        // decode the incoming string as JSON
+        //$responseObj = json_decode($request->getResponse());
+        
+        //print '<pre>';
+        //print_r($responseObj);
+        
+        $accessToken = '8b3f38b6631c2dd66f7151c3f4706dc9';
+        
+       
+        $headers = array(
+            //"Content-type: application/x-www-form-urlencoded",
+            "Accept: application/json, text/javascript, */*; q=0.01",
+            "Accept-Encoding: gzip, deflate, sdch",
+            "Accept-Language: en-US,en;q=0.8,ro;q=0.6",
+            //"Cache-Control: no-cache",
+            //"Pragma: no-cache",
+            "Authorization: Bearer " . $accessToken,
+            //"Connection: keep-alive",
+            //"Host: api.rakutenmarketing.com"
+        );
+        
+        $request = new HttpPost($config->getUrlAdvertisers(), $headers);
+        $request->setGetData(array());
+        $request->send();
+      
+        // decode the incoming string as JSON
+        $responseObj = json_decode($request->getResponse());
+        
+        print '<pre>';
+        print_r($responseObj);
+
+    }
 
 }
