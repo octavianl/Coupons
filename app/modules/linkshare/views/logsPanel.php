@@ -26,7 +26,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="7">Nu sunt loguri.</td>
+		<td colspan="7">No logs available.</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Lista site-uri</h1>
+<h1>Channels List</h1>
 <div style="width:1000px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<?
@@ -12,10 +12,10 @@
                                 <td align="center"><?=$row['name'];?></td>
 				<td align="center"><?=$row['token'];?></td>                               
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/editSite/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp/linkshare/editSite/' . $row['id']);?>">Edit</a> 				
 				</td>
                                 <td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/infoSite/' . $row['id']);?>">info</a> 				
+					<a href="<?=site_url('admincp/linkshare/infoSite/' . $row['id']);?>">Info</a> 				
 				</td>
 			</tr>
 		<?
@@ -24,7 +24,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="7">Nu sunt site-uri.</td>
+		<td colspan="7">No channels available</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

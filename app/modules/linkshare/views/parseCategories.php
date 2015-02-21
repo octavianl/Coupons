@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Parsare categorii : conform <a href="http://helpcenter.linkshare.com/publisher/questions.php?questionid=709" target="_blank">Articol Linkshare</a></h1>
+<h1>Parse Categories according to : <a href="http://helpcenter.linkshare.com/publisher/questions.php?questionid=709" target="_blank">Linkshare Article</a></h1>
 
 <div style="width:600px;text-align:center;" align="center">
     <?=$this->dataset->table_head();?>
@@ -16,7 +16,7 @@
     } else {
         ?>
             <tr>
-                <td colspan="7">Nu sunt categorii.</td>
+                <td colspan="7">No categories available.</td>
             </tr>
     <?php 
     } 

@@ -1,6 +1,6 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <br/><br/><br/>
-<h1>Lista Advertiseri parsati</h1>
+<h1>Parsed Advertisers List</h1>
 <div style="width:1800px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<?
@@ -27,7 +27,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="10">Nu sunt advertiseri parsati.</td>
+		<td colspan="10">No parsed advertisers available.</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Lista produse</h1>
+<h1>Products List</h1>
 <div style="width:1800px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<? 
@@ -33,7 +33,7 @@
                                     <?php if($row['available'] == 'no'){ ?><a href="<?= 'admincp/linkshare/change_produs_status/'.$row['id'].'/'.$url; ?>"><img src="<?=branded_include('images/ko.png');?>"/></a> <?php } ?>
                                 </td>                                
 				<td class="options" align="center">
-					<a href="<?=site_url('admincp/linkshare/edit_produs/' . $row['id']);?>">editeaza</a> 				
+					<a href="<?=site_url('admincp/linkshare/edit_produs/' . $row['id']);?>">Edit</a> 				
 				</td>
 			</tr>
 		<?
@@ -42,7 +42,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="7">Nu sunt produse pentru magazinul <?php echo $magazin; ?>.</td>
+		<td colspan="7">No products for advertiser <?php echo $magazin; ?>.</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

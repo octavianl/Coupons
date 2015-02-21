@@ -6,9 +6,9 @@
 
 <div class="submit">
 	<? if ($action == 'new') { ?>
-	<input type="submit" class="button" name="go_type" value="Adauga" />
+	<input type="submit" class="button" name="go_type" value="Add" />
 	<? } else { ?>
-	<input type="submit" class="button" name="go_type" value="Actualizeaza" />
+	<input type="submit" class="button" name="go_type" value="Update" />
 	<? } ?>
 </div>
 </form>

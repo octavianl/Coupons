@@ -9,7 +9,7 @@
                                        <? if ($action == 'new') { ?>
                                 <input type="submit" class="button" name="add" value="Add" />
                                 <? } else { ?>
-                                <input type="submit" class="button" name="edit" value="edit" />
+                                <input type="submit" class="button" name="edit" value="Edit" />
                                 <? } ?>
             </div>
     </form>
