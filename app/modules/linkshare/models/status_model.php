@@ -123,7 +123,7 @@ class Status_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_status($insert_fields)
+    function newStatus($insert_fields)
     {
         $this->db->insert('linkshare_status', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -141,7 +141,7 @@ class Status_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_status($update_fields, $id)
+    function updateStatus($update_fields, $id)
     {
 
         $this->db->update('linkshare_status', $update_fields, array('id' => $id));

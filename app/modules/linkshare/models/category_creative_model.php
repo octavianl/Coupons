@@ -58,7 +58,7 @@ class Category_creative_model extends CI_Model
 
         foreach ($result->result_array() as $linie) {
             if (isset($filters['name'])) {
-                $site = $this->site_model->get_site($linie['id_site']);
+                $site = $this->site_model->getSite($linie['id_site']);
                 $linie['id_site'] = $site['name'];
             }
             $row[] = $linie;
@@ -295,7 +295,7 @@ class Category_creative_model extends CI_Model
         foreach ($result->result_array() as $linie) {
             
             if (isset($filters['name'])) {
-                $site = $this->site_model->get_site($linie['id_site']);
+                $site = $this->site_model->getSite($linie['id_site']);
                 $linie['id_site'] = $site['name'];
             }
             

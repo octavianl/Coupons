@@ -525,7 +525,7 @@ class Admincp2 extends Admincp_Controller
         $mids = array();
         $aux = '';
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site($id);
+        $aux = $this->site_model->getSite($id);
         $token = $aux['token'];
         $i = 0;
         $site = $aux['name'];
@@ -538,7 +538,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->model('status_model');
         $filters['id_status'] = $this->status_model->get_status_by_name('approved');
         $mag = array();
-        $mag = $this->advertiser_model->get_magazine($filters);
+        $mag = $this->advertiser_model->getAdvertisers($filters);
         foreach ($mag as $val) {
             $mids[] = $val['mid'];
         }

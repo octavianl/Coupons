@@ -38,7 +38,7 @@ class Admincp extends Admincp_Controller
 
     public function listSites()
     {
-        $this->admin_navigation->module_link('Adauga site', site_url('admincp/linkshare/addSite/'));
+        $this->admin_navigation->module_link('Add site', site_url('admincp/linkshare/addSite/'));
 
         $this->load->library('dataset');
 
@@ -47,13 +47,13 @@ class Admincp extends Admincp_Controller
                 'name' => 'ID #',
                 'width' => '10%'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '20%'),
             array(
                 'name' => 'Token',
                 'width' => '70%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Actions',
                 'width' => '30%'
             ),
             array(
@@ -63,7 +63,7 @@ class Admincp extends Admincp_Controller
         );
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('site_model', 'get_sites');
+        $this->dataset->datasource('site_model', 'getSites');
         $this->dataset->base_url(site_url('admincp/linkshare/listSites'));
         $this->dataset->rows_per_page(10);
 
@@ -85,13 +85,13 @@ class Admincp extends Admincp_Controller
         $form = new Admin_form;
 
         $form->fieldset('Site nou');
-        $form->text('Nume site', 'name', '', 'Introduceti nume site.', true, 'e.g., couponland.com', true);
-        $form->text('Token site', 'token', '', 'Introduceti token site.', true, '', true);
+        $form->text('Site name', 'name', '', 'Insert site name.', true, 'e.g., couponland.com', true);
+        $form->text('Site token', 'token', '', 'Insert site token.', true, '', true);
 
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Adauga site',
+            'form_title' => 'Add channel',
             'form_action' => site_url('admincp/linkshare/addSiteValidate'),
             'action' => 'new'
         );
@@ -126,13 +126,13 @@ class Admincp extends Admincp_Controller
         $this->load->model('site_model');
 
         if ($action == 'new') {
-            $type_id = $this->site_model->new_site($fields);
+            $type_id = $this->site_model->newSite($fields);
 
             $this->notices->SetNotice('Site adaugat cu succes.');
 
             redirect('admincp/linkshare/listSites/');
         } else {
-            $this->site_model->update_site($fields, $id);
+            $this->site_model->updateSite($fields, $id);
             $this->notices->SetNotice('Site actualizat cu succes.');
 
             redirect('admincp/linkshare/listSites/');
@@ -144,7 +144,7 @@ class Admincp extends Admincp_Controller
     public function editSite($id)
     {
         $this->load->model('site_model');
-        $site = $this->site_model->get_site($id);
+        $site = $this->site_model->getSite($id);
 
         if (empty($site)) {
             die(show_error('Nu exista site cu acest ID.'));
@@ -154,12 +154,12 @@ class Admincp extends Admincp_Controller
         $form = new Admin_form;
 
         $form->fieldset('Site');
-        $form->text('Nume site', 'name', $site['name'], 'Introduceti nume site.', true, 'e.g., couponland', true);
-        $form->text('Token site', 'token', $site['token'], 'Introduceti token site.', true, '', true);
+        $form->text('Site name', 'name', $site['name'], 'Insert site name.', true, 'e.g., couponland', true);
+        $form->text('Site token', 'token', $site['token'], 'Insert site token.', true, '', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Editare site',
+            'form_title' => 'Edit channel',
             'form_action' => site_url('admincp/linkshare/addSiteValidate/edit/' . $site['id']),
             'action' => 'edit',
         );
@@ -174,10 +174,10 @@ class Admincp extends Admincp_Controller
         $this->admin_navigation->module_link('Vezi produse linkshare', site_url('admincp/linkshare/site_produse/' . $id));
 
         $this->load->model('site_model');
-        $site = $this->site_model->get_site($id);
+        $site = $this->site_model->getSite($id);
 
         if (empty($site)) {
-            die(show_error('Nu exista site cu acest ID.'));
+            die(show_error('No channel with this ID.'));
         }
 
         $data = array();
@@ -314,15 +314,15 @@ class Admincp extends Admincp_Controller
         $network = $this->network_model->get_network($id);
 
         if (empty($network)) {
-            die(show_error('Nu exista nici o network cu acest ID.'));
+            die(show_error('No network with this ID.'));
         }
 
         $this->load->library('admin_form');
         $form = new Admin_form;
 
         $form->fieldset('network');
-        $form->text('Nume', 'name', $network['name'], 'Introduceti nume network.', true, 'e.g., U.S. Network', true);
-        $form->text('Nid', 'nid', $network['nid'], 'Introduceti network ID.', true, 'e.g., 1', true);
+        $form->text('Name', 'name', $network['name'], 'Insert network name.', true, 'e.g., U.S. Network', true);
+        $form->text('Nid', 'nid', $network['nid'], 'Insert network ID.', true, 'e.g., 1', true);
 
         $data = array(
             'form' => $form->display(),
@@ -347,7 +347,7 @@ class Admincp extends Admincp_Controller
             $this->network_model->deleteNetwork($content);
         }
 
-        $this->notices->SetNotice('network stearsa cu succes.');
+        $this->notices->SetNotice('Network successfully removed.');
 
         redirect($return_url);
 
@@ -367,16 +367,16 @@ class Admincp extends Admincp_Controller
                 'name' => 'ID #',
                 'width' => '10%'),
             array(
-                'name' => 'status ID',
+                'name' => 'Status ID',
                 'width' => '20%'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '20%'),
             array(
-                'name' => 'Descriere',
+                'name' => 'Description',
                 'width' => '40%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Actions',
                 'width' => '10%'
             )
         );
@@ -448,13 +448,13 @@ class Admincp extends Admincp_Controller
         $fields['description'] = $this->input->post('description');
 
         if ($action == 'new') {
-            $type_id = $this->status_model->new_status($fields);
+            $type_id = $this->status_model->newStatus($fields);
 
             $this->notices->SetNotice('Status successfully added.');
 
             redirect('admincp/linkshare/listStatus/');
         } else {
-            $this->status_model->update_status($fields, $id);
+            $this->status_model->updateStatus($fields, $id);
             $this->notices->SetNotice('Status successfully updated.');
 
             redirect('admincp/linkshare/listStatus/');
@@ -514,7 +514,7 @@ class Admincp extends Admincp_Controller
     {
         $this->load->model('site_model');
         $this->load->model('advertiser_model');
-        $site = $this->site_model->get_site($id);
+        $site = $this->site_model->getSite($id);
 
         $this->admin_navigation->module_link('Adauga advertiser', site_url('admincp/linkshare/addAdvertiser/'));
         $this->admin_navigation->module_link('Parseaza advertiserii aprobati', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
@@ -581,7 +581,7 @@ class Admincp extends Admincp_Controller
         $filters['id_site'] = $_GET['sites'];
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('advertiser_model', 'get_magazine', $filters);
+        $this->dataset->datasource('advertiser_model', 'getAdvertisers', $filters);
         $this->dataset->base_url(site_url('admincp/linkshare/siteAdvertisers/' . $id));
         $this->dataset->rows_per_page(10);
 
@@ -604,7 +604,7 @@ class Admincp extends Admincp_Controller
         $this->dataset->action('Delete', 'admincp/linkshare/deleteAdvertiser');
 
 
-        $allSites = $this->site_model->get_sites($filters);
+        $allSites = $this->site_model->getSites($filters);
         $data = array(
             'allSites' => $allSites,
             'form_action' => site_url('admincp/linkshare/siteAdvertisers/'),
@@ -623,20 +623,20 @@ class Admincp extends Admincp_Controller
         $categorii = $this->category_model->get_categorie_status();
 
         $form->fieldset('Magazin nou');
-        $form->text('Id site', 'id_site', '', 'Introduceti id site.', true, 'e.g., 1', true);
-        $form->text('Id status', 'id_status', '', 'Introduceti id status.', true, 'e.g., 1', true);
-        $form->text('Status', 'status', '', 'Introduceti status.', true, 'e.g., Temp Rejected', true);
-        $form->text('Categorii', 'id_categories', '', 'Introduceti categorii', true, 'e.g., 103 155 154 125 18 132', true);
-        $form->text('Id magazin', 'mid', '', 'Introduceti id magazin.', true, 'e.g., 35171', true);
-        $form->text('Nume magazin', 'name', '', 'Introduceti nume magazin.', true, 'e.g., MrWatch', true);
-        $form->text('Offer also', 'offer_also', '', 'Introduceti offer_also.', true, 'e.g., 19.2', true);
-        $form->text('Comision', 'commission', '', 'Introduceti comision .', true, 'e.g., sale : 0-2000 8%', true);
-        $form->text('Offer id', 'offer_id', '', 'Introduceti offer_id.', true, 'e.g., 228980', true);
-        $form->text('Offer name', 'offer_name', '', 'Introduceti offer_name.', true, 'e.g., Baseline Offer', true);
+        $form->text('Site ID', 'id_site', '', 'Insert site ID.', true, 'e.g., 1', true);
+        $form->text('Status ID', 'id_status', '', 'Insert status ID.', true, 'e.g., 1', true);
+        $form->text('Status', 'status', '', 'Insert status.', true, 'e.g., Temp Rejected', true);
+        $form->text('Categories', 'id_categories', '', 'Insert categories', true, 'e.g., 103 155 154 125 18 132', true);
+        $form->text('Advertiser ID', 'mid', '', 'Insert advertiser ID.', true, 'e.g., 35171', true);
+        $form->text('Advertiser name', 'name', '', 'Insert advertiser name.', true, 'e.g., MrWatch', true);
+        $form->text('Offer also', 'offer_also', '', 'Insert offer_also.', true, 'e.g., 19.2', true);
+        $form->text('Commission', 'commission', '', 'Insert commission.', true, 'e.g., sale : 0-2000 8%', true);
+        $form->text('Offer id', 'offer_id', '', 'Insert offer_id.', true, 'e.g., 228980', true);
+        $form->text('Offer name', 'offer_name', '', 'Insert offer_name.', true, 'e.g., Baseline Offer', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Adauga magazin',
+            'form_title' => 'Add advertiser',
             'form_action' => site_url('admincp/linkshare/addAdvertiserValidate'),
             'action' => 'new'
         );
@@ -651,7 +651,7 @@ class Admincp extends Admincp_Controller
         $this->form_validation->set_rules('mid', 'Id magazin', 'required|trim');
 
         if ($this->form_validation->run() === false) {
-            $this->notices->SetError('Aveti erori in formular.');
+            $this->notices->SetError('You have errors in your form.');
             $error = true;
         }
 
@@ -679,13 +679,13 @@ class Admincp extends Admincp_Controller
         $this->load->model('advertiser_model');
 
         if ($action == 'new') {
-            $type_id = $this->advertiser_model->new_magazin($fields);
+            $type_id = $this->advertiser_model->newAdvertiser($fields);
 
             $this->notices->SetNotice('Magazin adaugat cu succes.');
 
             redirect('admincp/linkshare/siteAdvertisers/1');
         } else {
-            $this->advertiser_model->update_magazin($fields, $id);
+            $this->advertiser_model->updateAdvertiser($fields, $id);
             $this->notices->SetNotice('Magazin actualizat cu succes.');
 
             redirect('admincp/linkshare/siteAdvertisers/1');
@@ -697,30 +697,30 @@ class Admincp extends Admincp_Controller
     public function editAdvertiser($id)
     {
         $this->load->model('advertiser_model');
-        $magazin = $this->advertiser_model->get_magazin($id);
+        $magazin = $this->advertiser_model->getAdvertiser($id);
 
         if (empty($magazin)) {
-            die(show_error('Nu exista magazin cu acest ID.'));
+            die(show_error('No advertiser with this ID.'));
         }
 
         $this->load->library('admin_form');
         $form = new Admin_form;
 
         $form->fieldset('Magazin');
-        $form->text('Id site', 'id_site', $magazin['id_site'], 'Introduceti id site.', true, 'e.g., 1', true);
-        $form->text('Id status', 'id_status', $magazin['id_status'], 'Introduceti id status.', true, 'e.g., 1', true);
-        $form->text('Status', 'status', $magazin['status'], 'Introduceti status.', true, 'e.g., Temp Rejected', true);
-        $form->text('Categorii', 'id_categories', $magazin['id_categories'], 'Introduceti categorii', true, 'e.g., 103 155 154 125 18 132', true);
-        $form->text('Id magazin', 'mid', $magazin['mid'], 'Introduceti id magazin.', true, 'e.g., 35171', true);
-        $form->text('Nume magazin', 'name', $magazin['name'], 'Introduceti nume magazin.', true, 'e.g., MrWatch', true);
-        $form->text('Offer also', 'offer_also', $magazin['offer_also'], 'Introduceti offer_also.', true, 'e.g., 19.2', true);
-        $form->text('Comision', 'commission', $magazin['commission'], 'Introduceti comision .', true, 'e.g., sale : 0-2000 8%', true);
-        $form->text('Offer id', 'offer_id', $magazin['offer_id'], 'Introduceti offer_id.', true, 'e.g., 228980', true);
-        $form->text('Offer name', 'offer_name', $magazin['offer_name'], 'Introduceti offer_name.', true, 'e.g., Baseline Offer', true);
-
+        $form->text('Site ID', 'id_site', $magazin['id_site'], 'Insert site ID.', true, 'e.g., 1', true);
+        $form->text('Status ID', 'id_status', $magazin['id_status'], 'Insert status ID.', true, 'e.g., 1', true);
+        $form->text('Status', 'status', $magazin['status'], 'Insert status.', true, 'e.g., Temp Rejected', true);
+        $form->text('Categories', 'id_categories', $magazin['id_categories'], 'Insert categories', true, 'e.g., 103 155 154 125 18 132', true);
+        $form->text('Advertiser ID', 'mid', $magazin['mid'], 'Insert advertiser ID.', true, 'e.g., 35171', true);
+        $form->text('Advertiser name', 'name', $magazin['name'], 'Insert advertiser name.', true, 'e.g., MrWatch', true);
+        $form->text('Offer also', 'offer_also', $magazin['offer_also'], 'Insert offer_also.', true, 'e.g., 19.2', true);
+        $form->text('Commission', 'commission', $magazin['commission'], 'Insert commission.', true, 'e.g., sale : 0-2000 8%', true);
+        $form->text('Offer id', 'offer_id', $magazin['offer_id'], 'Insert offer_id.', true, 'e.g., 228980', true);
+        $form->text('Offer name', 'offer_name', $magazin['offer_name'], 'Insert offer_name.', true, 'e.g., Baseline Offer', true);
+        
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Editare magazin',
+            'form_title' => 'Edit advertiser',
             'form_action' => site_url('admincp/linkshare/addAdvertiserValidate/edit/' . $magazin['id']),
             'action' => 'edit',
         );
@@ -752,7 +752,7 @@ class Admincp extends Admincp_Controller
     {
         $this->db->query("TRUNCATE TABLE linkshare_advertisers");
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site_by_token($token);
+        $aux = $this->site_model->getSiteByToken($token);
         $id_site = $aux['id'];
         $aux = '';
         $i = 0;
@@ -804,7 +804,7 @@ class Admincp extends Admincp_Controller
 
             $this->load->model('advertiser_model');
             $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
-            $cate += $this->advertiser_model->new_magazine($mids);
+            $cate += $this->advertiser_model->newAdvertisers($mids);
 
             $i = 0;
             unset($mids);
@@ -823,7 +823,7 @@ class Admincp extends Admincp_Controller
         $mids = array();
         $aux = '';
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site_by_token($token);
+        $aux = $this->site_model->getSiteByToken($token);
         $i = 0;
         $site = $aux['name'];
         $offset = 0;
@@ -920,7 +920,7 @@ class Admincp extends Admincp_Controller
         );
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('advertiser_model', 'parse_magazin', $mids);
+        $this->dataset->datasource('advertiser_model', 'parseAdvertiser', $mids);
         $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisers/' . $token) . '/' . $status);
         $this->dataset->rows_per_page(10);
 
@@ -938,7 +938,7 @@ class Admincp extends Admincp_Controller
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);            
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site_by_token($token);
+        $aux = $this->site_model->getSiteByToken($token);
         $id_site = $aux['id'];
         $aux = '';
         $i = 0;
@@ -990,7 +990,7 @@ class Admincp extends Admincp_Controller
 
             $this->load->model('advertiser_model');
             $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
-            $cate += $this->advertiser_model->new_magazine($mids);
+            $cate += $this->advertiser_model->newAdvertisers($mids);
 
             $i = 0;
             unset($mids);

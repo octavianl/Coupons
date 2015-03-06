@@ -29,7 +29,7 @@ class Advertiser_model extends CI_Model
      *
      * @return array
      */
-    function get_magazine($filters = array())
+    function getAdvertisers($filters = array())
     {
         $row = array();
         $order_dir = (isset($filters['sort_dir'])) ? $filters['sort_dir'] : 'ASC';
@@ -70,10 +70,10 @@ class Advertiser_model extends CI_Model
 
         foreach ($result->result_array() as $linie) {
 
-            $site = $this->site_model->get_site($linie['id_site']);
+            $site = $this->site_model->getSite($linie['id_site']);
             $linie['name_site'] = $site['name'];
 
-            $nr_products = $this->get_count_produse_by_mid($linie['mid'], $linie['id_site']);
+            $nr_products = $this->getCountProductsByMID($linie['mid'], $linie['id_site']);
             $linie['nr_products'] = $nr_products;
             $row[] = $linie;
         }
@@ -89,7 +89,7 @@ class Advertiser_model extends CI_Model
      *
      * @return array
      */
-    function get_magazin($id, $name = false)
+    function getAdvertiser($id, $name = false)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -100,7 +100,7 @@ class Advertiser_model extends CI_Model
 
         foreach ($result->result_array() as $row) {
             if ($name) {
-                $site = $this->site_model->get_site($row['id_site']);
+                $site = $this->site_model->getSite($row['id_site']);
                 $row['id_site'] = $site['name'];
             }
             return $row;
@@ -117,7 +117,7 @@ class Advertiser_model extends CI_Model
      *
      * @return array
      */
-    function get_magazin_by_mid($mid, $id_site)
+    function getAdvertiserByMID($mid, $id_site)
     {
         $row = array();
         $this->db->where('mid', $mid);
@@ -132,7 +132,7 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Get Count Produse By Mid
+     * Get Count Products By Mid
      *
      * @param int $mid
      * @param int $id_site
@@ -140,7 +140,7 @@ class Advertiser_model extends CI_Model
      *
      * @return array
      */
-    function get_count_produse_by_mid($mid, $id_site, $filters = array())
+    function getCountProductsByMID($mid, $id_site, $filters = array())
     {
         /* $i = 0;
           $row = array(); */
@@ -171,7 +171,7 @@ class Advertiser_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_magazin($insert_fields)
+    function newAdvertiser($insert_fields)
     {
         $this->db->insert('linkshare_advertisers', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -188,7 +188,7 @@ class Advertiser_model extends CI_Model
      *
      * @return int $count
      */
-    function new_magazine($mids)
+    function newAdvertisers($mids)
     {
         $cate = count($mids);
         for ($i = 0; $i < $cate; $i++) {
@@ -207,7 +207,7 @@ class Advertiser_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_magazin($update_fields, $id)
+    function updateAdvertiser($update_fields, $id)
     {
         $this->db->update('linkshare_advertisers', $update_fields, array('id' => $id));
 
@@ -230,7 +230,7 @@ class Advertiser_model extends CI_Model
         return true;
     }
 
-    function parse_magazin($params)
+    function parseAdvertiser($params)
     {
         if ($params[0]['limit'])
             $limit = $params[0]['limit'];

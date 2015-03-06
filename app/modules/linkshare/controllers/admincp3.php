@@ -144,7 +144,7 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('advertiser_model');
 
         // total rows
-        $total_rows = $this->advertiser_model->get_count_produse_by_mid($mid, $id_site, $filters);
+        $total_rows = $this->advertiser_model->getCountProductsByMID($mid, $id_site, $filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -155,7 +155,7 @@ class Admincp3 extends Admincp_Controller
         $magazin = '';
 
         $this->load->model('advertiser_model');
-        $aux = $this->advertiser_model->get_magazin_by_mid($mid, $id_site);
+        $aux = $this->advertiser_model->getAdvertiserByMID($mid, $id_site);
         if ($aux)
             $magazin = $aux['name'];
 
@@ -183,7 +183,7 @@ class Admincp3 extends Admincp_Controller
         
         $aux = '';
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site($id);
+        $aux = $this->site_model->getSite($id);
         $token = $aux['token'];
 
         $this->load->model('produs_model');
@@ -330,7 +330,7 @@ class Admincp3 extends Admincp_Controller
         error_reporting(E_ERROR);
         $aux = '';
         $this->load->model('site_model');
-        $aux = $this->site_model->get_site($id);
+        $aux = $this->site_model->getSite($id);
         $token = $aux['token'];
 
         $this->load->model('produs_model');

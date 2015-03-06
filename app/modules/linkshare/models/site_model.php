@@ -29,7 +29,7 @@ class Site_model extends CI_Model
      *
      * @return array
      */
-    function get_sites()
+    function getSites()
     {
         $row = array();
         $result = $this->db->get('linkshare_site');
@@ -47,7 +47,7 @@ class Site_model extends CI_Model
      *
      * @return array
      */
-    function get_site($id)
+    function getSite($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -67,7 +67,7 @@ class Site_model extends CI_Model
      *
      * @return string
      */
-    function get_site_by_token($token)
+    function getSiteByToken($token)
     {
         $row = array();
         $this->db->where('token', $token);
@@ -89,7 +89,7 @@ class Site_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_site($insert_fields)
+    function newSite($insert_fields)
     {
         $this->db->insert('linkshare_site', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -107,7 +107,7 @@ class Site_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_site($update_fields, $id)
+    function updateSite($update_fields, $id)
     {
 
         $this->db->update('linkshare_site', $update_fields, array('id' => $id));
