@@ -133,7 +133,7 @@ class Admincp extends Admincp_Controller
             redirect('admincp/linkshare/listSites/');
         } else {
             $this->site_model->updateSite($fields, $id);
-            $this->notices->SetNotice('Site actualizat cu succes.');
+            $this->notices->SetNotice('Site updated successfully.');
 
             redirect('admincp/linkshare/listSites/');
         }
@@ -147,7 +147,7 @@ class Admincp extends Admincp_Controller
         $site = $this->site_model->getSite($id);
 
         if (empty($site)) {
-            die(show_error('Nu exista site cu acest ID.'));
+            die(show_error('No site with this ID.'));
         }
 
         $this->load->library('admin_form');
@@ -169,9 +169,9 @@ class Admincp extends Admincp_Controller
 
     public function infoSite($id)
     {
-        $this->admin_navigation->module_link('Vezi categorii creative linkshare', site_url('admincp/linkshare/listCreativeCategory/' . $id));
-        $this->admin_navigation->module_link('Vezi magazine linkshare', site_url('admincp/linkshare/siteAdvertisers/' . $id));
-        $this->admin_navigation->module_link('Vezi produse linkshare', site_url('admincp/linkshare/site_produse/' . $id));
+        $this->admin_navigation->module_link('See creative categories linkshare', site_url('admincp/linkshare/listCreativeCategory/' . $id));
+        $this->admin_navigation->module_link('See advertisers linkshare', site_url('admincp/linkshare/siteAdvertisers/' . $id));
+        $this->admin_navigation->module_link('See products linkshare', site_url('admincp/linkshare/site_produse/' . $id));
 
         $this->load->model('site_model');
         $site = $this->site_model->getSite($id);
@@ -199,7 +199,7 @@ class Admincp extends Admincp_Controller
             $this->site_model->deleteSite($content);
         }
 
-        $this->notices->SetNotice('Site(-uri) sters(e) cu succes.');
+        $this->notices->SetNotice('Sites successfully removed.');
 
         redirect($return_url);
 
@@ -540,7 +540,7 @@ class Admincp extends Admincp_Controller
                 'filter' => 'name_status',
                 'sort_column' => 'status'),
             array(
-                'name' => 'Categorii',
+                'name' => 'Categories',
                 'width' => '10%',
                 'type' => 'text',
                 'filter' => 'id_categories'),
@@ -551,28 +551,28 @@ class Admincp extends Admincp_Controller
                 'filter' => 'mid',
                 'sort_column' => 'mid'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '10%',
                 'type' => 'text',
                 'filter' => 'name'),
             array(
-                'name' => 'Comision',
+                'name' => 'Commission',
                 'width' => '10%'),
             array(
-                'name' => 'Oferta ID',
+                'name' => 'Offer ID',
                 'width' => '5%'),
             array(
-                'name' => 'Nume oferta',
+                'name' => 'Offer name',
                 'width' => '10%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Actions',
                 'width' => '10%'),
             array(
-                'name' => 'Parseaza produse',
+                'name' => 'Parse products',
                 'width' => '5%'),
-            array('name' => 'Produse',
+            array('name' => 'Products',
                 'width' => '5%'),
-            array('name' => 'NR',
+            array('name' => 'No',
                 'width' => '1%'),
         );
 
@@ -622,7 +622,7 @@ class Admincp extends Admincp_Controller
         $this->load->model('category_model');
         $categorii = $this->category_model->get_categorie_status();
 
-        $form->fieldset('Magazin nou');
+        $form->fieldset('New Advertiser');
         $form->text('Site ID', 'id_site', '', 'Insert site ID.', true, 'e.g., 1', true);
         $form->text('Status ID', 'id_status', '', 'Insert status ID.', true, 'e.g., 1', true);
         $form->text('Status', 'status', '', 'Insert status.', true, 'e.g., Temp Rejected', true);
@@ -647,8 +647,8 @@ class Admincp extends Admincp_Controller
     public function addAdvertiserValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('name', 'Nume magazin', 'required|trim');
-        $this->form_validation->set_rules('mid', 'Id magazin', 'required|trim');
+        $this->form_validation->set_rules('name', 'Advertiser name', 'required|trim');
+        $this->form_validation->set_rules('mid', 'Advertiser ID', 'required|trim');
 
         if ($this->form_validation->run() === false) {
             $this->notices->SetError('You have errors in your form.');
@@ -681,12 +681,12 @@ class Admincp extends Admincp_Controller
         if ($action == 'new') {
             $type_id = $this->advertiser_model->newAdvertiser($fields);
 
-            $this->notices->SetNotice('Magazin adaugat cu succes.');
+            $this->notices->SetNotice('Advertiser added successfully.');
 
             redirect('admincp/linkshare/siteAdvertisers/1');
         } else {
             $this->advertiser_model->updateAdvertiser($fields, $id);
-            $this->notices->SetNotice('Magazin actualizat cu succes.');
+            $this->notices->SetNotice('Advertiser updated successfully.');
 
             redirect('admincp/linkshare/siteAdvertisers/1');
         }
@@ -741,7 +741,7 @@ class Admincp extends Admincp_Controller
             $this->advertiser_model->deleteAdvertiser($content);
         }
 
-        $this->notices->SetNotice('Magazin(e) sters(e) cu succes.');
+        $this->notices->SetNotice('Advertisers successfully removed.');
 
         redirect($return_url);
 
@@ -812,7 +812,7 @@ class Admincp extends Admincp_Controller
         }
 
 
-        $this->notices->SetNotice($cate . ' magazine au fost updatate cu succes.');
+        $this->notices->SetNotice($cate . ' advertisers updated successfully.');
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
 
@@ -878,7 +878,7 @@ class Admincp extends Admincp_Controller
             //print '<pre>';print_r($mids);die;
         }
 
-        $this->admin_navigation->module_link('Adauga advertiseri parsati', site_url('admincp/linkshare/parseAdvertisersAdd/' . $token . '/' . $status));
+        $this->admin_navigation->module_link('Add parsed advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/' . $token . '/' . $status));
 
         $this->load->library('dataset');
 
@@ -890,31 +890,31 @@ class Admincp extends Admincp_Controller
                 'name' => 'Site',
                 'width' => '10%'),
             array(
-                'name' => 'ID Status',
+                'name' => 'Status ID',
                 'width' => '5%'),
             array(
                 'name' => 'Status',
                 'width' => '5%'),
             array(
-                'name' => 'Categorii',
+                'name' => 'Categories',
                 'width' => '15%'),
             array(
                 'name' => 'Mid',
                 'width' => '10%'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '10%'),
             array(
-                'name' => 'Oferta alias',
+                'name' => 'Offer alias',
                 'width' => '10%'),
             array(
-                'name' => 'Comision',
+                'name' => 'Commission',
                 'width' => '10%'),
             array(
-                'name' => 'Oferta ID',
+                'name' => 'Offer ID',
                 'width' => '10%'
             ),
-            array('name' => 'Oferta nume',
+            array('name' => 'Offer name',
                 'width' => '10%'
             ),
         );
@@ -998,7 +998,7 @@ class Admincp extends Admincp_Controller
         }
 
 
-        $this->notices->SetNotice($cate . ' magazine parsate adaugate cu succes.');
+        $this->notices->SetNotice($cate . ' parsed advertisers added successfully.');
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
     
