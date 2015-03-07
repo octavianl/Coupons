@@ -16,8 +16,8 @@ if (!defined('BASEPATH')) {
 
 use app\third_party\LOG\Log;
 
-require_once APPPATH . 'third_party/OAUTH2/Config.php';
-require_once APPPATH . 'third_party/OAUTH2/HttpPost.php';
+require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
+require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
 class Admincp extends Admincp_Controller
 {
@@ -1002,128 +1002,107 @@ class Admincp extends Admincp_Controller
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
     
-    public function api()
-    {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+    protected function getToken($tokenType = LinkshareConfig::PASSWORD)
+    {       
+        $config = new LinkshareConfig();
+        // build a new HTTP POST request
+        $request = new CurlApi(LinkshareConfig::URL_TOKEN);
+        $request->setHeaders($config->getTokenHeaders());
+        $request->setPostData($config->getTokenParams());
+        $request->send();
         
-        // https://login.rakutenmarketing.com
+        // decode the incoming string as JSON
+        $responseObj = $request->getDecodedResponse();
+        if ($tokenType == LinkshareConfig::PASSWORD) {
+            return $responseObj->access_token;
+        } elseif ($tokenType == LinkshareConfig::REFRESH) {
+            return $responseObj->refresh_token;
+        } else {
+            return $responseObj->access_token;
+        }
         
-        $config = array(
-            'application_name' => 'Linkshare',
-            'grant_type' => Config::PASSWORD,
-            'username' => 'thelichking',
-            'password' => 'arthas123',
-            'client_id' => 'D3R3JTfrev1nYyDgWilTsf3TfOIa',
-            'client_secret' => 'b52ePyomXvbC7AYOjhQTT3EGhrEa',
-            'scope' => '2531438', // optional
-            'link_to_fetch' => 'https://api.rakutenmarketing.com//linklocator/1.0/getMerchByAppStatus/approved'
-        );
         
+        //print '<pre>';
+        //print_r($responseObj);
+                
         /*
-         * Consumer Key <=> Client ID           D3R3JTfrev1nYyDgWilTsf3TfOIa     
-         * Consumer Secret <=> Client Secret    b52ePyomXvbC7AYOjhQTT3EGhrEa
-         * Basic: RDNSM0pUZnJldjFuWXlEZ1dpbFRzZjNUZk9JYTpiNTJlUHlvbVh2YkM3QVlPamhRVFQzRUdockVh
-         * 
-         * 
-         * 
-         * 
-         */
-        
-
-        $client = new Google_Client();
-        $client->setApplicationName($config['application_name']);
-        $client->setClientId($config['client_id']);
-        $client->setClientSecret($config['client_secret']);
-        $client->addScope($config['scope']);
-        $client->authenticate($code);
+            stdClass Object
+            (
+                [token_type] => bearer
+                [expires_in] => 3042
+                [refresh_token] => ec03243c5d33d193f1983f69f2ac
+                [access_token] => e6f99a58f75753fa8bcbb81a6ff91
+            )
+         */                
     }
     
-    public function apilinkshare()
+    public function getRefreshToken()
     {
+        $config = new LinkshareConfig();
+        // build a new HTTP POST request
+        $request = new CurlApi(LinkshareConfig::URL_TOKEN);
+        $request->setHeaders($config->getTokenHeaders());
+        $request->setPostData($config->getTokenParams());
+        $request->send();
+        $request->setPostData($config->getRefreshTokenParams($this->getToken(LinkshareConfig::REFRESH)));
+        $request->send();
+        
+        // decode the incoming string as JSON
+        $responseObj = json_decode($request->getResponse());
+        return $responseObj->access_token;
+        
+        //print '<pre>';
+        //print_r($responseObj);
+                
+        /*
+            stdClass Object
+            (
+                [token_type] => bearer
+                [expires_in] => 3600
+                [refresh_token] => b2f98de52cfb9f6925fe1dff3de494af
+                [access_token] => b0d4d2a3c9665c3c706356da3a423d
+            )
+         */
+    }
+    
+    public function getXml()
+    {
+        $this->load->library('admin_form');
+        $form = new Admin_form;
+        
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
         
-        $config = new Config();
+        $config = new LinkshareConfig();
         
-        // this will be our POST data to send back to the OAuth server in exchange
-        // for an access token
-        $params = array(
-            //"redirect_uri" => $config->getUrlRedirect(),
-            "grant_type" => $config->getGrantType(Config::PASSWORD),
-            "username" => $config->getUsername(),
-            "password" => $config->getPassword(),
-            "scope" => $config->getScope()
-        );
-        
-        $headers = array(
-            "Content-type: application/x-www-form-urlencoded",
-            "Accept: */*",
-            "Cache-Control: no-cache",
-            "Pragma: no-cache",
-            "Authorization: Basic " . $config->getCredentials()
-        );
-        
-        // build a new HTTP POST request
-        //$request = new HttpPost($config->getUrlToken(), $headers);
-        
-        //$request->setPostData($params);
-        //$request->send();
-        
-        // decode the incoming string as JSON
-        //$responseObj = json_decode($request->getResponse());
-        
-        //print '<pre>';
-        //print_r($responseObj);
-        
-        /*
-            [token_type] => bearer
-            [expires_in] => 3101
-            [refresh_token] => 16405f47463b56fda13a16c9bcfd44cd
-            [access_token] => b97d4b68362ab3c98b2fcc22956f666
-         */
-        
-        // refresh token
-        //$params['grant_type'] = $config->getGrantType(Config::REFRESH);
-        //$params['refresh_token'] = $responseObj->refresh_token;
-        //$params['scope'] = 'PRODUCTION';
-        //unset($params['username']);
-        //unset($params['password']);
-        
-        //$request->setPostData($params);
-        //$request->send();
-        
-        // decode the incoming string as JSON
-        //$responseObj = json_decode($request->getResponse());
-        
-        //print '<pre>';
-        //print_r($responseObj);
-        
-        $accessToken = '8b3f38b6631c2dd66f7151c3f4706dc9';
-        
-       
-        $headers = array(
-            //"Content-type: application/x-www-form-urlencoded",
-            "Accept: application/json, text/javascript, */*; q=0.01",
-            "Accept-Encoding: gzip, deflate, sdch",
-            "Accept-Language: en-US,en;q=0.8,ro;q=0.6",
-            //"Cache-Control: no-cache",
-            //"Pragma: no-cache",
-            "Authorization: Bearer " . $accessToken,
-            //"Connection: keep-alive",
-            //"Host: api.rakutenmarketing.com"
-        );
-        
-        $request = new HttpPost($config->getUrlAdvertisers(), $headers);
-        $request->setGetData(array());
-        $request->send();
-      
-        // decode the incoming string as JSON
-        $responseObj = json_decode($request->getResponse());
-        
-        print '<pre>';
-        print_r($responseObj);
+        $accessToken = $this->getToken();
 
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
+              
+        $responseObj = $request->getFormattedResponse();
+        
+        if (!$responseObj) {
+            $this->notices->SetError('Refresh token');
+            $responseObj['header'] = $responseObj['body'] = 'ERROR';
+        } else {
+            //print '<pre>';
+            //print_r($responseObj['header']);
+        }
+                                        
+        $form->fieldset('Xml');
+        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', false);
+        $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
+        
+        $data = array(
+            'form' => $form->display(),
+            'form_title' => 'XML',
+            'form_action' => site_url('admincp/linkshare/')
+        );
+
+        $this->load->view('xml', $data);
     }
 
 }
