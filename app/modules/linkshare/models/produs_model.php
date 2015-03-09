@@ -28,7 +28,7 @@ class Produs_model extends CI_Model
      *
      * @return array
      */
-    function get_produse()
+    function getProducts()
     {
         $row = array();
         $result = $this->db->get('linkshare_produs');
@@ -46,7 +46,7 @@ class Produs_model extends CI_Model
      *
      * @return array
      */
-    function get_produse_by_mid($params)
+    function getProductsByMid($params)
     {
         $row = array();
         if (isset($params['limit'])) {
@@ -76,7 +76,7 @@ class Produs_model extends CI_Model
      *
      * @return array
      */
-    function get_produs_status()
+    function getProductStatus()
     {
         $row = array();
         $result = $this->db->get('linkshare_produs');
@@ -94,7 +94,7 @@ class Produs_model extends CI_Model
      *
      * @return boolean
      */
-    function change_produs_status($id_product)
+    function changeProductStatus($id_product)
     {
         $row = array();
         $this->db->where('id', $id_product);
@@ -110,7 +110,7 @@ class Produs_model extends CI_Model
             $available = 'yes';
 
         $update_fields['available'] = $available;
-        $this->update_produs($update_fields, $id_product);
+        $this->updateProduct($update_fields, $id_product);
 
         return true;
     }
@@ -122,7 +122,7 @@ class Produs_model extends CI_Model
      *
      * @return array
      */
-    function get_produs($id)
+    function getProduct($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -142,7 +142,7 @@ class Produs_model extends CI_Model
      *
      * @return array
      */
-    function get_produs_by_linkid($linkid)
+    function getProductByLinkID($linkid)
     {
         $row = array();
         $this->db->where('linkid', $linkid);
@@ -164,7 +164,7 @@ class Produs_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_produs($insert_fields)
+    function newProduct($insert_fields)
     {
         $this->db->insert('linkshare_produs', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -182,7 +182,7 @@ class Produs_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_produs($update_fields, $id)
+    function updateProduct($update_fields, $id)
     {
         $this->db->update('linkshare_produs', $update_fields, array('id' => $id));
 
@@ -199,9 +199,9 @@ class Produs_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_produs_by_linkid($update_fields, $linkid)
+    function updateProductByLinkID($update_fields, $linkid)
     {
-        $produs = $this->get_produs_by_linkid($linkid);
+        $produs = $this->getProductByLinkID($linkid);
         //preserve insert date
         $update_fields['insert_date'] = $produs['insert_date'];
         $this->db->update('linkshare_produs', $update_fields, array('linkid' => $linkid));
@@ -218,7 +218,7 @@ class Produs_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_produs($id)
+    function deleteProduct($id)
     {
         $this->db->delete('linkshare_produs', array('id' => $id));
 
@@ -234,7 +234,7 @@ class Produs_model extends CI_Model
      *
      * @return boolean
      */
-    function exists_produs($linkid)
+    function existsProduct($linkid)
     {
         $this->db->where('linkid', $linkid);
         $result = $this->db->get('linkshare_produs');

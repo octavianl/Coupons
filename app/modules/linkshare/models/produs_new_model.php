@@ -8,7 +8,6 @@
  * @author   Weblight <office@weblight.ro>
  * @license  License http://www.weblight.ro/
  * @link     http://www.weblight.ro/
-
  */
 class Produs_new_model extends CI_Model {
 
@@ -27,7 +26,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produse() {
+    function getProducts() {
         $row = array();
         $result = $this->db->get('linkshare_produs_new');
 
@@ -44,7 +43,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produse_by_mid($params) {
+    function getProductsByMid($params) {
         $row = array();
         if ($params['mid'])
             $this->db->where('mid', $params['mid']);
@@ -63,7 +62,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produs_status() {
+    function getProductStatus() {
         $row = array();
         $result = $this->db->get('linkshare_produs_new');
 
@@ -81,7 +80,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produs($id)
+    function getProduct($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -103,7 +102,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function new_produs($insert_fields)
+    function newProduct($insert_fields)
     {
         $this->db->insert('linkshare_produs_new', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -121,7 +120,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean true
      */
-    function update_produs($update_fields, $id)
+    function updateProduct($update_fields, $id)
     {
         $this->db->update('linkshare_produs_new', $update_fields, array('id' => $id));
 
@@ -138,7 +137,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean true
      */
-    function update_produs_by_linkid($update_fields, $linkid)
+    function updateProductByLinkID($update_fields, $linkid)
     {
         $this->db->update('linkshare_produs_new', $update_fields, array('linkid' => $linkid));
 
@@ -154,7 +153,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean true
      */
-    function delete_produs($id)
+    function deleteProduct($id)
     {
 
         $this->db->delete('linkshare_produs_new', array('id' => $id));
@@ -171,7 +170,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean
      */
-    function exists_produs($linkid)
+    function existsProduct($linkid)
     {
         $this->db->where('linkid', $linkid);
         $result = $this->db->get('linkshare_produs_new');
@@ -188,7 +187,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return array
      */
-    function get_produse_by_linkid($linkid,$mid) {
+    function getProductsByLinkID($linkid,$mid) {
         $row = array();
 
         $result = $this->db->get('linkshare_produs', array('linkid' => $linkid,'mid' => $mid));
@@ -252,11 +251,11 @@ class Produs_new_model extends CI_Model {
             //if the old product is not present among the new = current products...we mark it as old move it to linkshare_produs_old
             $update_fields['available'] = 'no';
             $update_fields['last_update_date'] = date('Y-m-d H:i:s');
-            if (!$this->exists_produs($row['linkid'])) {
+            if (!$this->existsProduct($row['linkid'])) {
                 $this->db->update('linkshare_produs', $update_fields, array('linkid' => $row['linkid']));
                 
                 // Copy product to linkshare_produs_old
-                $produs = $this->get_produse_by_linkid($row['linkid'],$mid);    
+                $produs = $this->getProductsByLinkID($row['linkid'],$mid);    
                 $this->copy_to_old($produs);
                 
                 // Delete product from linkshare_produs

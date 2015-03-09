@@ -22,11 +22,11 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Get Categorii
+     * Get Categories
      *
      * @return array
      */
-    function get_categorii()
+    function getCategories()
     {
         $row = array();
         $result = $this->db->get('linkshare_categories');
@@ -62,7 +62,7 @@ class Category_model extends CI_Model
      *
      * @return array
      */
-    function get_categorie($id)
+    function getCategory($id)
     {
         $row = array();
         $this->db->where('id', $id);

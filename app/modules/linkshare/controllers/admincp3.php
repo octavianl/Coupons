@@ -137,7 +137,7 @@ class Admincp3 extends Admincp_Controller
         $filters['mid'] = $mid;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('produs_model', 'get_produse_by_mid', $filters);
+        $this->dataset->datasource('produs_model', 'getProductsByMid', $filters);
         $this->dataset->base_url(site_url('admincp3/linkshare/listProducts/' . $id_site . '/' . $mid));
         $this->dataset->rows_per_page(20);
 
@@ -150,7 +150,7 @@ class Admincp3 extends Admincp_Controller
         $this->dataset->initialize();
 
         // add actions
-        $this->dataset->action('Delete', 'admincp3/linkshare/delete_produs');
+        $this->dataset->action('Delete', 'admincp3/linkshare/deleteProduct');
 
         $magazin = '';
 
@@ -168,11 +168,11 @@ class Admincp3 extends Admincp_Controller
         $this->load->view('listProducts', $data);
     }
     
-    public function change_produs_status($id_product, $ret_url)
+    public function changeProductStatus($id_product, $ret_url)
     {
         $ret_url = base64_decode($ret_url);
         $this->load->model('produs_model');
-        $this->produs_model->change_produs_status($id_product);
+        $this->produs_model->changeProductStatus($id_product);
         echo '<META http-equiv="refresh" content="0;URL=' . $ret_url . '">';
     }
 
@@ -193,7 +193,7 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('category_creative_model');
         $filters['id_site'] = $id;
         $filters['mid'] = $mid;
-        $creative_categories = $this->category_creative_model->get_categorii($filters);
+        $creative_categories = $this->category_creative_model->getCategories($filters);
 
         $data = array();
 
@@ -292,14 +292,14 @@ class Admincp3 extends Admincp_Controller
                             $product[$i]['price_final'] = 0;
                         }
 
-                        $this->produs_new_model->new_produs($product[$i]);
+                        $this->produs_new_model->newProduct($product[$i]);
 
-                        $exista = $this->produs_model->exists_produs($product[$i]['linkid']);
+                        $exista = $this->produs_model->existsProduct($product[$i]['linkid']);
                         if (!$exista) {
-                            $this->produs_model->new_produs($product[$i]);
+                            $this->produs_model->newProduct($product[$i]);
                             $j++;
                         } else {
-                            $this->produs_model->update_produs_by_linkid($product[$i], $product[$i]['linkid']);
+                            $this->produs_model->updateProductByLinkID($product[$i], $product[$i]['linkid']);
                             $k++;
                         }
                         $i++;
@@ -341,7 +341,7 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('category_creative_model');
         $filters['id_site'] = $id;
         $filters['mid'] = $mid;
-        $creative_categories = $this->category_creative_model->get_categorii($filters);
+        $creative_categories = $this->category_creative_model->getCategories($filters);
 
         $data = array();
 
@@ -410,7 +410,7 @@ class Admincp3 extends Admincp_Controller
                         $product[$i]['insert_date'] = date("Y-m-d H:i:s");
                         $product[$i]['last_update_date'] = date("Y-m-d H:i:s");
 
-                        $this->produs_partial_model->new_produs($product[$i]);
+                        $this->produs_partial_model->newProduct($product[$i]);
 
                         unset($subarray);
 
@@ -450,7 +450,7 @@ class Admincp3 extends Admincp_Controller
             }
         } else {
             $produs_partial = array();
-            $produs_partial = $this->produs_partial_model->get_produs($id_produs_partial);
+            $produs_partial = $this->produs_partial_model->getProduct($id_produs_partial);
             if (!empty($produs_partial)) {
                 $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=$token&keyword=\"{$produs_partial['linkname']}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
 
@@ -494,14 +494,14 @@ class Admincp3 extends Admincp_Controller
                 }
 
                 unset($produs_partial['id']);
-                $this->produs_new_model->new_produs($produs_partial);
+                $this->produs_new_model->newProduct($produs_partial);
 
-                $exista = $this->produs_model->exists_produs($produs_partial['linkid']);
+                $exista = $this->produs_model->existsProduct($produs_partial['linkid']);
                 if (!$exista) {
-                    $this->produs_model->new_produs($produs_partial);
+                    $this->produs_model->newProduct($produs_partial);
                     $j++;
                 } else {
-                    $this->produs_model->update_produs_by_linkid($produs_partial, $produs_partial['linkid']);
+                    $this->produs_model->updateProductByLinkID($produs_partial, $produs_partial['linkid']);
                     $k++;
                 }
 
@@ -522,7 +522,7 @@ class Admincp3 extends Admincp_Controller
                 fclose($fp);
 
                 //i finished all the partial products,truncate the linkshare_produs_partial,increment the page and refresh
-                $this->produs_partial_model->sterge();
+                $this->produs_partial_model->deletePartialProduct();
                 $partial = 0;
                 $page++;
 
@@ -552,7 +552,7 @@ class Admincp3 extends Admincp_Controller
         
         //$produs = array();
         
-        //$produs = $this->produs_new_model->get_produse_by_linkid($linkid,$mid);
+        //$produs = $this->produs_new_model->getProductsByLinkID($linkid,$mid);
        
 
         

@@ -57,7 +57,7 @@ class Admincp2 extends Admincp_Controller
         );
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_model', 'get_categorii');
+        $this->dataset->datasource('category_model', 'getCategories');
         $this->dataset->base_url(site_url('admincp2/linkshare/listCategories'));
         $this->dataset->rows_per_page(1000);
 
@@ -137,7 +137,7 @@ class Admincp2 extends Admincp_Controller
     public function editCategory($id)
     {
         $this->load->model('category_model');
-        $categorie = $this->category_model->get_categorie($id);
+        $categorie = $this->category_model->getCategory($id);
 
         if (empty($categorie)) {
             die(show_error('No category with this ID.'));
@@ -366,7 +366,7 @@ class Admincp2 extends Admincp_Controller
         $filters['name'] = true;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'get_categorii', $filters);
+        $this->dataset->datasource('category_creative_model', 'getCategories', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/' . $id));
         $this->dataset->rows_per_page(50);
 
@@ -389,7 +389,7 @@ class Admincp2 extends Admincp_Controller
 
         // total rows
         $this->db->where('id_site', $id);
-        $total_rows = $this->category_creative_model->get_categorii_linii($filters);
+        $total_rows = $this->category_creative_model->getCategoriesLines($filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -470,7 +470,7 @@ class Admincp2 extends Admincp_Controller
     public function editCreativeCategory($id)
     {
         $this->load->model('category_creative_model');
-        $categorie = $this->category_creative_model->get_categorie($id);
+        $categorie = $this->category_creative_model->getCategory($id);
 
         if (empty($categorie)) {
             die(show_error('No category with this ID.'));
@@ -572,7 +572,7 @@ class Admincp2 extends Admincp_Controller
 
                 $this->load->model('category_creative_model');
                 //delete old categories for this mid and this site id
-                $this->category_creative_model->delete_categorie_by_mid($id, $mids[$j - 1]);
+                $this->category_creative_model->deleteCategoryByMid($id, $mids[$j - 1]);
 
                 foreach ($cats as $cat) {
                     $cat['id'] = '';
@@ -796,16 +796,16 @@ class Admincp2 extends Admincp_Controller
                         }
                     }
                 }  
-                $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
-                $id_join_category = $this->category_creative_model->new_join_category($id_merged_category,$checked_values);
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);            
+                $id_join_category = $this->category_creative_model->newJoinCategory($id_merged_category,$checked_values);
                 
                 $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
                 $this->notices->SetNotice($message);
                 redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
                 
             }elseif(isset($_POST['merged_category']) && !empty($_POST['check_category'])){
-                $id_merged_category = $this->category_creative_model->new_merged_category($_POST['merged_category']);            
-                $this->category_creative_model->new_join_category($id_merged_category,$_POST['check_category']);
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);            
+                $this->category_creative_model->newJoinCategory($id_merged_category,$_POST['check_category']);
 
                 $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
                 $this->notices->SetNotice($message);
@@ -822,7 +822,7 @@ class Admincp2 extends Admincp_Controller
 //        $filters['mid'] = $filters_decode['mid'];
         
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'get_creative_for_merge', $filters);
+        $this->dataset->datasource('category_creative_model', 'getCreativeForMerge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
 
 
@@ -856,7 +856,7 @@ class Admincp2 extends Admincp_Controller
 
         // total rows
         $this->db->where('id_site', $id);
-        $total_rows = $this->category_creative_model->get_categorii_linii($filters);
+        $total_rows = $this->category_creative_model->getCategoriesLines($filters);
 
         $this->dataset->total_rows($total_rows); 
         
@@ -901,7 +901,7 @@ class Admincp2 extends Admincp_Controller
         
         $filters = array();
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model','list_merged_category', $filters);
+        $this->dataset->datasource('category_creative_model','listMergedCategory', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listMergedCategories'));
         $this->dataset->rows_per_page(10);
 
@@ -922,7 +922,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->model('category_creative_model');
         $fields['name'] = $this->input->post('category_name');
         
-        $category_name = $this->category_creative_model->get_merged_category_by_id($id);
+        $category_name = $this->category_creative_model->getMergedCategoryByID($id);
                 
 //        echo "<pre>";
 //        print_r($category_name);
@@ -931,7 +931,7 @@ class Admincp2 extends Admincp_Controller
 
         if (!empty($fields['name']) && isset($fields['name'])) {
             
-            $this->category_creative_model->update_merged_category($fields, $id);
+            $this->category_creative_model->updateMergedCategory($fields, $id);
             $this->notices->SetNotice('Category updated successfully.');
 
             redirect('admincp2/linkshare/listMergedCategories/');
@@ -955,7 +955,7 @@ class Admincp2 extends Admincp_Controller
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
         
         foreach ($contents as $content) {
-            $this->category_creative_model->delete_merged_category($content);
+            $this->category_creative_model->deleteMergedCategory($content);
         }
         
         $this->notices->SetNotice('Merged Category deleted successfully.');
@@ -965,7 +965,7 @@ class Admincp2 extends Admincp_Controller
     
     function ajaxDeleteCategory($MergedCategory_id, $JoinsCategory_id){
         $this->load->model('category_creative_model');
-        $this->category_creative_model->delete_join_category($MergedCategory_id, $JoinsCategory_id);
+        $this->category_creative_model->deleteJoinCategory($MergedCategory_id, $JoinsCategory_id);
         
         $message = "Joins Category id:".$JoinsCategory_id." from Merged Category id:".$MergedCategory_id."deleted successfully.";
         $this->notices->SetNotice($message);

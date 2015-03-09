@@ -29,7 +29,7 @@ class Log_model extends CI_Model
      *
      * @return array
      */
-    function get_logs($filters = array())
+    function getLogs($filters = array())
     {
         //Directory read
         $filedir = FCPATH.APPPATH.'logs/'; //'logs/logs.csv'

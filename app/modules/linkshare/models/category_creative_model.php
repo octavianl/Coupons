@@ -28,7 +28,7 @@ class Category_creative_model extends CI_Model
      *
      * @return array
      */
-    function get_categorii($filters)
+    function getCategories($filters)
     {
         $row = array();
 
@@ -74,7 +74,7 @@ class Category_creative_model extends CI_Model
      *
      * @return int
      */
-    function get_categorii_linii($filters)
+    function getCategoriesLines($filters)
     {
         if (isset($filters['id_site']))
             $this->db->where('id_site', $filters['id_site']);
@@ -100,7 +100,7 @@ class Category_creative_model extends CI_Model
      *
      * @return array
      */
-    function get_categorie($id)
+    function getCategory($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -159,7 +159,7 @@ class Category_creative_model extends CI_Model
      *
      * @return boolean true
      */
-    function delete_categorie_by_mid($id_site, $mid)
+    function deleteCategoryByMid($id_site, $mid)
     {
         $this->db->delete('linkshare_categories_creative', array('id_site' => $id_site, 'mid' => $mid));
 
@@ -228,7 +228,7 @@ class Category_creative_model extends CI_Model
         return array_slice($params, $offset, $limit, true);
     }
     
-    function new_merged_category($merged_category)
+    function newMergedCategory($merged_category)
     {
         $insert_fields = array ('name' => $merged_category);
         $this->db->insert('linkshare_categories_merged', $insert_fields);
@@ -237,7 +237,7 @@ class Category_creative_model extends CI_Model
         return $insert_id;
     }
     
-    function new_join_category($id_merged_category,$check_category)
+    function newJoinCategory($id_merged_category,$check_category)
     {
         foreach ($check_category as $category) {
             $category = (int) $category;
@@ -261,7 +261,7 @@ class Category_creative_model extends CI_Model
      *
      * @return array
      */
-    function get_creative_for_merge($filters)
+    function getCreativeForMerge($filters)
     {
         $this->load->model('site_model');
         $row = array();
@@ -299,7 +299,7 @@ class Category_creative_model extends CI_Model
                 $linie['id_site'] = $site['name'];
             }
             
-            $merge_categories = $this->category_creative_model->get_creative_merged($linie['cat_id']);
+            $merge_categories = $this->category_creative_model->getCreativeMerged($linie['cat_id']);
             $linie['merge_categories'] = $merge_categories;
 
             $check_array = explode(',', $filters['check_category']);
@@ -311,7 +311,7 @@ class Category_creative_model extends CI_Model
         return $row;
     }
     
-    function get_creative_merged($id)
+    function getCreativeMerged($id)
     {
         $row = array();
         $names = array();
@@ -328,7 +328,7 @@ class Category_creative_model extends CI_Model
         return $names;
     }
     
-    function get_merged_category_by_id($id)
+    function getMergedCategoryByID($id)
     {  
         $this->db->where('ID', $id);
         $result = $this->db->get('linkshare_categories_merged');
@@ -336,14 +336,14 @@ class Category_creative_model extends CI_Model
         return $result->result_array();
     }
     
-    function get_merged_category()
+    function getMergedCategory()
     {  
         $result = $this->db->get('linkshare_categories_merged');
 
         return $result->result_array();
     }
    
-    function get_joins_category($id)
+    function getJoinsCategory($id)
     {
         $this->db->where('id_categ_merged', $id);
         //$this->db->join('linkshare_categories_creative','linkshare_categories_creative.cat_id = linkshare_categories_joins.id_categ_merged','left');
@@ -352,52 +352,44 @@ class Category_creative_model extends CI_Model
         return $result->result_array();
     }
     
-    function list_merged_category()
+    function listMergedCategory()
     {  
-        $id_merged_category = $this->get_merged_category();
+        $id_merged_category = $this->getMergedCategory();
 
         foreach ($id_merged_category as $key=>$row) {
-            $list_merged_category = array();
+            $listMergedCategory = array();
             
-            $categories = $this->get_joins_category($row['ID']);
+            $categories = $this->getJoinsCategory($row['ID']);
             
             foreach ($categories as $categ) {
                 $category_merged[] = $categ['id_categ_advertiser'];
             }
 
-            $list_merged_category['category_merged_ID'] = $row['ID'];
-            $list_merged_category['category_merged_name'] = $row['name'];
-            $list_merged_category['categories_merged'] = $category_merged;
+            $listMergedCategory['category_merged_ID'] = $row['ID'];
+            $listMergedCategory['category_merged_name'] = $row['name'];
+            $listMergedCategory['categories_merged'] = $category_merged;
             
-            $result[] = $list_merged_category;
+            $result[] = $listMergedCategory;
             unset($category_merged);
         }
 
         return $result;
     }
     
-    function update_merged_category($update_fields,$id) 
+    function updateMergedCategory($update_fields,$id) 
     {		
         $this->db->update('linkshare_categories_merged', $update_fields, array('ID' => $id));	
         return TRUE;
     }
     
-    function delete_merged_category($id)
+    function deleteMergedCategory($id)
     {
         $this->db->delete('linkshare_categories_merged', array('id' => $id));
         return TRUE;
     }
     
-    function delete_join_category($MergedCategory_id, $JoinsCategory_id)
+    function deleteJoinCategory($MergedCategory_id, $JoinsCategory_id)
     {
-//        echo "<pre>";
-//        echo "merge".$MergedCategory_id."<br>";
-//        echo "join".$JoinsCategory_id."<br>";
-//        die();
-//        echo "</pre>";
-        
-//        $this->db->where('id_categ_merged', $MergedCategory_id);
-//        $this->db->where('id_categ_advertiser', $JoinsCategory_id);
         $this->db->delete('linkshare_categories_joins', array('id_categ_merged'=>$JoinsCategory_id,'id_categ_advertiser'=>$MergedCategory_id));
         return TRUE;
     }

@@ -72,7 +72,7 @@ class Admincp4 extends Admincp_Controller
         $filters['limit'] = 5;
         
         $this->dataset->columns($columns);
-        $this->dataset->datasource('log_model', 'get_logs', $filters);
+        $this->dataset->datasource('log_model', 'getLogs', $filters);
 
         $this->dataset->base_url(site_url('admincp4/linkshare/logsPanel'));
         $this->dataset->rows_per_page($filters['limit']);
