@@ -35,8 +35,8 @@ class Admincp2 extends Admincp_Controller
 
     public function listCategories()
     {
-        $this->admin_navigation->module_link('Adauga categorie', site_url('admincp2/linkshare/addCategory'));
-        $this->admin_navigation->module_link('Parseaza categorii linkshare', site_url('admincp2/linkshare/parseCategories'));
+        $this->admin_navigation->module_link('Add category', site_url('admincp2/linkshare/addCategory'));
+        $this->admin_navigation->module_link('Parse linkshare category', site_url('admincp2/linkshare/parseCategories'));
 
         $this->load->library('dataset');
 
@@ -119,13 +119,13 @@ class Admincp2 extends Admincp_Controller
         $fields['id_category'] = $this->input->post('id_category');
 
         if ($action == 'new') {
-            $this->category_model->new_categorie($fields);
+            $this->category_model->newCategory($fields);
 
             $this->notices->SetNotice('Category added successfully.');
 
             redirect('admincp2/linkshare/listCategories/');
         } else {
-            $this->category_model->update_categorie($fields, $id);
+            $this->category_model->updateCategory($fields, $id);
             $this->notices->SetNotice('Category updated successfully.');
 
             redirect('admincp2/linkshare/listCategories/');
@@ -245,7 +245,7 @@ class Admincp2 extends Admincp_Controller
         $this->dataset->rows_per_page(50);
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_model', 'get_categorii_parse', $filters);
+        $this->dataset->datasource('category_model', 'getCategoriesParse', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/parseCategories'));
 
 
@@ -310,7 +310,7 @@ class Admincp2 extends Admincp_Controller
         $this->dataset->rows_per_page(50);
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_model', 'get_categorii_parse', $filters);
+        $this->dataset->datasource('category_model', 'getCategoriesParse', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/parseCategories'));
 
 
@@ -452,13 +452,13 @@ class Admincp2 extends Admincp_Controller
         $fields['nid'] = $this->input->post('nid');
 
         if ($action == 'new') {
-            $type_id = $this->category_creative_model->new_categorie($fields);
+            $type_id = $this->category_creative_model->newCategory($fields);
 
             $this->notices->SetNotice('Creative category added successfully.');
 
             redirect('admincp2/linkshare/listCreativeCategory/');
         } else {
-            $this->category_creative_model->update_categorie($fields, $id);
+            $this->category_creative_model->updateCategory($fields, $id);
             $this->notices->SetNotice('Creative category updated successfully.');
 
             redirect('admincp2/linkshare/listCreativeCategory/');
@@ -473,22 +473,22 @@ class Admincp2 extends Admincp_Controller
         $categorie = $this->category_creative_model->get_categorie($id);
 
         if (empty($categorie)) {
-            die(show_error('Nu exista nici o categorie cu acest ID.'));
+            die(show_error('No category with this ID.'));
         }
 
         $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $form->fieldset('Categorie creative');
-        $form->text('Id site linkshare', 'id_site', $categorie['id_site'], 'Introduceti id site', true, 'e.g., 1', true);
-        $form->text('Id categorie creative', 'cat_id', $categorie['cat_id'], 'Introduceti id categorie cum e pe linkshare', true, 'e.g., 200229205', true);
-        $form->text('Nume', 'name', $categorie['name'], 'Introduceti numele categoriei', true, 'e.g., MAT (Mission Against Terror)', true);
-        $form->text('Mid linkshare', 'mid', $categorie['mid'], 'Introduceti mid', true, 'e.g., 37517', true);
-        $form->text('Nid linkshare', 'nid', $categorie['nid'], 'Introduceti nid', true, 'e.g., 1', true);
+        $form->fieldset('Creative category');
+        $form->text('Site ID linkshare', 'id_site', $categorie['id_site'], 'Insert site ID', true, 'e.g., 1', true);
+        $form->text('Creative category ID', 'cat_id', $categorie['cat_id'], 'Insert category ID according to linkshare', true, 'e.g., 200229205', true);
+        $form->text('Name', 'name', $categorie['name'], 'Insert category name', true, 'e.g., MAT (Mission Against Terror)', true);
+        $form->text('Mid linkshare', 'mid', $categorie['mid'], 'Insert mid', true, 'e.g., 37517', true);
+        $form->text('Nid linkshare', 'nid', $categorie['nid'], 'Insert nid', true, 'e.g., 1', true);
 
         $data = array(
             'form' => $form->display(),
-            'form_title' => 'Editare Categorie Creative',
+            'form_title' => 'Edit creative category',
             'form_action' => site_url('admincp2/linkshare/addCreativeCategoryValidate/edit/' . $categorie['id']),
             'action' => 'edit',
         );
@@ -509,7 +509,7 @@ class Admincp2 extends Admincp_Controller
             $this->category_creative_model->deleteCategory($content);
         }
 
-        $this->notices->SetNotice('Categorie creative stearsa cu succes.');
+        $this->notices->SetNotice('Creative category removed successfully.');
 
         redirect($return_url);
 
@@ -536,7 +536,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->model('advertiser_model');
         $filters['id_site'] = $id;
         $this->load->model('status_model');
-        $filters['id_status'] = $this->status_model->get_status_by_name('approved');
+        $filters['id_status'] = $this->status_model->getStatusByName('approved');
         $mag = array();
         $mag = $this->advertiser_model->getAdvertisers($filters);
         foreach ($mag as $val) {
@@ -576,7 +576,7 @@ class Admincp2 extends Admincp_Controller
 
                 foreach ($cats as $cat) {
                     $cat['id'] = '';
-                    $this->category_creative_model->new_categorie($cat);
+                    $this->category_creative_model->newCategory($cat);
                 }
 
                 //print '<pre>';print_r($cats);die;
@@ -587,16 +587,16 @@ class Admincp2 extends Admincp_Controller
             $j--;
         }
 
-        $this->admin_navigation->module_link('Vezi categoriile creative parsate', site_url('admincp2/linkshare/listCreativeCategory/' . $id));
+        $this->admin_navigation->module_link('See parsed creative category', site_url('admincp2/linkshare/listCreativeCategory/' . $id));
 
         $this->load->library('dataset');
 
         $columns = array(
             array(
-                'name' => 'Creative Categories Parsed',
+                'name' => 'Parsed creative categories',
                 'width' => '50%'),
             array(
-                'name' => 'ID Site',
+                'name' => 'Site ID',
                 'width' => '50%'),
         );
 
@@ -731,7 +731,7 @@ class Admincp2 extends Admincp_Controller
                 'name' => 'CATEGORY ID #',
                 'width' => '30%'),
             array(
-                'name' => 'Nume',
+                'name' => 'Name',
                 'width' => '20%',
                 'type' => 'text',
                 'filter' => 'nume'),
@@ -744,7 +744,7 @@ class Admincp2 extends Admincp_Controller
                 'name' => 'Nid',
                 'width' => '5%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Actions',
                 'width' => '5%'
             )
         );
@@ -888,14 +888,8 @@ class Admincp2 extends Admincp_Controller
             array(
                 'name' => 'ID merged categories',
                 'width' => '20%'),
-//            array(
-//                'name' => 'Contained Categ Name',
-//                'width' => '20%'),
-//            array(
-//                'name' => 'Contained Categ MID',
-//                'width' => '20%'),
             array(
-                'name' => 'Operatii',
+                'name' => 'Actions',
                 'width' => '15%'
             )
         );

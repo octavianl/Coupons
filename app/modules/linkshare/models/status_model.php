@@ -29,7 +29,7 @@ class Status_model extends CI_Model
      *
      * @return array
      */
-    function get_statuses()
+    function getStatuses()
     {
         $row = array();
         $result = $this->db->get('linkshare_status');
@@ -47,7 +47,7 @@ class Status_model extends CI_Model
      *
      * @return array
      */
-    function get_status($id)
+    function getStatus($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -67,7 +67,7 @@ class Status_model extends CI_Model
      *
      * @return int
      */
-    function get_status_by_name($id_status)
+    function getStatusByName($id_status)
     {
         $status = 0;
         $this->db->where('id_status', $id_status);
@@ -87,26 +87,26 @@ class Status_model extends CI_Model
      *
      * @return array
      */
-    function get_status_by_application_status($status)
+    function getStatusByApplicationStatus($status)
     {
         switch ($status)
         {
         case 'Temp Removed' : 
-            return $this->get_status_by_name('temp removed');
+            return $this->getStatusByName('temp removed');
         case 'Approved' : 
-            return $this->get_status_by_name('approved');
+            return $this->getStatusByName('approved');
         case 'Extended' : 
-            return $this->get_status_by_name('approval extended');
+            return $this->getStatusByName('approval extended');
         case 'Perm Rejected' : 
-            return $this->get_status_by_name('perm rejected');
+            return $this->getStatusByName('perm rejected');
         case 'Perm Removed' : 
-            return $this->get_status_by_name('perm removed');
+            return $this->getStatusByName('perm removed');
         case 'Self Removed' : 
-            return $this->get_status_by_name('self removed');
+            return $this->getStatusByName('self removed');
         case 'Temp Rejected' : 
-            return $this->get_status_by_name('temp rejected');
+            return $this->getStatusByName('temp rejected');
         case 'Waiting' : 
-            return $this->get_status_by_name('wait');
+            return $this->getStatusByName('wait');
         default : 
             return '';
         }

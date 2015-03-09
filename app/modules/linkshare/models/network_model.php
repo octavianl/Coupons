@@ -29,7 +29,7 @@ class Network_model extends CI_Model
      *
      * @return array
      */
-    function get_networks()
+    function getNetworks()
     {
         $row = array();
         $result = $this->db->get('linkshare_network');
@@ -47,7 +47,7 @@ class Network_model extends CI_Model
      *
      * @return array
      */
-    function get_network($id)
+    function getNetwork($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -69,7 +69,7 @@ class Network_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_network($insert_fields)
+    function newNetwork($insert_fields)
     {
         $this->db->insert('linkshare_network', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -87,7 +87,7 @@ class Network_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_network($update_fields, $id)
+    function updateNetwork($update_fields, $id)
     {
 
         $this->db->update('linkshare_network', $update_fields, array('id' => $id));

@@ -38,7 +38,7 @@ class Admincp extends Admincp_Controller
 
     public function listSites()
     {
-        $this->admin_navigation->module_link('Add site', site_url('admincp/linkshare/addSite/'));
+        $this->admin_navigation->module_link('Add channel', site_url('admincp/linkshare/addSite/'));
 
         $this->load->library('dataset');
 
@@ -47,7 +47,7 @@ class Admincp extends Admincp_Controller
                 'name' => 'ID #',
                 'width' => '10%'),
             array(
-                'name' => 'Name',
+                'name' => 'Site Name',
                 'width' => '20%'),
             array(
                 'name' => 'Token',
@@ -84,7 +84,7 @@ class Admincp extends Admincp_Controller
         $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $form->fieldset('Site nou');
+        $form->fieldset('New channel');
         $form->text('Site name', 'name', '', 'Insert site name.', true, 'e.g., couponland.com', true);
         $form->text('Site token', 'token', '', 'Insert site token.', true, '', true);
 
@@ -102,11 +102,11 @@ class Admincp extends Admincp_Controller
     public function addSiteValidate($action = 'new', $id = false)
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('name', 'Nume site', 'required|trim');
-        $this->form_validation->set_rules('token', 'Token site', 'required|trim');
+        $this->form_validation->set_rules('name', 'Site name', 'required|trim');
+        $this->form_validation->set_rules('token', 'Site token', 'required|trim');
 
         if ($this->form_validation->run() === false) {
-            $this->notices->SetError('Aveti erori in formular.');
+            $this->notices->SetError('You have errors in your form.');
             $error = true;
         }
 
@@ -128,7 +128,7 @@ class Admincp extends Admincp_Controller
         if ($action == 'new') {
             $type_id = $this->site_model->newSite($fields);
 
-            $this->notices->SetNotice('Site adaugat cu succes.');
+            $this->notices->SetNotice('Channel added successfuly.');
 
             redirect('admincp/linkshare/listSites/');
         } else {
@@ -225,13 +225,13 @@ class Admincp extends Admincp_Controller
                 'name' => 'Name',
                 'width' => '40%'),
             array(
-                'name' => 'Operations',
+                'name' => 'Actions',
                 'width' => '30%'
             )
         );
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('network_model', 'get_networks');
+        $this->dataset->datasource('network_model', 'getNetworks');
         $this->dataset->base_url(site_url('admincp/linkshare/listNetworks'));
         $this->dataset->rows_per_page(10);
 
@@ -293,13 +293,13 @@ class Admincp extends Admincp_Controller
         $fields['nid'] = $this->input->post('nid');
 
         if ($action == 'new') {
-            $type_id = $this->network_model->new_network($fields);
+            $type_id = $this->network_model->newNetwork($fields);
 
             $this->notices->SetNotice('Successfully added network.');
 
             redirect('admincp/linkshare/listNetworks/');
         } else {
-            $this->network_model->update_network($fields, $id);
+            $this->network_model->updateNetwork($fields, $id);
             $this->notices->SetNotice('Successfully updated network.');
 
             redirect('admincp/linkshare/listNetworks/');
@@ -311,7 +311,7 @@ class Admincp extends Admincp_Controller
     public function editNetwork($id)
     {
         $this->load->model('network_model');
-        $network = $this->network_model->get_network($id);
+        $network = $this->network_model->getNetwork($id);
 
         if (empty($network)) {
             die(show_error('No network with this ID.'));
@@ -382,7 +382,7 @@ class Admincp extends Admincp_Controller
         );
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('status_model', 'get_statuses');
+        $this->dataset->datasource('status_model', 'getStatuses');
         $this->dataset->base_url(site_url('admincp/linkshare/listStatus'));
         $this->dataset->rows_per_page(10);
 
@@ -466,7 +466,7 @@ class Admincp extends Admincp_Controller
     public function editStatus($id)
     {
         $this->load->model('status_model');
-        $status = $this->status_model->get_status($id);
+        $status = $this->status_model->getStatus($id);
 
         if (empty($status)) {
             die(show_error('No status with this ID.'));
@@ -620,7 +620,7 @@ class Admincp extends Admincp_Controller
 
         $status = array('aprobat' => 'aprobat', 'in curs' => 'in curs', 'terminat' => 'terminat', 'respins' => 'respins');
         $this->load->model('category_model');
-        $categorii = $this->category_model->get_categorie_status();
+        $categorii = $this->category_model->getCategoryStatus();
 
         $form->fieldset('New Advertiser');
         $form->text('Site ID', 'id_site', '', 'Insert site ID.', true, 'e.g., 1', true);
@@ -762,7 +762,7 @@ class Admincp extends Admincp_Controller
         $statuses = array();
         if ($status == 'all') {
             $this->load->model('status_model');
-            $aux = $this->status_model->get_statuses();
+            $aux = $this->status_model->getStatuses();
             foreach ($aux as $val) {
                 $statuses[] = str_replace(' ', '%20', $val['id_status']);
             }
@@ -785,7 +785,7 @@ class Admincp extends Admincp_Controller
 
                 foreach ($kids as $child) {
                     $mids[$i]['id_site'] = $id_site;
-                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->get_status_by_application_status($child->applicationStatus));
+                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
                     $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
                     $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
                     $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
@@ -800,7 +800,7 @@ class Admincp extends Admincp_Controller
 
             $statuses[$j - 1] = str_replace('%20', ' ', $statuses[$j - 1]);
             $this->load->model('status_model');
-            $id_status = $this->status_model->get_status_by_name($statuses[$j - 1]);
+            $id_status = $this->status_model->getStatusByName($statuses[$j - 1]);
 
             $this->load->model('advertiser_model');
             $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
@@ -834,7 +834,7 @@ class Admincp extends Admincp_Controller
         $statuses = array();
         if ($status == 'all') {
             $this->load->model('status_model');
-            $aux = $this->status_model->get_statuses();
+            $aux = $this->status_model->getStatuses();
             foreach ($aux as $val) {
                 $statuses[] = str_replace(' ', '%20', $val['id_status']);
             }
@@ -948,7 +948,7 @@ class Admincp extends Admincp_Controller
         $statuses = array();
         if ($status == 'all') {
             $this->load->model('status_model');
-            $aux = $this->status_model->get_statuses();
+            $aux = $this->status_model->getStatuses();
             foreach ($aux as $val) {
                 $statuses[] = str_replace(' ', '%20', $val['id_status']);
             }
@@ -971,7 +971,7 @@ class Admincp extends Admincp_Controller
 
                 foreach ($kids as $child) {
                     $mids[$i]['id_site'] = $id_site;
-                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->get_status_by_application_status($child->applicationStatus));
+                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
                     $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
                     $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
                     $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
@@ -986,7 +986,7 @@ class Admincp extends Admincp_Controller
 
             $statuses[$j - 1] = str_replace('%20', ' ', $statuses[$j - 1]);
             $this->load->model('status_model');
-            $id_status = $this->status_model->get_status_by_name($statuses[$j - 1]);
+            $id_status = $this->status_model->getStatusByName($statuses[$j - 1]);
 
             $this->load->model('advertiser_model');
             $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);

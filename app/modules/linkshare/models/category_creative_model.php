@@ -120,7 +120,7 @@ class Category_creative_model extends CI_Model
      *
      * @return array
      */
-    function get_categorie_name($id)
+    function getCategoryName($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -142,7 +142,7 @@ class Category_creative_model extends CI_Model
      *
      * @return int $insert_id
      */
-    function new_categorie($insert_fields)
+    function newCategory($insert_fields)
     {
         $this->db->insert('linkshare_categories_creative', $insert_fields);
         $insert_id = $this->db->insert_id();
@@ -176,7 +176,7 @@ class Category_creative_model extends CI_Model
      *
      * @return boolean true
      */
-    function update_categorie($update_fields, $id)
+    function updateCategory($update_fields, $id)
     {
         $this->db->update('linkshare_categories_creative', $update_fields, array('id' => $id));
 
@@ -207,7 +207,7 @@ class Category_creative_model extends CI_Model
      * @return array
      * 
      */
-    function get_categorii_parse($filters)
+    function getCategoriesParse($filters)
     {
         if ($filters['limit']) {
             return array_slice($filters['categories'], $filters['offset'], $filters['limit']);

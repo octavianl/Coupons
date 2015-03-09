@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Categories list : according to<a href="http://helpcenter.linkshare.com/publisher/questions.php?questionid=709" target="_blank">Articol Linkshare</a></h1>
+<h1>Categories list : according to <a href="http://helpcenter.linkshare.com/publisher/questions.php?questionid=709" target="_blank">Articol Linkshare</a></h1>
 <div style="width:600px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<?
