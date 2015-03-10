@@ -832,21 +832,34 @@ class Admincp extends Admincp_Controller
 
         $j = 1;
         $statuses = array();
-        if ($status == 'all') {
+//        if ($status == 'all') {
             $this->load->model('status_model');
             $aux = $this->status_model->getStatuses();
             foreach ($aux as $val) {
                 $statuses[] = str_replace(' ', '%20', $val['id_status']);
             }
             $j = count($statuses);
-        } else {
-            $statuses[] = $status;
-        }
+//        } else {
+//            $statuses[] = $status;
+//        }
 
-        /* print '<pre>';
+        /* Get XML with OAUTH2 */
+        
+        $config = new LinkshareConfig();
+        
+        $accessToken = $this->getToken();
+
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
+              
+        $responseObj = $request->getFormattedResponse();
+        
+         print '<pre>';
           print_r($statuses);
           echo "j=$j<br/>";
-          die; */
+          die; 
 
         while ($j > 0) {
             $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
@@ -1077,7 +1090,7 @@ class Admincp extends Admincp_Controller
         
         $accessToken = $this->getToken();
 
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS);
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
         $request->setHeaders($config->getMinimalHeaders($accessToken));
         $request->setGetData();
         $request->send();

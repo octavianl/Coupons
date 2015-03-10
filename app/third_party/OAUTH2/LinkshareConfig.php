@@ -17,7 +17,13 @@ class LinkshareConfig
     const REFRESH = 1;
     
     const URL_TOKEN = 'https://api.rakutenmarketing.com/token';
-    const URL_ADVERTISERS = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/approved';
+    const URL_ADVERTISERS_APPROVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/approved';
+    const URL_ADVERTISERS_PERM_REJECTED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20rejected';
+    const URL_ADVERTISERS_PERM_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20removed';
+    const URL_ADVERTISERS_SELF_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/self%20removed';
+    const URL_ADVERTISERS_TEMP_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/temp%20removed';
+    const URL_ADVERTISERS_TEMP_REJECTED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/temp%20rejected';
+    const URL_ADVERTISERS_WAIT = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/wait';
     
     protected $application_name = 'Linkshare';
     protected $grant_type = array('password', 'refresh_token');
