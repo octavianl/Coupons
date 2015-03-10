@@ -11,7 +11,7 @@
  *
  */
 
-class Produs_model extends CI_Model
+class Product_model extends CI_Model
 {
     private $CI;
 

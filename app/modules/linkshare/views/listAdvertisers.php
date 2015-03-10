@@ -39,7 +39,7 @@
 				<td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">Edit</a>
 				</td>
-                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parse_product_search/' . $row['id_site'].'/'.$row['mid']);?>">Parse products</a></td>
+                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parseProductSearch/' . $row['id_site'].'/'.$row['mid']);?>">Parse products</a></td>
                                 <td align="center"><a href="<?=site_url('admincp3/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">See products</a></td>
                                 <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
 			</tr>

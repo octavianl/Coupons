@@ -137,7 +137,7 @@ class Admincp3 extends Admincp_Controller
         $filters['mid'] = $mid;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('produs_model', 'getProductsByMid', $filters);
+        $this->dataset->datasource('product_model', 'getProductsByMid', $filters);
         $this->dataset->base_url(site_url('admincp3/linkshare/listProducts/' . $id_site . '/' . $mid));
         $this->dataset->rows_per_page(20);
 
@@ -171,12 +171,12 @@ class Admincp3 extends Admincp_Controller
     public function changeProductStatus($id_product, $ret_url)
     {
         $ret_url = base64_decode($ret_url);
-        $this->load->model('produs_model');
-        $this->produs_model->changeProductStatus($id_product);
+        $this->load->model('product_model');
+        $this->product_model->changeProductStatus($id_product);
         echo '<META http-equiv="refresh" content="0;URL=' . $ret_url . '">';
     }
 
-    public function parse_product_search($id, $mid, $creative_cat_id = 0)
+    public function parseProductSearch($id, $mid, $creative_cat_id = 0)
     {
         error_reporting(E_ERROR);
         include "app/third_party/LOG/Log.php";
@@ -186,8 +186,8 @@ class Admincp3 extends Admincp_Controller
         $aux = $this->site_model->getSite($id);
         $token = $aux['token'];
 
-        $this->load->model('produs_model');
-        $this->load->model('produs_new_model');
+        $this->load->model('product_model');
+        $this->load->model('product_new_model');
 
         $creative_categories = array();
         $this->load->model('category_creative_model');
@@ -204,9 +204,9 @@ class Admincp3 extends Admincp_Controller
         //the creative category is not present it means we have finished adding/updating new products...now we must set the old ones to available='no' and return from method
 
         if (!array_key_exists($creative_cat_id, $creative_categories)) {
-            $old = $this->produs_new_model->mark_old($mid);
+            $old = $this->product_new_model->markOld($mid);
             $data['message'] = "$old products marked as not available";
-            $this->load->view('parse_product_search', $data);
+            $this->load->view('parseProductSearch', $data);
             return;
         }
 
@@ -292,14 +292,14 @@ class Admincp3 extends Admincp_Controller
                             $product[$i]['price_final'] = 0;
                         }
 
-                        $this->produs_new_model->newProduct($product[$i]);
+                        $this->product_new_model->newProduct($product[$i]);
 
-                        $exista = $this->produs_model->existsProduct($product[$i]['linkid']);
+                        $exista = $this->product_model->existsProduct($product[$i]['linkid']);
                         if (!$exista) {
-                            $this->produs_model->newProduct($product[$i]);
+                            $this->product_model->newProduct($product[$i]);
                             $j++;
                         } else {
-                            $this->produs_model->updateProductByLinkID($product[$i], $product[$i]['linkid']);
+                            $this->product_model->updateProductByLinkID($product[$i], $product[$i]['linkid']);
                             $k++;
                         }
                         $i++;
@@ -318,14 +318,14 @@ class Admincp3 extends Admincp_Controller
 
         $data['message'] = $message;
 
-        $this->load->view('parse_product_search', $data);
+        $this->load->view('parseProductSearch', $data);
 
         $creative_cat_id++;
-        echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parse_product_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+        echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
         die;
     }
 
-    public function parse_product_xml_reader_search($id, $mid, $creative_cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0)
+    public function parseProductXmlReaderSearch($id, $mid, $creative_cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0)
     {
         error_reporting(E_ERROR);
         $aux = '';
@@ -333,9 +333,9 @@ class Admincp3 extends Admincp_Controller
         $aux = $this->site_model->getSite($id);
         $token = $aux['token'];
 
-        $this->load->model('produs_model');
-        $this->load->model('produs_partial_model');
-        $this->load->model('produs_new_model');
+        $this->load->model('product_model');
+        $this->load->model('product_partial_model');
+        $this->load->model('product_new_model');
 
         $creative_categories = array();
         $this->load->model('category_creative_model');
@@ -354,9 +354,9 @@ class Admincp3 extends Admincp_Controller
 
             //the creative category is not present it means we have finished adding/updating new products...now we must set the old ones to available='no' and return from method
             if (!array_key_exists($creative_cat_id, $creative_categories)) {
-                $old = $this->produs_new_model->mark_old($mid);
+                $old = $this->product_new_model->markOld($mid);
                 $data['message'] = "$old products marked as not available";
-                $this->load->view('parse_product_search', $data);
+                $this->load->view('parseProductSearch', $data);
                 return;
             }
 
@@ -374,10 +374,10 @@ class Admincp3 extends Admincp_Controller
 
                 $data['message'] = "Failed to open input file : http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page " . date("Y-m-d H:i:s");
 
-                $this->load->view('parse_product_search', $data);
+                $this->load->view('parseProductSearch', $data);
 
                 $creative_cat_id++;
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parse_product_xml_reader_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
                 die;
             } else {
                 $i = 0;
@@ -410,7 +410,7 @@ class Admincp3 extends Admincp_Controller
                         $product[$i]['insert_date'] = date("Y-m-d H:i:s");
                         $product[$i]['last_update_date'] = date("Y-m-d H:i:s");
 
-                        $this->produs_partial_model->newProduct($product[$i]);
+                        $this->product_partial_model->newProduct($product[$i]);
 
                         unset($subarray);
 
@@ -430,10 +430,10 @@ class Admincp3 extends Admincp_Controller
                 if (!$i) {
                     $data['message'] = "Failed to open input file : http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page xml empty " . date("Y-m-d H:i:s");
 
-                    $this->load->view('parse_product_search', $data);
+                    $this->load->view('parseProductSearch', $data);
 
                     $creative_cat_id++;
-                    echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parse_product_xml_reader_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+                    echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
                     die;
                 }
 
@@ -443,14 +443,14 @@ class Admincp3 extends Admincp_Controller
 
                 $data['message'] = $message;
 
-                $this->load->view('parse_product_search', $data);
+                $this->load->view('parseProductSearch', $data);
 
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parse_product_xml_reader_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
                 die;
             }
         } else {
             $produs_partial = array();
-            $produs_partial = $this->produs_partial_model->getProduct($id_produs_partial);
+            $produs_partial = $this->product_partial_model->getProduct($id_produs_partial);
             if (!empty($produs_partial)) {
                 $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=$token&keyword=\"{$produs_partial['linkname']}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
 
@@ -494,14 +494,14 @@ class Admincp3 extends Admincp_Controller
                 }
 
                 unset($produs_partial['id']);
-                $this->produs_new_model->newProduct($produs_partial);
+                $this->product_new_model->newProduct($produs_partial);
 
-                $exista = $this->produs_model->existsProduct($produs_partial['linkid']);
+                $exista = $this->product_model->existsProduct($produs_partial['linkid']);
                 if (!$exista) {
-                    $this->produs_model->newProduct($produs_partial);
+                    $this->product_model->newProduct($produs_partial);
                     $j++;
                 } else {
-                    $this->produs_model->updateProductByLinkID($produs_partial, $produs_partial['linkid']);
+                    $this->product_model->updateProductByLinkID($produs_partial, $produs_partial['linkid']);
                     $k++;
                 }
 
@@ -510,9 +510,9 @@ class Admincp3 extends Admincp_Controller
 
                 $data['message'] = "$id_produs_partial products parsed";
 
-                $this->load->view('parse_product_search', $data);
+                $this->load->view('parseProductSearch', $data);
 
-                echo '<META http-equiv="refresh" content="0;URL=/admincp3/linkshare/parse_product_xml_reader_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
+                echo '<META http-equiv="refresh" content="0;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
                 die;
             } else {
 
@@ -522,37 +522,37 @@ class Admincp3 extends Admincp_Controller
                 fclose($fp);
 
                 //i finished all the partial products,truncate the linkshare_produs_partial,increment the page and refresh
-                $this->produs_partial_model->deletePartialProduct();
+                $this->product_partial_model->deletePartialProduct();
                 $partial = 0;
                 $page++;
 
                 $data['message'] = "cat_id $creative_cat_id creative_category $creative_category page $page $i products parsed<br/>";
-                $this->load->view('parse_product_search', $data);
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parse_product_xml_reader_search/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '">';
+                $this->load->view('parseProductSearch', $data);
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '">';
                 die;
             }
         }
 
         $data['message'] = 'FINISHED';
 
-        $this->load->view('parse_product_search', $data);
+        $this->load->view('parseProductSearch', $data);
     }
     
 
-    public function test_mark_old()
+    public function testMarkOld()
     {
-        $this->load->model('produs_model');
-        $this->load->model('produs_new_model');
+        $this->load->model('product_model');
+        $this->load->model('product_new_model');
                 
         $id = 2; $mid = 37920; $creative_cat_id = 200260395;
         $linkid = 78900666;
         
         // Delete product from linkshare_produs
-        $this->produs_new_model->delete_old_from_current($linkid,$mid);
+        $this->product_new_model->deleteOldFromCurrent($linkid,$mid);
         
         //$produs = array();
         
-        //$produs = $this->produs_new_model->getProductsByLinkID($linkid,$mid);
+        //$produs = $this->product_new_model->getProductsByLinkID($linkid,$mid);
        
 
         
@@ -561,7 +561,7 @@ class Admincp3 extends Admincp_Controller
 //        echo "</pre>";
 //        die();
        
-        //$this->produs_new_model->copy_to_old($produs);
+        //$this->product_new_model->copyToProductsOld($produs);
        
     }
     

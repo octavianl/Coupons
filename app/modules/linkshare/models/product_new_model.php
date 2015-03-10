@@ -9,7 +9,7 @@
  * @license  License http://www.weblight.ro/
  * @link     http://www.weblight.ro/
  */
-class Produs_new_model extends CI_Model {
+class Product_new_model extends CI_Model {
 
     private $CI;
 
@@ -208,7 +208,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return int $insert_id
      */
-    function copy_to_old($insert_fields)
+    function copyToProductsOld($insert_fields)
     {
         $this->db->insert('linkshare_produs_old', $insert_fields['0']);
         $insert_id = $this->db->insert_id();
@@ -225,7 +225,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return boolean true
      */
-    function delete_old_from_current($linkid,$mid)
+    function deleteOldFromCurrent($linkid,$mid)
     {
         $this->db->delete('linkshare_produs', array('linkid' => $linkid,'mid' => $mid));
 
@@ -241,7 +241,7 @@ class Produs_new_model extends CI_Model {
      *
      * @return int $i
      */
-    function mark_old($mid)
+    function markOld($mid)
     {
         $i = $j = 0;
         $update_fields = array();
@@ -256,10 +256,10 @@ class Produs_new_model extends CI_Model {
                 
                 // Copy product to linkshare_produs_old
                 $produs = $this->getProductsByLinkID($row['linkid'],$mid);    
-                $this->copy_to_old($produs);
+                $this->copyToProductsOld($produs);
                 
                 // Delete product from linkshare_produs
-                $this->delete_old_from_current($row['linkid'],$mid);
+                $this->deleteOldFromCurrent($row['linkid'],$mid);
                 
                 $i++;
             }

@@ -11,7 +11,7 @@
  *
  */
 
-class Produs_partial_model extends CI_Model
+class Product_partial_model extends CI_Model
 {
 
     private $CI;

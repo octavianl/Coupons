@@ -516,10 +516,10 @@ class Admincp extends Admincp_Controller
         $this->load->model('advertiser_model');
         $site = $this->site_model->getSite($id);
 
-        $this->admin_navigation->module_link('Adauga advertiser', site_url('admincp/linkshare/addAdvertiser/'));
-        $this->admin_navigation->module_link('Parseaza advertiserii aprobati', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
-        $this->admin_navigation->module_link('Parseaza TOTI advertiserii', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
-        $this->admin_navigation->module_link('Refresh TOTI advertiserii', site_url('admincp/linkshare/refreshAdvertisers/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Add advertiser', site_url('admincp/linkshare/addAdvertiser/'));
+        $this->admin_navigation->module_link('Parse APPROVED advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
+        $this->admin_navigation->module_link('Parse ALL advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Refresh ALL advertisers', site_url('admincp/linkshare/refreshAdvertisers/' . $site['token'] . '/all'));
 
         $this->load->library('dataset');
 
