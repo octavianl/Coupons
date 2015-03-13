@@ -17,6 +17,8 @@ class LinkshareConfig
     const REFRESH = 1;
     
     const URL_TOKEN = 'https://api.rakutenmarketing.com/token';
+    
+    // Legacy method $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);   
     const URL_ADVERTISERS_APPROVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/approved';
     const URL_ADVERTISERS_PERM_REJECTED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20rejected';
     const URL_ADVERTISERS_PERM_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20removed';

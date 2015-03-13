@@ -832,34 +832,21 @@ class Admincp extends Admincp_Controller
 
         $j = 1;
         $statuses = array();
-//        if ($status == 'all') {
+        if ($status == 'all') {
             $this->load->model('status_model');
             $aux = $this->status_model->getStatuses();
             foreach ($aux as $val) {
                 $statuses[] = str_replace(' ', '%20', $val['id_status']);
             }
             $j = count($statuses);
-//        } else {
-//            $statuses[] = $status;
-//        }
-
-        /* Get XML with OAUTH2 */
+        } else {
+            $statuses[] = $status;
+        }
         
-        $config = new LinkshareConfig();
-        
-        $accessToken = $this->getToken();
-
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS);
-        $request->setHeaders($config->getMinimalHeaders($accessToken));
-        $request->setGetData();
-        $request->send();
-              
-        $responseObj = $request->getFormattedResponse();
-        
-         print '<pre>';
-          print_r($statuses);
-          echo "j=$j<br/>";
-          die; 
+//         print '<pre>';
+//          print_r($statuses);
+//          echo "j=$j<br/>";
+//          die; 
 
         while ($j > 0) {
             $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
@@ -945,6 +932,7 @@ class Admincp extends Admincp_Controller
 
         $this->load->view('listAdvertisersParsed');
     }
+
 
     public function parseAdvertisersAdd($token, $status)
     {
@@ -1116,6 +1104,118 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
+    }
+    
+    public function parseAdvertisersTEST()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors',1);
+        
+        $mids = array();
+        
+        $linkshareConstants = array("URL_ADVERTISERS_APPROVED",
+                                    "URL_ADVERTISERS_PERM_REJECTED",
+                                    "URL_ADVERTISERS_PERM_REMOVED",
+                                    "URL_ADVERTISERS_SELF_REMOVED",
+                                    "URL_ADVERTISERS_TEMP_REMOVED",
+                                    "URL_ADVERTISERS_TEMP_REJECTED",
+                                    "URL_ADVERTISERS_WAIT");
+        
+        /* Get XML with OAUTH2 */
+        
+        $config = new LinkshareConfig();
+        
+        $accessToken = $this->getToken();
+
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
+              
+        $responseObj = $request->getFormattedResponse();
+        
+//        print '<pre>';
+//        print_r($responseObj['body']);
+//        die; 
+
+        $aux = $responseObj['body'];
+        $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
+        //echo $categories->getName().'<br/>';die;
+        if (isset($categories)) {
+            $kids = $categories->children('ns1', true);
+            //var_dump(count($kids));die;
+
+            foreach ($kids as $child) {
+//                $mids[$i]['id'] = $i + 1;
+//                $mids[$i]['site'] = $site;
+                $mids[$i]['id_status'] = $child->applicationStatus;
+                $mids[$i]['status'] = $child->applicationStatus;
+                $mids[$i]['id_categories'] = $child->categories;
+                $mids[$i]['mid'] = $child->mid;
+                $mids[$i]['name'] = $child->name;
+                $mids[$i]['offer_also'] = $child->offer->alsoName;
+                $mids[$i]['commission'] = $child->offer->commissionTerms;
+                $mids[$i]['offer_id'] = $child->offer->offerId;
+                $mids[$i]['offer_name'] = $child->offer->offerName;
+                $mids[$i]['limit'] = 10;
+//                $mids[$i]['offset'] = $offset;
+                $i++;
+            }
+        }
+
+        $this->admin_navigation->module_link('Add parsed advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/'));
+
+        $this->load->library('dataset');
+
+        $columns = array(
+            array(
+                'name' => 'ID #',
+                'width' => '5%'),
+//            array(
+//                'name' => 'Site',
+//                'width' => '10%'),
+            array(
+                'name' => 'Status ID',
+                'width' => '5%'),
+            array(
+                'name' => 'Status',
+                'width' => '5%'),
+            array(
+                'name' => 'Categories',
+                'width' => '15%'),
+            array(
+                'name' => 'Mid',
+                'width' => '10%'),
+            array(
+                'name' => 'Name',
+                'width' => '10%'),
+            array(
+                'name' => 'Offer alias',
+                'width' => '10%'),
+            array(
+                'name' => 'Commission',
+                'width' => '10%'),
+            array(
+                'name' => 'Offer ID',
+                'width' => '10%'
+            ),
+            array('name' => 'Offer name',
+                'width' => '10%'
+            ),
+        );
+
+        $this->dataset->columns($columns);
+        $this->dataset->datasource('advertiser_model', 'parseAdvertiser', $mids);
+        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisersTEST/'));
+        $this->dataset->rows_per_page(30);
+
+        // total rows
+        $total_rows = count($mids);
+        $this->dataset->total_rows($total_rows);
+
+        $this->dataset->initialize();
+
+        $this->load->view('listAdvertisersParsed');
     }
 
 }
