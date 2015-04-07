@@ -32,6 +32,7 @@ class Linkshare extends Module
     **/
     function admin_preload ()
     {
+        $this->CI->admin_navigation->child_link('linkshare', 1, 'Choose site', site_url('admincp/linkshare/chooseSite'));
         $this->CI->admin_navigation->child_link('linkshare', 10, 'Sites', site_url('admincp/linkshare/listSites'));
         $this->CI->admin_navigation->child_link('linkshare', 20, 'Networks', site_url('admincp/linkshare/listNetworks'));
         $this->CI->admin_navigation->child_link('linkshare', 30, 'Application Status', site_url('admincp/linkshare/listStatus'));

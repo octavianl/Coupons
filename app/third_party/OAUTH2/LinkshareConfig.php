@@ -34,19 +34,9 @@ class LinkshareConfig
     protected $password = 'arthas123';
     protected $client_id = 'D3R3JTfrev1nYyDgWilTsf3TfOIa';
     protected $client_secret = 'b52ePyomXvbC7AYOjhQTT3EGhrEa';
-    private $scope = '2531438'; // Site ID
+    private   $scope = '2531438'; // Site ID
     // not used for now but in the Linkshare documentation it says to be somewhat required
-    protected $url_redirect = '';
-    
-     /**
-     * Set site id
-     * 
-     * @return string
-     */
-    public function setScope($sid)
-    {
-        return $this->scope = $sid;
-    }   
+    protected $url_redirect = '';           
     
     /**
      * Get the application name
@@ -108,6 +98,16 @@ class LinkshareConfig
     public function getClientSecret()
     {
         return $this->client_secret;
+    }
+    
+    /**
+     * Set site id
+     * 
+     * @return void
+     */
+    public function setScope($sid)
+    {
+        $this->scope = $sid;
     }
     
     /**
@@ -202,4 +202,115 @@ class LinkshareConfig
             'scope' => 'PRODUCTION'
         );
     }
+    
+    protected function getToken($ci, $sid, $tokenType = self::ALL)
+    {        
+        $this->setScope($sid); 
+        // build a new HTTP POST request
+        $request = new CurlApi(self::URL_TOKEN);
+        $request->setHeaders($this->getTokenHeaders());
+        $request->setPostData($this->getTokenParams());
+        $request->send();
+        
+        // decode the incoming string as JSON
+        $responseObj = $request->getDecodedResponse();
+        
+        // set tokens in cookie
+        $ci->load->helper('cookie');
+        $ci->input->set_cookie("accessToken", $responseObj->access_token, 3000);
+        $ci->input->set_cookie("refreshToken", $responseObj->refresh_token, 2592000);
+        $ci->input->set_cookie("siteID", $sid, 2592000);
+        
+        if ($tokenType == self::PASSWORD) {
+            return $responseObj->access_token;
+        } elseif ($tokenType == self::REFRESH) {
+            return $responseObj->refresh_token;
+        } else {            
+            return $responseObj;
+        }
+                                
+        //print '<pre>';
+        //print_r($responseObj);
+                
+        /*
+            stdClass Object
+            (
+                [token_type] => bearer
+                [expires_in] => 3042
+                [refresh_token] => ec03243c5d33d193f1983f69f2ac
+                [access_token] => e6f99a58f75753fa8bcbb81a6ff91
+            )
+         */                
+    }
+    
+    protected function extendAccessToken($ci, $sid, $refreshToken)
+    {        
+        $this->setScope($sid);
+        // build a new HTTP POST request
+        $request = new CurlApi(self::URL_TOKEN);
+        $request->setHeaders($this->getTokenHeaders());
+        $request->setPostData($this->getRefreshTokenParams($refreshToken));
+        $request->send();
+        
+        // decode the incoming string as JSON
+        $responseObj = json_decode($request->getResponse());
+        
+        $ci->input->set_cookie("accessToken", $responseObj->access_token, 3000);
+        $ci->input->set_cookie("refreshToken",$responseObj->refresh_token, 2592000);
+        $ci->input->set_cookie("siteID", $sid, 2592000);
+        
+        return $responseObj;
+    }                
+    
+    public function setSiteCookieAndGetAccessToken($ci, $scope = 2531438)
+    {
+        $ci->load->helper('cookie');
+                
+        $siteID = $ci->input->cookie('siteID');        
+        $accessToken = $ci->input->cookie('accessToken');
+                        
+        if ($accessToken) {
+            if ($scope == $siteID) {
+                echo "ACCESS TOKEN ALREADY SET" . '<br/>';
+                echo "ACCESS TOKEN = " . $ci->input->cookie('accessToken'). '<br/>';
+                echo "SiteID = " . $ci->input->cookie('siteID'). '<br/>';
+            } else {
+                echo "CHANGE SCOPE/SITE ID1<br/>";
+                //$config->setScope($sid);
+                $tokens = $this->getToken($ci, $scope); 
+                echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                echo "SiteID = " . $scope;
+            }
+        } else {
+            if (!$ci->input->cookie('refreshToken')) {
+                echo "COOKIES empty<br/>";                
+                $tokens = $this->getToken($ci, $scope); 
+                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                echo "SiteID = " . $scope;
+            } else {
+                if ($scope == $siteID) {
+                    echo "EXTEND ACCESS TOKEN" . '<br>';
+                    $tokens = $this->extendAccessToken($ci, $scope, $ci->input->cookie('refreshToken'));
+                    echo "NEW EXTENDED ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                    echo "NEW EXTENDED REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                    echo "SiteID = " . $ci->input->cookie('siteID');
+                } else {
+                    echo "CHANGE SCOPE/SITE ID2<br/>";
+                    //$config->setScope($sid);
+                    $tokens = $this->getToken($ci, $scope); 
+                    echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                    echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                    echo "SiteID = " . $scope;
+                }
+            }
+        }
+        
+        if (!$accessToken || $scope != $siteID) {
+            $accessToken = $tokens->access_token;
+        }
+        
+        return $accessToken;
+    }        
 }

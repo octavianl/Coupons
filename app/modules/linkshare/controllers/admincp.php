@@ -1003,7 +1003,7 @@ class Admincp extends Admincp_Controller
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
     
-    protected function getToken($sid,$tokenType = LinkshareConfig::ALL)
+    protected function getToken($sid, $tokenType = LinkshareConfig::ALL)
     {
         $config = new LinkshareConfig();
         $config->setScope($sid); 
@@ -1018,8 +1018,9 @@ class Admincp extends Admincp_Controller
         
         // set tokens in cookie
         $this->load->helper('cookie');
-        $this->input->set_cookie("accessToken", $responseObj->access_token,3000);
-        $this->input->set_cookie("refreshToken",$responseObj->refresh_token,2592000);
+        $this->input->set_cookie("accessToken", $responseObj->access_token, 3000);
+        $this->input->set_cookie("refreshToken", $responseObj->refresh_token, 2592000);
+        $this->input->set_cookie("siteID", $sid, 2592000);
         
         if ($tokenType == LinkshareConfig::PASSWORD) {
             return $responseObj->access_token;
@@ -1043,7 +1044,7 @@ class Admincp extends Admincp_Controller
          */                
     }
     
-    protected function extendAccessToken($refreshToken,$sid)
+    protected function extendAccessToken($sid, $refreshToken)
     {
         $config = new LinkshareConfig();
         $config->setScope($sid);
@@ -1056,9 +1057,9 @@ class Admincp extends Admincp_Controller
         // decode the incoming string as JSON
         $responseObj = json_decode($request->getResponse());
         
-        $this->input->set_cookie("accessToken", $responseObj->access_token,3000);
-        $this->input->set_cookie("refreshToken",$responseObj->refresh_token,2592000);
-        
+        $this->input->set_cookie("accessToken", $responseObj->access_token, 3000);
+        $this->input->set_cookie("refreshToken",$responseObj->refresh_token, 2592000);
+        $this->input->set_cookie("siteID", $sid, 2592000);
         return $responseObj;
     }        
     
@@ -1091,10 +1092,10 @@ class Admincp extends Admincp_Controller
          */
     }
      
-    public function getXmlCookie()
+    public function getXmlCookie($scope = 2531438)
     {
-        $this->load->library('admin_form');
-        $this->load->helper('cookie');
+        $CI =& get_instance();
+        $this->load->library('admin_form');        
         
         $form = new Admin_form;
         
@@ -1102,31 +1103,10 @@ class Admincp extends Admincp_Controller
         ini_set('display_errors', 1);
         
         $config = new LinkshareConfig();
-        $sid ='2531438';
-        $accessToken = $this->input->cookie('accessToken');       
         
-        if($accessToken){
-            echo "ACCESS TOKEN ALREADY SET" . PHP_EOL;
-            echo "ACCESS TOKEN = " . $this->input->cookie('accessToken');
-        } else {
-            if (!$this->input->cookie('refreshToken')){
-                echo "COOKIES empty<br/>";
-                $tokens = $this->getToken($sid);                
-                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-            } else {
-                echo "EXTEND ACCESS TOKEN" . '<br>';
-                $tokens = $this->extendAccessToken($this->input->cookie('refreshToken'),$sid);
-                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-            }                                                            
-        }
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
         
-        if (!$accessToken) {
-            $accessToken = $tokens->access_token;
-        }
-        
-        echo "accessToken = $accessToken" . PHP_EOL;
+        //echo "accessToken = $accessToken" . PHP_EOL;
                                                   
         $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
         $request->setHeaders($config->getMinimalHeaders($accessToken));
@@ -1156,14 +1136,7 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
-    }
-    
-    public function TestLink() { 
-        $sid = "2531438";
-        $config = new LinkshareConfig();
-        $config->setScope($sid);
-        echo $config->getScope();        
-    }
+    }      
    
     public function getXml()
     {
@@ -1206,14 +1179,14 @@ class Admincp extends Admincp_Controller
         
     }
     
-    public function parseAdvertisersTEST()
+    public function parseAdvertisersTEST($scope = 2531438)
     {
         error_reporting(E_ALL);
         ini_set('display_errors',1);
         
         $mids = array();
         
-        $linkshareConstants = array("URL_ADVERTISERS_APPROVED",
+        $linkshareConstants = array(LinkshareConfig::URL_ADVERTISERS_APPROVED,
                                     "URL_ADVERTISERS_PERM_REJECTED",
                                     "URL_ADVERTISERS_PERM_REMOVED",
                                     "URL_ADVERTISERS_SELF_REMOVED",
@@ -1223,14 +1196,24 @@ class Admincp extends Admincp_Controller
         
         /* Get XML with OAUTH2 */
         
+        
+        
+        $CI =& get_instance();
+        $this->load->library('admin_form');                        
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
         $config = new LinkshareConfig();
         
-        $accessToken = $this->getToken();
-
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_WAIT);
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
+        
+        //echo "accessToken = $accessToken" . PHP_EOL;
+                                                  
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
         $request->setHeaders($config->getMinimalHeaders($accessToken));
         $request->setGetData();
-        $request->send();
+        $request->send();                      
               
         $responseObj = $request->getFormattedResponse();
         

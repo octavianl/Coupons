@@ -47,12 +47,26 @@ class Admincp_Controller extends MY_Controller {
 		$this->admin_navigation->parent_link('dashboard','Dashboard');
 		$this->admin_navigation->parent_link('publish','Publish');
 		if (module_installed('store') or module_installed('billing') or module_installed('coupons')) {
-			$this->admin_navigation->parent_link('storefront','Storefront');
+                    $this->admin_navigation->parent_link('storefront','Storefront');
 		}
+                
 		$this->admin_navigation->parent_link('members','Members');
 		$this->admin_navigation->parent_link('reports','Reports');
 		$this->admin_navigation->parent_link('design','Design');
-        $this->admin_navigation->parent_link('linkshare','Linkshare');
+                                
+                $coupons = array(
+                    '2531438' => 'Coupon-Land',
+                    '2901923' => 'Save-Coupon'
+                );
+                
+                $this->load->helper('cookie');
+                $scope = $this->input->cookie('siteID'); 
+                if (!$scope) {
+                    $scope = '2531438';
+                }
+                
+                
+                $this->admin_navigation->parent_link('linkshare','Linkshare - ' . $coupons[$scope]);
 		$this->admin_navigation->parent_link('configuration','Configuration');
         $this->admin_navigation->parent_link('freedom','Freedom');
 		
