@@ -39,6 +39,7 @@ class CurlApi
     {
         curl_close($this->ch);
     }
+      
     
     /**
      * Set the headers

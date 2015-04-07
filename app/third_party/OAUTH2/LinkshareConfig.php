@@ -15,6 +15,7 @@ class LinkshareConfig
 {
     const PASSWORD = 0;
     const REFRESH = 1;
+    const ALL = 2;
     
     const URL_TOKEN = 'https://api.rakutenmarketing.com/token';
     
@@ -33,9 +34,19 @@ class LinkshareConfig
     protected $password = 'arthas123';
     protected $client_id = 'D3R3JTfrev1nYyDgWilTsf3TfOIa';
     protected $client_secret = 'b52ePyomXvbC7AYOjhQTT3EGhrEa';
-    protected $scope = '2531438';
+    private $scope = '2531438'; // Site ID
     // not used for now but in the Linkshare documentation it says to be somewhat required
     protected $url_redirect = '';
+    
+     /**
+     * Set site id
+     * 
+     * @return string
+     */
+    public function setScope($sid)
+    {
+        return $this->scope = $sid;
+    }   
     
     /**
      * Get the application name

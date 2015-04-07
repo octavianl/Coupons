@@ -24,8 +24,8 @@ class Admincp extends Admincp_Controller
     public function __construct()
     {
         parent::__construct();
-
-        $this->admin_navigation->parent_active('annonces');
+        
+        $this->admin_navigation->parent_active('linkshare');
 
         error_reporting(E_ALL^E_NOTICE);
         error_reporting(E_WARNING);
@@ -1003,9 +1003,10 @@ class Admincp extends Admincp_Controller
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
     
-    protected function getToken($tokenType = LinkshareConfig::PASSWORD)
-    {       
+    protected function getToken($sid,$tokenType = LinkshareConfig::ALL)
+    {
         $config = new LinkshareConfig();
+        $config->setScope($sid); 
         // build a new HTTP POST request
         $request = new CurlApi(LinkshareConfig::URL_TOKEN);
         $request->setHeaders($config->getTokenHeaders());
@@ -1014,15 +1015,20 @@ class Admincp extends Admincp_Controller
         
         // decode the incoming string as JSON
         $responseObj = $request->getDecodedResponse();
+        
+        // set tokens in cookie
+        $this->load->helper('cookie');
+        $this->input->set_cookie("accessToken", $responseObj->access_token,3000);
+        $this->input->set_cookie("refreshToken",$responseObj->refresh_token,2592000);
+        
         if ($tokenType == LinkshareConfig::PASSWORD) {
             return $responseObj->access_token;
         } elseif ($tokenType == LinkshareConfig::REFRESH) {
             return $responseObj->refresh_token;
-        } else {
-            return $responseObj->access_token;
+        } else {            
+            return $responseObj;
         }
-        
-        
+                                
         //print '<pre>';
         //print_r($responseObj);
                 
@@ -1036,6 +1042,25 @@ class Admincp extends Admincp_Controller
             )
          */                
     }
+    
+    protected function extendAccessToken($refreshToken,$sid)
+    {
+        $config = new LinkshareConfig();
+        $config->setScope($sid);
+        // build a new HTTP POST request
+        $request = new CurlApi(LinkshareConfig::URL_TOKEN);
+        $request->setHeaders($config->getTokenHeaders());
+        $request->setPostData($config->getRefreshTokenParams($refreshToken));
+        $request->send();
+        
+        // decode the incoming string as JSON
+        $responseObj = json_decode($request->getResponse());
+        
+        $this->input->set_cookie("accessToken", $responseObj->access_token,3000);
+        $this->input->set_cookie("refreshToken",$responseObj->refresh_token,2592000);
+        
+        return $responseObj;
+    }        
     
     public function getRefreshToken()
     {
@@ -1065,7 +1090,81 @@ class Admincp extends Admincp_Controller
             )
          */
     }
+     
+    public function getXmlCookie()
+    {
+        $this->load->library('admin_form');
+        $this->load->helper('cookie');
+        
+        $form = new Admin_form;
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
+        $config = new LinkshareConfig();
+        $sid ='2531438';
+        $accessToken = $this->input->cookie('accessToken');       
+        
+        if($accessToken){
+            echo "ACCESS TOKEN ALREADY SET" . PHP_EOL;
+            echo "ACCESS TOKEN = " . $this->input->cookie('accessToken');
+        } else {
+            if (!$this->input->cookie('refreshToken')){
+                echo "COOKIES empty<br/>";
+                $tokens = $this->getToken($sid);                
+                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+            } else {
+                echo "EXTEND ACCESS TOKEN" . '<br>';
+                $tokens = $this->extendAccessToken($this->input->cookie('refreshToken'),$sid);
+                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+            }                                                            
+        }
+        
+        if (!$accessToken) {
+            $accessToken = $tokens->access_token;
+        }
+        
+        echo "accessToken = $accessToken" . PHP_EOL;
+                                                  
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
+              
+        $responseObj = $request->getFormattedResponse();
+        
+        if (!$responseObj) {
+            $this->notices->SetError('Refresh token');
+            $responseObj['header'] = $responseObj['body'] = 'ERROR';
+        } else {
+            //print '<pre>';
+            //print_r($responseObj['header']);
+        }
+   
+//        die();
+        
+        $form->fieldset('Xml');
+        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', false);
+        $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
+        
+        $data = array(
+            'form' => $form->display(),
+            'form_title' => 'XML',
+            'form_action' => site_url('admincp/linkshare/')
+        );
+
+        $this->load->view('xml', $data);
+    }
     
+    public function TestLink() { 
+        $sid = "2531438";
+        $config = new LinkshareConfig();
+        $config->setScope($sid);
+        echo $config->getScope();        
+    }
+   
     public function getXml()
     {
         $this->load->library('admin_form');
@@ -1104,6 +1203,7 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
+        
     }
     
     public function parseAdvertisersTEST()
@@ -1127,7 +1227,7 @@ class Admincp extends Admincp_Controller
         
         $accessToken = $this->getToken();
 
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
+        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_WAIT);
         $request->setHeaders($config->getMinimalHeaders($accessToken));
         $request->setGetData();
         $request->send();
