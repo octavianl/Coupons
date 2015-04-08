@@ -19,7 +19,7 @@ use app\third_party\LOG\Log;
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
-class Admincp extends Admincp_Controller
+class Admincp5 extends Admincp_Controller
 {
     public function __construct()
     {
@@ -50,22 +50,15 @@ class Admincp extends Admincp_Controller
                 'name' => 'Site Name',
                 'width' => '20%'),
             array(
-                'name' => 'SID',
-                'width' => '20%'),
-            array(
                 'name' => 'Token',
-                'width' => '35%'),
+                'width' => '70%'),
             array(
-                'name' => 'Edit',
-                'width' => '5%'
+                'name' => 'Actions',
+                'width' => '30%'
             ),
             array(
                 'name' => 'Info',
-                'width' => '5%'
-            ),
-            array(
-                'name' => 'Delete',
-                'width' => '5%'
+                'width' => '30%'
             )
         );
 
@@ -86,22 +79,6 @@ class Admincp extends Admincp_Controller
         $this->load->view('listSites');
     }
 
-    public function chooseSites($id=0)
-    {
-        $this->load->model('site_model');
-        $site = $this->site_model->getSite($id);
-        
-        if ($id!=0){
-            $this->input->set_cookie("siteID", $site['SID'], 2592000);
-
-            redirect('admincp/linkshare/chooseSites');
-        }
-//        print_r($site);
-//        die();
-
-        $this->load->view('chooseSites');
-    }
-
     public function addSite()
     {
         $this->load->library('admin_form');
@@ -109,8 +86,8 @@ class Admincp extends Admincp_Controller
 
         $form->fieldset('New channel');
         $form->text('Site name', 'name', '', 'Insert site name.', true, 'e.g., couponland.com', true);
-        $form->text('SID', 'sid', '', 'Site ID.', true, 'e.g., 2531438', true);
-        $form->text('Site token', 'token', '', 'Insert site token (optional)', false, '', true);
+        $form->text('Site token', 'token', '', 'Insert site token.', true, '', true);
+
 
         $data = array(
             'form' => $form->display(),
@@ -126,8 +103,7 @@ class Admincp extends Admincp_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Site name', 'required|trim');
-        $this->form_validation->set_rules('sid', 'Site ID', 'required|trim');
-        $this->form_validation->set_rules('token', 'Site token', 'trim');
+        $this->form_validation->set_rules('token', 'Site token', 'required|trim');
 
         if ($this->form_validation->run() === false) {
             $this->notices->SetError('You have errors in your form.');
@@ -145,7 +121,6 @@ class Admincp extends Admincp_Controller
         }
 
         $fields['name'] = $this->input->post('name');
-        $fields['sid'] = $this->input->post('sid');
         $fields['token'] = $this->input->post('token');
 
         $this->load->model('site_model');
@@ -180,8 +155,7 @@ class Admincp extends Admincp_Controller
 
         $form->fieldset('Site');
         $form->text('Site name', 'name', $site['name'], 'Insert site name.', true, 'e.g., couponland', true);
-        $form->text('SID', 'sid', $site['SID'], 'Site ID.', true, 'e.g., 2531438', true);
-        $form->text('Site token', 'token', $site['token'], 'Insert site token.(optional)', false, '', true);
+        $form->text('Site token', 'token', $site['token'], 'Insert site token.', true, '', true);
 
         $data = array(
             'form' => $form->display(),
@@ -191,19 +165,6 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('addSite', $data);
-    }
-    
-    public function deleteSite($id)
-    {
-        $this->load->model('site_model');
-
-        $this->site_model->deleteSite($id);
-
-        $this->notices->SetNotice('Site successfully removed.');
-
-        redirect('/admincp/linkshare/listSites');
-
-        return true;
     }
 
     public function infoSite($id)
@@ -224,6 +185,28 @@ class Admincp extends Admincp_Controller
 
         $this->load->view('infoSite', $data);
     }
+
+     public function deleteSite($contents, $return_url)
+    {
+
+        $this->load->library('asciihex');
+        $this->load->model('site_model');
+
+        $contents = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
+        $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
+
+        foreach ($contents as $content) {
+            $this->site_model->deleteSite($content);
+        }
+
+        $this->notices->SetNotice('Sites successfully removed.');
+
+        redirect($return_url);
+
+        return true;
+    }
+
+    /* networks */
 
     public function listNetworks()
     {
@@ -1070,8 +1053,6 @@ class Admincp extends Admincp_Controller
     {
         error_reporting(E_ALL);
         ini_set('display_errors',1);
-        
-        $scope = $this->input->cookie('siteID');
         
         $mids = array();
         

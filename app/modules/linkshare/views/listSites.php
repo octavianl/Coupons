@@ -10,12 +10,16 @@
 			<tr>							
 				<td align="center"><?=$row['id'];?></td>
                                 <td align="center"><?=$row['name'];?></td>
+                                <td align="center"><?=$row['SID'];?></td>
 				<td align="center"><?=$row['token'];?></td>                               
 				<td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editSite/' . $row['id']);?>">Edit</a> 				
 				</td>
                                 <td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/infoSite/' . $row['id']);?>">Info</a> 				
+				</td>
+                                <td class="options" align="center">
+					<a href="<?=site_url('admincp/linkshare/deleteSite/' . $row['id']);?>">Delete</a> 				
 				</td>
 			</tr>
 		<?

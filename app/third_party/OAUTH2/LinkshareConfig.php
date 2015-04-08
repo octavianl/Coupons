@@ -271,38 +271,22 @@ class LinkshareConfig
                         
         if ($accessToken) {
             if ($scope == $siteID) {
-                echo "ACCESS TOKEN ALREADY SET" . '<br/>';
-                echo "ACCESS TOKEN = " . $ci->input->cookie('accessToken'). '<br/>';
-                echo "SiteID = " . $ci->input->cookie('siteID'). '<br/>';
+                // ACCESS TOKEN ALREADY SET
             } else {
-                echo "CHANGE SCOPE/SITE ID1<br/>";
-                //$config->setScope($sid);
-                $tokens = $this->getToken($ci, $scope); 
-                echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-                echo "SiteID = " . $scope;
+                // CHANGE SCOPE/SITE ID first
+                $tokens = $this->getToken($ci, $scope);
             }
         } else {
             if (!$ci->input->cookie('refreshToken')) {
-                echo "COOKIES empty<br/>";                
+                // COOKIES empty             
                 $tokens = $this->getToken($ci, $scope); 
-                echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-                echo "SiteID = " . $scope;
             } else {
                 if ($scope == $siteID) {
-                    echo "EXTEND ACCESS TOKEN" . '<br>';
+                    // EXTEND ACCESS TOKEN
                     $tokens = $this->extendAccessToken($ci, $scope, $ci->input->cookie('refreshToken'));
-                    echo "NEW EXTENDED ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                    echo "NEW EXTENDED REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-                    echo "SiteID = " . $ci->input->cookie('siteID');
                 } else {
-                    echo "CHANGE SCOPE/SITE ID2<br/>";
-                    //$config->setScope($sid);
-                    $tokens = $this->getToken($ci, $scope); 
-                    echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
-                    echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
-                    echo "SiteID = " . $scope;
+                    // CHANGE SCOPE/SITE ID second
+                    $tokens = $this->getToken($ci, $scope);
                 }
             }
         }
