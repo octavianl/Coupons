@@ -81,6 +81,26 @@ class Site_model extends CI_Model
     }
 
     /**
+     * Get Site Name
+     *
+     * @param string $token 
+     *
+     * @return string
+     */
+    function getSiteBySID($sid)
+    {
+        $row = array();
+        $this->db->where('SID', $sid);
+        $result = $this->db->get('linkshare_site');
+
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
+
+        return $row;
+    }
+
+    /**
      * Create New Site
      *
      * Creates a new site

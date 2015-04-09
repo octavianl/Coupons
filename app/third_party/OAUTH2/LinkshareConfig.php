@@ -21,6 +21,7 @@ class LinkshareConfig
     
     // Legacy method $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);   
     const URL_ADVERTISERS_APPROVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/approved';
+    const URL_ADVERTISERS_APPROVAL_EXTENDED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/approval%20extended';
     const URL_ADVERTISERS_PERM_REJECTED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20rejected';
     const URL_ADVERTISERS_PERM_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/perm%20removed';
     const URL_ADVERTISERS_SELF_REMOVED = 'https://api.rakutenmarketing.com/linklocator/1.0/getMerchByAppStatus/self%20removed';
@@ -272,20 +273,35 @@ class LinkshareConfig
         if ($accessToken) {
             if ($scope == $siteID) {
                 // ACCESS TOKEN ALREADY SET
+                //echo "ACCESS TOKEN ALREADY SET" . '<br/>';
+                //echo "ACCESS TOKEN = " . $ci->input->cookie('accessToken'). '<br/>';
+                //echo "SiteID = " . $ci->input->cookie('siteID'). '<br/>';
             } else {
                 // CHANGE SCOPE/SITE ID first
+                //echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                //echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                //echo "SiteID = " . $scope;
                 $tokens = $this->getToken($ci, $scope);
             }
         } else {
             if (!$ci->input->cookie('refreshToken')) {
-                // COOKIES empty             
+                // COOKIES empty    
+                //echo "NEW ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                //echo "NEW REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                //echo "SiteID = " . $scope;
                 $tokens = $this->getToken($ci, $scope); 
             } else {
                 if ($scope == $siteID) {
                     // EXTEND ACCESS TOKEN
+                    //echo "NEW EXTENDED ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                    //echo "NEW EXTENDED REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                    //echo "SiteID = " . $ci->input->cookie('siteID');
                     $tokens = $this->extendAccessToken($ci, $scope, $ci->input->cookie('refreshToken'));
                 } else {
                     // CHANGE SCOPE/SITE ID second
+                    //echo "NEW SCOPE ACCESS TOKEN = " . $tokens->access_token . '<br/>';
+                    //echo "NEW SCOPE REFRESH TOKEN = " . $tokens->refresh_token . '<br/>';
+                    //echo "SiteID = " . $scope;
                     $tokens = $this->getToken($ci, $scope);
                 }
             }

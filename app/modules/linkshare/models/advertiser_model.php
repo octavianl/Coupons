@@ -24,7 +24,7 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Get Magazine
+     * Get Temp Advertisers
      * array $filters
      *
      * @return array
@@ -81,6 +81,63 @@ class Advertiser_model extends CI_Model
         return $row;
     }
 
+    /**
+     * Get Temp Advertisers
+     * array $filters
+     *
+     * @return array
+     */
+    function getTempAdvertisers($filters = array())
+    {
+        $row = array();
+        $order_dir = (isset($filters['sort_dir'])) ? $filters['sort_dir'] : 'ASC';
+
+        $this->load->model('site_model');
+
+        if(isset($filters['sort']))  $this->db->order_by($filters['sort'], $order_dir);
+
+        if (isset($filters['limit'])) {
+            $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
+            $this->db->limit($filters['limit'], $offset);
+        }
+
+        if (isset($filters['id_site'])) {
+            $this->db->where('id_site', $filters['id_site']);
+        }
+
+        if (isset($filters['id_categories'])) {
+            $this->db->like('id_categories', $filters['id_categories']);
+        }
+
+        if (isset($filters['name_status'])) {
+            $this->db->like('status', $filters['name_status']);
+        }
+        
+        if (isset($filters['name'])) {
+            $this->db->like('name', $filters['name']);
+        }
+
+        if (isset($filters['mid'])) {
+            $this->db->where('mid', $filters['mid']);
+        }
+
+        if (isset($filters['id_status']))
+            $this->db->where('id_status', $filters['id_status']);
+            $this->db->order_by('id');
+            $result = $this->db->get('linkshare_advertisers_temp');
+
+        foreach ($result->result_array() as $linie) {
+
+            $site = $this->site_model->getSite($linie['id_site']);
+            $linie['name_site'] = $site['name'];
+
+            //$nr_products = $this->getCountProductsByMID($linie['mid'], $linie['id_site']);
+            //$linie['nr_products'] = $nr_products;
+            $row[] = $linie;
+        }
+        return $row;
+    }
+    
     /**
      * Get Magazin
      *
@@ -178,6 +235,23 @@ class Advertiser_model extends CI_Model
 
         return $insert_id;
     }
+    
+     /**
+     * Create New Temp Advertisers
+     *
+     * Creates a new magazin
+     *
+     * @param array $insert_fields	
+     *
+     * @return int $insert_id
+     */
+    function newTempAdvertiser($insert_fields)
+    {
+        $this->db->insert('linkshare_advertisers_temp', $insert_fields);
+        $insert_id = $this->db->insert_id();
+
+        return $insert_id;
+    }
 
     /**
      * Create New Magazine
@@ -198,7 +272,7 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Update Magazin
+     * Update Advertisers
      *
      * Updates magazin
      * 
@@ -215,7 +289,7 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Delete Magazin
+     * Delete Advertisers
      *
      * Deletes magazin
      * 	
@@ -229,14 +303,29 @@ class Advertiser_model extends CI_Model
 
         return true;
     }
+    
+        /**
+     * Delete Temporary Advertisers
+     *
+     * Deletes magazin
+     * 	
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function deleteTempAdvertiser()
+    {
+        $this->db->truncate('linkshare_advertisers_temp'); 
+        return true;
+    }
 
     function parseAdvertiser($params)
     {
-        if ($params[0]['limit'])
+        if (isset($params[0]['limit']))
             $limit = $params[0]['limit'];
         else
             $limit = 10;
-        if ($params[0]['offset'])
+        if (isset($params[0]['offset']))
             $offset = $params[0]['offset'];
         else
             $offset = 0;

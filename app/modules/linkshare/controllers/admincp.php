@@ -534,9 +534,7 @@ class Admincp extends Admincp_Controller
         $site = $this->site_model->getSite($id);
 
         $this->admin_navigation->module_link('Add advertiser', site_url('admincp/linkshare/addAdvertiser/'));
-        $this->admin_navigation->module_link('Parse APPROVED advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/approved'));
-        $this->admin_navigation->module_link('Parse ALL advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $site['token'] . '/all'));
-        $this->admin_navigation->module_link('Refresh ALL advertisers', site_url('admincp/linkshare/refreshAdvertisers/' . $site['token'] . '/all'));
+        $this->admin_navigation->module_link('Parse advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $this->input->cookie('siteID').'?status=approved'));
 
         $this->load->library('dataset');
 
@@ -833,123 +831,6 @@ class Admincp extends Admincp_Controller
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
 
-    public function parseAdvertisers($token, $status)
-    {
-        //error_reporting(E_ALL);
-        //ini_set('display_errors',1);
-        $mids = array();
-        $aux = '';
-        $this->load->model('site_model');
-        $aux = $this->site_model->getSiteByToken($token);
-        $i = 0;
-        $site = $aux['name'];
-        $offset = 0;
-        if (isset($_GET['offset']) && $_GET['offset'])
-            $offset = $_GET['offset'];
-
-        $j = 1;
-        $statuses = array();
-        if ($status == 'all') {
-            $this->load->model('status_model');
-            $aux = $this->status_model->getStatuses();
-            foreach ($aux as $val) {
-                $statuses[] = str_replace(' ', '%20', $val['id_status']);
-            }
-            $j = count($statuses);
-        } else {
-            $statuses[] = $status;
-        }
-        
-//         print '<pre>';
-//          print_r($statuses);
-//          echo "j=$j<br/>";
-//          die; 
-
-        while ($j > 0) {
-            $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
-            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-            //echo $categories->getName().'<br/>';die;
-            if (isset($categories)) {
-                $kids = $categories->children('ns1', true);
-                //var_dump(count($kids));die;
-
-                foreach ($kids as $child) {
-                    $mids[$i]['id'] = $i + 1;
-                    $mids[$i]['site'] = $site;
-                    $mids[$i]['id_status'] = $child->applicationStatus;
-                    $mids[$i]['status'] = $child->applicationStatus;
-                    $mids[$i]['id_categories'] = $child->categories;
-                    $mids[$i]['mid'] = $child->mid;
-                    $mids[$i]['name'] = $child->name;
-                    $mids[$i]['offer_also'] = $child->offer->alsoName;
-                    $mids[$i]['commission'] = $child->offer->commissionTerms;
-                    $mids[$i]['offer_id'] = $child->offer->offerId;
-                    $mids[$i]['offer_name'] = $child->offer->offerName;
-                    $mids[$i]['limit'] = 10;
-                    $mids[$i]['offset'] = $offset;
-                    $i++;
-                }
-            }
-
-            $j--;
-            //print '<pre>';print_r($mids);die;
-        }
-
-        $this->admin_navigation->module_link('Add parsed advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/' . $token . '/' . $status));
-
-        $this->load->library('dataset');
-
-        $columns = array(
-            array(
-                'name' => 'ID #',
-                'width' => '5%'),
-            array(
-                'name' => 'Site',
-                'width' => '10%'),
-            array(
-                'name' => 'Status ID',
-                'width' => '5%'),
-            array(
-                'name' => 'Status',
-                'width' => '5%'),
-            array(
-                'name' => 'Categories',
-                'width' => '15%'),
-            array(
-                'name' => 'Mid',
-                'width' => '10%'),
-            array(
-                'name' => 'Name',
-                'width' => '10%'),
-            array(
-                'name' => 'Offer alias',
-                'width' => '10%'),
-            array(
-                'name' => 'Commission',
-                'width' => '10%'),
-            array(
-                'name' => 'Offer ID',
-                'width' => '10%'
-            ),
-            array('name' => 'Offer name',
-                'width' => '10%'
-            ),
-        );
-
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('advertiser_model', 'parseAdvertiser', $mids);
-        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisers/' . $token) . '/' . $status);
-        $this->dataset->rows_per_page(10);
-
-        // total rows
-        $total_rows = count($mids);
-        $this->dataset->total_rows($total_rows);
-
-        $this->dataset->initialize();
-
-        $this->load->view('listAdvertisersParsed');
-    }
-
 
     public function parseAdvertisersAdd($token, $status)
     {
@@ -1019,8 +900,152 @@ class Admincp extends Admincp_Controller
         $this->notices->SetNotice($cate . ' parsed advertisers added successfully.');
         redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
     }
+    
+    
+    public function parseAdvertisers($scope = 2531438)
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors',1);
+        
+        $this->load->library('admin_form');    
+        $this->load->model('site_model');
+        $this->load->model('status_model');
+        $this->load->model('advertiser_model');
+        //$scope = $this->input->cookie('siteID');
+        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $allStatus = $this->status_model->getStatuses();
 
-    public function getXmlCookie($scope = 2531438)
+        $mids = array();
+        $i = 0;
+        $offset = 0;
+        if (isset($_GET['offset']) && $_GET['offset']) $offset = $_GET['offset'];
+
+        $CI =& get_instance();
+                             
+        $linkshareConstants = array(
+            'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
+            'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED,
+            'perm rejected'     => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
+            'perm removed'      => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
+            'self removed'      => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
+            'temp removed'      => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
+            'temp rejected'     => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
+            'wait'              => LinkshareConfig::URL_ADVERTISERS_WAIT
+            );
+        
+        $config = new LinkshareConfig();
+        
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
+        $this->advertiser_model->deleteTempAdvertiser();
+        //foreach ($linkshareConstants as $key => $const) {
+            $request = new CurlApi($linkshareConstants[$_GET['status']]);              
+            //$request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
+            $request->setHeaders($config->getMinimalHeaders($accessToken));
+            $request->setGetData();
+            $request->send();                      
+
+            $responseObj = $request->getFormattedResponse();
+
+            $aux = $responseObj['body'];
+            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
+                if (isset($categories)) {
+                    $kids = $categories->children('ns1', true);
+
+                    foreach ($kids as $child) {
+                        $mids[$i]['id'] = $i + 1;
+                        $mids[$i]['id_site'] = $siteRow['id'];
+                        $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
+                        $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
+                        $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
+                        $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
+                        $mids[$i]['name'] = mysql_real_escape_string($child->name);
+                        $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
+                        $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
+                        $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
+                        $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
+                        
+                        $this->advertiser_model->newTempAdvertiser($mids[$i]);
+                        
+                        $i++;
+                    }
+                }
+        //}
+        $cate = $i;
+                
+        $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/'));
+
+        $this->load->library('dataset');
+        
+        $columns = array(
+            array(
+                'name' => 'ID #',
+                'width' => '1%'),
+            array(
+                'name' => 'Site',
+                'width' => '10%'),
+            array(
+                'name' => 'Id Status',
+                'width' => '4%'),
+            array(
+                'name' => 'Status',
+                'width' => '8%',
+                'type' => 'text',
+                'filter' => 'name_status',
+                'sort_column' => 'status'),
+            array(
+                'name' => 'Categories',
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'id_categories'),
+            array(
+                'name' => 'Mid',
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'mid',
+                'sort_column' => 'mid'),
+            array(
+                'name' => 'Name',
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'name'),
+            array(
+                'name' => 'Offer Also',
+                'width' => '10%'),
+            array(
+                'name' => 'Commission',
+                'width' => '5%'),
+            array(
+                'name' => 'Offer ID',
+                'width' => '10%'),
+            array(
+                'name' => 'Offer Name',
+                'width' => '10%')
+        );
+
+        $filters['limit'] = 10;
+
+        $this->dataset->columns($columns);
+        $this->dataset->datasource('advertiser_model', 'getTempAdvertisers', $filters);
+        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisers/'));
+        $this->dataset->rows_per_page(10);
+        
+        // total rows
+        $total_rows = count($mids);
+        $this->dataset->total_rows($total_rows);
+
+        $this->dataset->initialize();
+        
+        $data = array(
+            'site_name' => $siteRow['name'],
+            'allStatus' => $allStatus,
+            'form_action' => site_url('admincp/linkshare/siteAdvertisers/'),
+        );
+        $this->notices->SetNotice($cate . ' parsed advertisers added successfully.');
+        $this->load->view('listAdvertisersParsed',$data);
+    }
+    
+    
+    public function getXmlCookie($scope = 2901923)
     {
         $CI =& get_instance();
         $this->load->library('admin_form');        
@@ -1064,130 +1089,6 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
-    }      
-    
-    public function parseAdvertisersTEST($scope = 2531438)
-    {
-        error_reporting(E_ALL);
-        ini_set('display_errors',1);
-        
-        $scope = $this->input->cookie('siteID');
-        
-        $mids = array();
-        
-        $linkshareConstants = array(LinkshareConfig::URL_ADVERTISERS_APPROVED,
-                                    "URL_ADVERTISERS_PERM_REJECTED",
-                                    "URL_ADVERTISERS_PERM_REMOVED",
-                                    "URL_ADVERTISERS_SELF_REMOVED",
-                                    "URL_ADVERTISERS_TEMP_REMOVED",
-                                    "URL_ADVERTISERS_TEMP_REJECTED",
-                                    "URL_ADVERTISERS_WAIT");
-        
-        /* Get XML with OAUTH2 */
-        
-        
-        
-        $CI =& get_instance();
-        $this->load->library('admin_form');                        
-        
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-        
-        $config = new LinkshareConfig();
-        
-        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
-        
-        //echo "accessToken = $accessToken" . PHP_EOL;
-                                                  
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
-        $request->setHeaders($config->getMinimalHeaders($accessToken));
-        $request->setGetData();
-        $request->send();                      
-              
-        $responseObj = $request->getFormattedResponse();
-        
-//        print '<pre>';
-//        print_r($responseObj['body']);
-//        die; 
-
-        $aux = $responseObj['body'];
-        $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-        //echo $categories->getName().'<br/>';die;
-        if (isset($categories)) {
-            $kids = $categories->children('ns1', true);
-            //var_dump(count($kids));die;
-
-            foreach ($kids as $child) {
-//                $mids[$i]['id'] = $i + 1;
-//                $mids[$i]['site'] = $site;
-                $mids[$i]['id_status'] = $child->applicationStatus;
-                $mids[$i]['status'] = $child->applicationStatus;
-                $mids[$i]['id_categories'] = $child->categories;
-                $mids[$i]['mid'] = $child->mid;
-                $mids[$i]['name'] = $child->name;
-                $mids[$i]['offer_also'] = $child->offer->alsoName;
-                $mids[$i]['commission'] = $child->offer->commissionTerms;
-                $mids[$i]['offer_id'] = $child->offer->offerId;
-                $mids[$i]['offer_name'] = $child->offer->offerName;
-                $mids[$i]['limit'] = 10;
-//                $mids[$i]['offset'] = $offset;
-                $i++;
-            }
-        }
-
-        $this->admin_navigation->module_link('Add parsed advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/'));
-
-        $this->load->library('dataset');
-
-        $columns = array(
-            array(
-                'name' => 'ID #',
-                'width' => '5%'),
-//            array(
-//                'name' => 'Site',
-//                'width' => '10%'),
-            array(
-                'name' => 'Status ID',
-                'width' => '5%'),
-            array(
-                'name' => 'Status',
-                'width' => '5%'),
-            array(
-                'name' => 'Categories',
-                'width' => '15%'),
-            array(
-                'name' => 'Mid',
-                'width' => '10%'),
-            array(
-                'name' => 'Name',
-                'width' => '10%'),
-            array(
-                'name' => 'Offer alias',
-                'width' => '10%'),
-            array(
-                'name' => 'Commission',
-                'width' => '10%'),
-            array(
-                'name' => 'Offer ID',
-                'width' => '10%'
-            ),
-            array('name' => 'Offer name',
-                'width' => '10%'
-            ),
-        );
-
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('advertiser_model', 'parseAdvertiser', $mids);
-        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisersTEST/'));
-        $this->dataset->rows_per_page(30);
-
-        // total rows
-        $total_rows = count($mids);
-        $this->dataset->total_rows($total_rows);
-
-        $this->dataset->initialize();
-
-        $this->load->view('listAdvertisersParsed');
-    }
+    }  
 
 }
