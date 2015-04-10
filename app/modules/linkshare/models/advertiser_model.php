@@ -139,6 +139,27 @@ class Advertiser_model extends CI_Model
     }
     
     /**
+     * Get Temp Status
+     * array $filters
+     *
+     * @return array
+     */
+    function getTempStatusName()
+    {
+        $id = 0;
+        $this->load->model('status_model');
+        $this->db->select('id_status');
+        $query = $this->db->get('linkshare_advertisers_temp');
+        foreach ($query->result_array() as $name){
+            $id = $name['id_status'];
+        }
+
+        $statusName = $this->status_model->getStatusNameByID($id);
+
+        return $statusName;
+    }
+    
+    /**
      * Get Magazin
      *
      * @param int $id
@@ -304,7 +325,7 @@ class Advertiser_model extends CI_Model
         return true;
     }
     
-        /**
+    /**
      * Delete Temporary Advertisers
      *
      * Deletes magazin

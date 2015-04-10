@@ -116,6 +116,8 @@ $(document).ready(function () {
 			value_td.html(data);
 			
 			notice_ok('Setting saved successfully.');
+                        
+                        window.location = 'admincp/settings';
 		});
 		
 		return false;

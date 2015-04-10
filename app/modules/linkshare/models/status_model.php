@@ -79,6 +79,26 @@ class Status_model extends CI_Model
 
         return $status;
     }
+    
+    /**
+     * Get status by ID
+     *
+     * @param string $id_status	
+     *
+     * @return int
+     */
+    function getStatusNameByID($id)
+    {
+        $statusName = '';
+        $this->db->where('id', $id);
+        $result = $this->db->get('linkshare_status');
+
+        foreach ($result->result_array() as $row) {
+            $statusName = $row['name'];
+        }
+
+        return $statusName;
+    }
 
     /**
      * Get status

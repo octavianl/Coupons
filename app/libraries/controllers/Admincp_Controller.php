@@ -22,6 +22,10 @@ class Admincp_Controller extends MY_Controller {
 		// by defining _CONTROLPANEL, certain functionality can be modified to be appropriate to this context
 		define("_CONTROLPANEL","TRUE");
 		
+                // set the language to be used and load the helper
+                $this->load->helper('language');
+                (setting('site_lang') == '0') ? $this->lang->load('general', 'english') : $this->lang->load('general', 'romanian');
+                
 		// load the SSL helper, and redirect to HTTPS if necessary (or to HTTP)
 		$this->load->helper('ssl');
 		
@@ -44,15 +48,15 @@ class Admincp_Controller extends MY_Controller {
 		$this->load->library('admin_navigation');
 		
 		// add basic navigation categories
-		$this->admin_navigation->parent_link('dashboard','Dashboard');
-		$this->admin_navigation->parent_link('publish','Publish');
+		$this->admin_navigation->parent_link('dashboard',lang('dashboard'));
+		$this->admin_navigation->parent_link('publish',lang('publish'));
 		if (module_installed('store') or module_installed('billing') or module_installed('coupons')) {
                     $this->admin_navigation->parent_link('storefront','Storefront');
 		}
                 
-		$this->admin_navigation->parent_link('members','Members');
-		$this->admin_navigation->parent_link('reports','Reports');
-		$this->admin_navigation->parent_link('design','Design');
+		$this->admin_navigation->parent_link('members',lang('members'));
+		$this->admin_navigation->parent_link('reports',lang('reports'));
+		$this->admin_navigation->parent_link('design',lang('design'));
                                 
                 $coupons = array(
                     '2531438' => 'Coupon-Land',

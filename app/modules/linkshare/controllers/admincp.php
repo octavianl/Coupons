@@ -534,7 +534,7 @@ class Admincp extends Admincp_Controller
         $site = $this->site_model->getSite($id);
 
         $this->admin_navigation->module_link('Add advertiser', site_url('admincp/linkshare/addAdvertiser/'));
-        $this->admin_navigation->module_link('Parse advertisers', site_url('admincp/linkshare/parseAdvertisers/' . $this->input->cookie('siteID').'?status=approved'));
+        $this->admin_navigation->module_link('Parse advertisers', site_url('admincp/linkshare/listTempAdvertisers/'));
 
         $this->load->library('dataset');
 
@@ -550,24 +550,24 @@ class Admincp extends Admincp_Controller
                 'width' => '4%'),
             array(
                 'name' => 'Status',
-                'width' => '8%',
+                'width' => '5%',
                 'type' => 'text',
                 'filter' => 'name_status',
                 'sort_column' => 'status'),
             array(
                 'name' => 'Categories',
-                'width' => '10%',
+                'width' => '15%',
                 'type' => 'text',
                 'filter' => 'id_categories'),
             array(
                 'name' => 'Mid',
-                'width' => '10%',
+                'width' => '5%',
                 'type' => 'text',
                 'filter' => 'mid',
                 'sort_column' => 'mid'),
             array(
                 'name' => 'Name',
-                'width' => '10%',
+                'width' => '15%',
                 'type' => 'text',
                 'filter' => 'name'),
             array(
@@ -580,15 +580,21 @@ class Admincp extends Admincp_Controller
                 'name' => 'Offer name',
                 'width' => '10%'),
             array(
-                'name' => 'Actions',
-                'width' => '10%'),
-            array(
                 'name' => 'Parse products',
                 'width' => '5%'),
             array('name' => 'Products',
                 'width' => '5%'),
             array('name' => 'No',
                 'width' => '1%'),
+            array(
+                'name' => 'Actions',
+                'width' => '5%'),
+            array(
+                'name' => 'LIVE',
+                'width' => '5%'),
+            array(
+                'name' => 'UPDATED',
+                'width' => '5%'),
         );
 
         $filters = array();
@@ -917,8 +923,6 @@ class Admincp extends Admincp_Controller
 
         $mids = array();
         $i = 0;
-        $offset = 0;
-        if (isset($_GET['offset']) && $_GET['offset']) $offset = $_GET['offset'];
 
         $CI =& get_instance();
                              
@@ -970,8 +974,23 @@ class Admincp extends Admincp_Controller
                     }
                 }
         //}
-        $cate = $i;
-                
+        redirect('admincp/linkshare/listTempAdvertisers/');
+    }
+    
+    public function listTempAdvertisers()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors',1);
+        
+        $this->load->library('admin_form');    
+        $this->load->model('site_model');
+        $this->load->model('status_model');
+        $this->load->model('advertiser_model');
+        $scope = $this->input->cookie('siteID');
+        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $allStatus = $this->status_model->getStatuses();
+        $selectStatus = $this->advertiser_model->getTempStatusName();
+        
         $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/'));
 
         $this->load->library('dataset');
@@ -979,27 +998,27 @@ class Admincp extends Admincp_Controller
         $columns = array(
             array(
                 'name' => 'ID #',
-                'width' => '1%'),
+                'width' => '3%'),
             array(
                 'name' => 'Site',
                 'width' => '10%'),
             array(
                 'name' => 'Id Status',
-                'width' => '4%'),
+                'width' => '5%'),
             array(
                 'name' => 'Status',
-                'width' => '8%',
+                'width' => '7%',
                 'type' => 'text',
                 'filter' => 'name_status',
                 'sort_column' => 'status'),
             array(
                 'name' => 'Categories',
-                'width' => '10%',
+                'width' => '15%',
                 'type' => 'text',
                 'filter' => 'id_categories'),
             array(
                 'name' => 'Mid',
-                'width' => '10%',
+                'width' => '5%',
                 'type' => 'text',
                 'filter' => 'mid',
                 'sort_column' => 'mid'),
@@ -1010,81 +1029,96 @@ class Admincp extends Admincp_Controller
                 'filter' => 'name'),
             array(
                 'name' => 'Offer Also',
-                'width' => '10%'),
-            array(
-                'name' => 'Commission',
                 'width' => '5%'),
             array(
+                'name' => 'Commission',
+                'width' => '15%'),
+            array(
                 'name' => 'Offer ID',
-                'width' => '10%'),
+                'width' => '5%'),
             array(
                 'name' => 'Offer Name',
-                'width' => '10%')
+                'width' => '20%')
         );
 
         $filters['limit'] = 10;
-
         $this->dataset->columns($columns);
         $this->dataset->datasource('advertiser_model', 'getTempAdvertisers', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/parseAdvertisers/'));
+        $this->dataset->base_url(site_url('admincp/linkshare/listTempAdvertisers/'));
         $this->dataset->rows_per_page(10);
         
         // total rows
-        $total_rows = count($mids);
+        $total_rows = $this->db->get('linkshare_advertisers_temp')->num_rows();
         $this->dataset->total_rows($total_rows);
-
         $this->dataset->initialize();
-        
         $data = array(
             'site_name' => $siteRow['name'],
+            'selectStatus' => $selectStatus,
             'allStatus' => $allStatus,
-            'form_action' => site_url('admincp/linkshare/siteAdvertisers/'),
+            'form_action' => site_url('admincp/linkshare/listTempAdvertisers/'),
         );
-        $this->notices->SetNotice($cate . ' parsed advertisers added successfully.');
+        $this->notices->SetNotice($total_rows . ' parsed advertisers in temporary table.');
         $this->load->view('listAdvertisersParsed',$data);
     }
     
-    
     public function getXmlCookie($scope = 2901923)
-    {
-        $CI =& get_instance();
-        $this->load->library('admin_form');        
-        
-        $form = new Admin_form;
-        
+    {            
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
+        $CI =& get_instance();
+        $this->load->library('admin_form'); 
+        $form = new Admin_form;
+                
+        $this->load->model('site_model');
+        $this->load->model('status_model');
+        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $allStatus = $this->status_model->getStatuses();   
+
+        $linkshareConstants = array(
+            'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
+            'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED,
+            'perm rejected'     => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
+            'perm removed'      => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
+            'self removed'      => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
+            'temp removed'      => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
+            'temp rejected'     => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
+            'wait'              => LinkshareConfig::URL_ADVERTISERS_WAIT
+            );
+        $responseObj = array();
         
-        $config = new LinkshareConfig();
-        
-        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
-        
-        //echo "accessToken = $accessToken" . PHP_EOL;
-                                                  
-        $request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
-        $request->setHeaders($config->getMinimalHeaders($accessToken));
-        $request->setGetData();
-        $request->send();
-              
-        $responseObj = $request->getFormattedResponse();
-        
-        if (!$responseObj) {
-            $this->notices->SetError('Refresh token');
-            $responseObj['header'] = $responseObj['body'] = 'ERROR';
-        } else {
-            //print '<pre>';
-            //print_r($responseObj['header']);
+        if(isset($_GET['status'])){
+            $config = new LinkshareConfig();
+
+            $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
+
+            //echo "accessToken = $accessToken" . PHP_EOL;
+
+            $request = new CurlApi($linkshareConstants[$_GET['status']]);
+            $request->setHeaders($config->getMinimalHeaders($accessToken));
+            $request->setGetData();
+            $request->send();
+
+            $responseObj = $request->getFormattedResponse();
         }
-   
+            if (!$responseObj) {
+                $this->notices->SetError('Refresh token');
+                $responseObj['header'] = $responseObj['body'] = 'ERROR';
+            } else {
+                //print '<pre>';
+                //print_r($responseObj['header']);
+            }
+
 //        die();
         
         $form->fieldset('Xml');
-        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', false);
+        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', true);
         $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
         
         $data = array(
             'form' => $form->display(),
             'form_title' => 'XML',
+            'site_name' => $siteRow['name'],
+            'allStatus' => $allStatus,
             'form_action' => site_url('admincp/linkshare/')
         );
 

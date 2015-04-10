@@ -1,13 +1,13 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <h1>Parsed advertisers list for <?=$site_name?>
 <h4>Select advertisers status</h4>
-    <form>
+    <form method="GET" action="admincp/linkshare/parseAdvertisers/">
     <select name="status">
-        <?
+        <?php
             foreach ($allStatus as $status){
             ?>
-                <option value="<?=$status['id_status']?>" <?php if(isset($_GET['status']) && $_GET['status']==$status['id_status']){ echo 'selected';} ?> ><?=$status['name']?></option>
-            <?
+                <option value="<?=$status['id_status']?>" <?php if(isset($selectStatus) && $selectStatus==$status['name']){ echo 'selected';} ?> ><?=$status['id_status']?></option>
+            <?php
                 }
         ?>
     </select>
