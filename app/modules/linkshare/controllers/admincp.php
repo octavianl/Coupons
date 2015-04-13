@@ -21,11 +21,24 @@ require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
 class Admincp extends Admincp_Controller
 {
+    /**
+     * Default coupon-land
+     * 
+     * @var int 
+     */
+    private $siteID = 2531438;
+    
     public function __construct()
     {
         parent::__construct();
         
         $this->admin_navigation->parent_active('linkshare');
+        
+        $siteID = $this->input->cookie('siteID');
+        // change if value already in cookie
+        if ($siteID) {
+            $this->siteID = $siteID;
+        }                
 
         error_reporting(E_ALL^E_NOTICE);
         error_reporting(E_WARNING);
@@ -86,20 +99,21 @@ class Admincp extends Admincp_Controller
         $this->load->view('listSites');
     }
 
-    public function chooseSites($id=0)
+    public function chooseSites($id = 0)
     {
         $this->load->model('site_model');
-        $site = $this->site_model->getSite($id);
-        
-        if ($id!=0){
-            $this->input->set_cookie("siteID", $site['SID'], 2592000);
+        $site = $this->site_model->getSite($id);        
 
-            redirect('admincp/linkshare/chooseSites');
-        }
-//        print_r($site);
-//        die();
-
-        $this->load->view('chooseSites');
+        if (!$id) {
+            $this->load->view('chooseSites');
+        } else {
+            $CI =& get_instance();
+            $config = new LinkshareConfig();
+            $config->setSiteCookieAndGetAccessToken($CI, $site['SID']);
+            $this->siteID = $CI->input->cookie('siteID');
+            $this->notices->SetNotice('Site cookie for ' . $site['name'] . ' successfully set!');
+            redirect('admincp/linkshare/index');
+        }                        
     }
 
     public function addSite()
@@ -908,7 +922,7 @@ class Admincp extends Admincp_Controller
     }
     
     
-    public function parseAdvertisers($scope = 2531438)
+    public function parseAdvertisers()
     {
         error_reporting(E_ALL);
         ini_set('display_errors',1);
@@ -918,7 +932,7 @@ class Admincp extends Admincp_Controller
         $this->load->model('status_model');
         $this->load->model('advertiser_model');
         //$scope = $this->input->cookie('siteID');
-        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();
 
         $mids = array();
@@ -937,9 +951,8 @@ class Admincp extends Admincp_Controller
             'wait'              => LinkshareConfig::URL_ADVERTISERS_WAIT
             );
         
-        $config = new LinkshareConfig();
-        
-        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
+        $config = new LinkshareConfig();        
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
         $this->advertiser_model->deleteTempAdvertiser();
         //foreach ($linkshareConstants as $key => $const) {
             $request = new CurlApi($linkshareConstants[$_GET['status']]);              
@@ -985,13 +998,12 @@ class Admincp extends Admincp_Controller
         $this->load->library('admin_form');    
         $this->load->model('site_model');
         $this->load->model('status_model');
-        $this->load->model('advertiser_model');
-        $scope = $this->input->cookie('siteID');
-        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $this->load->model('advertiser_model');        
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);  
         $allStatus = $this->status_model->getStatuses();
         $selectStatus = $this->advertiser_model->getTempStatusName();
         
-        $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/parseAdvertisersAdd/'));
+        $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/moveTempAdvertisers/'));
 
         $this->load->library('dataset');
         
@@ -1061,17 +1073,27 @@ class Admincp extends Admincp_Controller
         $this->load->view('listAdvertisersParsed',$data);
     }
     
-    public function getXmlCookie($scope = 2901923)
-    {            
+    public function moveTempAdvertisers()
+    {
         error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        ini_set('display_errors',1);
+        
+        $this->load->library('admin_form');    
+        $this->load->model('advertiser_model');
+        $currentStatus = $this->advertiser_model->getTempStatusName();
+        
+        echo $currentStatus;
+    }
+    
+    public function getXmlCookie()
+    {            
         $CI =& get_instance();
         $this->load->library('admin_form'); 
         $form = new Admin_form;
                 
         $this->load->model('site_model');
-        $this->load->model('status_model');
-        $siteRow = $this->site_model->getSiteBySID($scope);  
+        $this->load->model('status_model');        
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();   
 
         $linkshareConstants = array(
@@ -1089,7 +1111,7 @@ class Admincp extends Admincp_Controller
         if(isset($_GET['status'])){
             $config = new LinkshareConfig();
 
-            $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $scope);
+            $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
 
             //echo "accessToken = $accessToken" . PHP_EOL;
 
