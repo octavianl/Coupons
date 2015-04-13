@@ -270,6 +270,7 @@ class Category_creative_model extends CI_Model
     print_r($filters);
     print '</pre>'; 
     
+    
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
@@ -282,12 +283,12 @@ class Category_creative_model extends CI_Model
             $filters['nume'] = str_replace('+', ' ', $filters['nume']);
             $this->db->like('name', $filters['nume']);
         }
-        if (isset($filters['mid']))
+        if ($filters['mid'] != '') {
             $this->db->where('mid', $filters['mid']);
-        if (isset($filters['mid']))
             $this->db->order_by('cat_id');
-        else
+        } else {
             $this->db->order_by('id');
+        }
 
         $result = $this->db->get('linkshare_categories_creative');
         if (isset($filters['name']))
