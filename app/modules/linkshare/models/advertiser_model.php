@@ -67,6 +67,7 @@ class Advertiser_model extends CI_Model
             $this->db->where('id_status', $filters['id_status']);
             $this->db->order_by('id');
             $result = $this->db->get('linkshare_advertisers');
+           
 
         foreach ($result->result_array() as $linie) {
 
@@ -77,7 +78,6 @@ class Advertiser_model extends CI_Model
             $linie['nr_products'] = $nr_products;
             $row[] = $linie;
         }
-
         return $row;
     }
 
@@ -139,7 +139,7 @@ class Advertiser_model extends CI_Model
     }
     
     /**
-     * Get Temp Status
+     * Get Temp Status Name
      * array $filters
      *
      * @return array
@@ -157,6 +157,23 @@ class Advertiser_model extends CI_Model
         $statusName = $this->status_model->getStatusNameByID($id);
 
         return $statusName;
+    }
+    
+    /**
+     * Get Temp Status ID
+     * array $filters
+     *
+     * @return array
+     */
+    function getTempStatusID()
+    {
+        $id = 0;
+        $this->db->select('id_status');
+        $query = $this->db->get('linkshare_advertisers_temp');
+        foreach ($query->result_array() as $name){
+            $id = $name['id_status'];
+        }
+        return $id;
     }
     
     /**
@@ -201,6 +218,27 @@ class Advertiser_model extends CI_Model
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $id_site);
         $result = $this->db->get('linkshare_advertisers');
+
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
+
+        return $row;
+    }
+    
+    /**
+     * Get Temp Advertiser By Mid
+     *
+     * @param int $mid
+     * @param int $id_site	
+     *
+     * @return array
+     */
+    function getTempAdvertiserByMID($mid)
+    {
+        $row = array();
+        $this->db->where('mid', $mid);
+        $result = $this->db->get('linkshare_advertisers_temp');
 
         foreach ($result->result_array() as $row) {
             return $row;
@@ -308,6 +346,24 @@ class Advertiser_model extends CI_Model
 
         return true;
     }
+    
+    /**
+     * Update Advertisers from Temp
+     *
+     * Updates magazin
+     * 
+     * @param array $update_fields
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function updateAdvertiserFromTemp($update_fields, $mid)
+    {
+        array_shift($update_fields);
+        $this->db->update('linkshare_advertisers', $update_fields, array('mid' => $mid));
+
+        return true;
+    }
 
     /**
      * Delete Advertisers
@@ -352,7 +408,31 @@ class Advertiser_model extends CI_Model
             $offset = 0;
         return array_slice($params, $offset, $limit, true);
     }
+    
+    /**
+     * Check Advertiser exists by mid
+     *
+     * existsAdvertiser
+     * 	
+     * @param int $mid	
+     *
+     * @return boolean true
+     */
+    
+    function existsAdvertiser($mid,$sid)
+    {
+        $this->db->where('mid', $mid);
+        $this->db->where('id_site', $sid);
+        $result = $this->db->get('linkshare_advertisers_temp');
+        
+        $row = array();
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
 
+        return $row;
+    }
+    
     /**
      * Delete Magazin By Status	
      * 
@@ -364,6 +444,38 @@ class Advertiser_model extends CI_Model
     function deleteAdvertiserByStatus($id_site, $id_status)
     {
         $this->db->query("DELETE FROM  linkshare_advertisers WHERE id_site='$id_site' AND id_status='$id_status'");
+        return true;
+    }
+    
+    /**
+     * Delete Advertisers By MID	
+     * 
+     * @param int $id_site	
+     * @param int $id_status	
+     *
+     * @return boolean true
+     */
+    function deleteAdvertiserByMID($mid,$sid)
+    {
+        $this->db->where('mid', $mid);
+        $this->db->where('id_site', $sid);
+        $this->db->delete('linkshare_advertisers');
+        return true;
+    }
+    
+    /**
+     * Delete Temp Advertisers By MID	
+     * 
+     * @param int $id_site	
+     * @param int $id_status	
+     *
+     * @return boolean true
+     */
+    function deleteTempAdvertiserByMID($mid,$sid)
+    {
+        $this->db->where('mid', $mid);
+        $this->db->where('id_site', $sid);
+        $this->db->delete('linkshare_advertisers_temp');
         return true;
     }
 
@@ -380,6 +492,10 @@ class Advertiser_model extends CI_Model
 
         if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
+        }
+        
+        if (isset($filters['id_site'])) {
+            $this->db->where('id_site', $filters['id_site']);
         }
 
         $result = $this->db->get('linkshare_advertisers');

@@ -1,20 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Advertisers list
-<div style="padding: 0 0 0 40px; display:inline-block;">
-    <h6>Select Site</h6>
-    <form>
-    <select name="sites">
-        <?
-            foreach ($allSites as $site){
-            ?>
-                        <option value="<?=$site['id']?>"><?=$site['name']?></option>
-            <?
-                }
-        ?>
-    </select>
-    <button type="submit">Go</button>
-    </form>
-</div>
+<h1>Advertisers list for <?=$siteName?>
 </h1>
 
 <div style="width:1800px;text-align:center;" align="center">
@@ -42,8 +27,8 @@
                                 <td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">Edit</a>
 				</td>
-                                <td align="center"><?=$row['live'];?></td>
-                                <td align="center"><?=$row['updated'];?></td>
+                                <td align="center"><a href="#"><img src="<?php if($row['live']==0){$liveflag = 'liveoff-icon.png';}else{$liveflag = 'liveon-icon.png';}?><?=site_url('app/modules/linkshare/assets/'.$liveflag);?>" /></a></td>
+                                <td align="center"><a href="#"><img src="<?php if($row['updated']==0){$liveflag = 'updateoff-icon.png';}else{$liveflag = 'updateon-icon.png';}?><?=site_url('app/modules/linkshare/assets/'.$liveflag);?>" /></a></td>
 			</tr>
 		<?
 		}
