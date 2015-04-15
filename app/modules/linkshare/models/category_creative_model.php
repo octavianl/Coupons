@@ -28,7 +28,7 @@ class Category_creative_model extends CI_Model
      *
      * @return array
      */
-    function getCategories($filters)
+    function getCategories($filters = array())
     {
         $row = array();
 
@@ -65,6 +65,12 @@ class Category_creative_model extends CI_Model
         }
 
         return $row;
+    }
+    
+    function get_all_categories()
+    {
+        $query = $this->db->get('linkshare_categories_creative');
+        return $query->result();
     }
 
     /**
