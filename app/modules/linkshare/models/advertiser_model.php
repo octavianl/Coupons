@@ -289,6 +289,14 @@ class Advertiser_model extends CI_Model
      */
     function newAdvertiser($insert_fields)
     {
+        if (array_key_exists('id', $insert_fields)) {
+            unset($insert_fields['id']);
+        }
+        
+        if (array_key_exists('name_site', $insert_fields)) {
+            unset($insert_fields['name_site']);
+        }
+                
         $this->db->insert('linkshare_advertisers', $insert_fields);
         $insert_id = $this->db->insert_id();
 
@@ -359,7 +367,10 @@ class Advertiser_model extends CI_Model
      */
     function updateAdvertiserFromTemp($update_fields, $mid)
     {
-        array_shift($update_fields);
+        if (array_key_exists('id', $update_fields)) {
+            unset($update_fields['id']);
+        }
+                
         $this->db->update('linkshare_advertisers', $update_fields, array('mid' => $mid));
 
         return true;
@@ -471,11 +482,12 @@ class Advertiser_model extends CI_Model
      *
      * @return boolean true
      */
-    function deleteTempAdvertiserByMID($mid,$sid)
+    function deleteTempAdvertiserByMID($mid, $sid)
     {
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $sid);
         $this->db->delete('linkshare_advertisers_temp');
+        
         return true;
     }
 

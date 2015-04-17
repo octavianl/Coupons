@@ -16,16 +16,30 @@ if (!defined('BASEPATH')) {
 
 use app\third_party\LOG\Log;
 
+require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
+require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
+
 class Admincp2 extends Admincp_Controller
 {
+    /**
+     * Default coupon-land
+     * 
+     * @var int 
+     */
+    private $siteID = 2531438;
+    
     public function __construct()
     {
         parent::__construct();
 
         $this->admin_navigation->parent_active('linkshare');
+        
+        $siteID = $this->input->cookie('siteID');
+        // change if value already in cookie
+        if ($siteID) {
+            $this->siteID = $siteID;
+        }                
 
-        //error_reporting(E_ALL^E_NOTICE);
-        //error_reporting(E_WARNING);
     }
 
     public function index()
@@ -37,6 +51,7 @@ class Admincp2 extends Admincp_Controller
     {
         $this->admin_navigation->module_link('Add category', site_url('admincp2/linkshare/addCategory'));
         $this->admin_navigation->module_link('Parse linkshare category', site_url('admincp2/linkshare/parseCategories'));
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
 
         $this->load->library('dataset');
 
@@ -1039,5 +1054,73 @@ class Admincp2 extends Admincp_Controller
         readfile($temp_file);
         die();
     }
+  
+    public function getXmlCreativeCategories()
+    {            
+        $CI =& get_instance();
+        $this->load->library('admin_form'); 
+        $form = new Admin_form;
 
+        $this->load->model(array('site_model','advertiser_model'));
+        
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+
+        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteRow['id'])),
+                               $this->advertiser_model->getAdvertisers(array('id_status' => 2,'id_site'=>$siteRow['id'])));
+        
+        foreach ($current as $val){
+            $allMids[] = array( 'mid' => $val['mid'],'name' => $val['name']);
+        }
+     
+//        echo "<pre>";
+//        print_r($_GET['mid']);
+//        die();
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML/'));
+
+        $responseObj = array();
+
+        if(isset($_GET['mid'])){
+            
+            $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/'.$_GET['mid'];
+            
+            $config = new LinkshareConfig();
+
+            $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
+
+            //echo "accessToken = $accessToken" . PHP_EOL;
+
+            $request = new CurlApi($categoriesRequestUrl);
+            $request->setHeaders($config->getMinimalHeaders($accessToken));
+            $request->setGetData();
+            $request->send();
+
+            $responseObj = $request->getFormattedResponse();
+
+            if (!$responseObj) {
+                $this->notices->SetError('Refresh token');
+                $responseObj['header'] = $responseObj['body'] = 'ERROR';
+            } else {
+                //print '<pre>';
+                //print_r($responseObj['header']);
+            }
+        }
+//        print_r($_GET['status']);
+//        die();                  
+        
+        $form->fieldset('Xml');
+        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', true);
+        $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
+        
+        $data = array(
+            'form' => $form->display(),
+            'form_title' => 'Categories XML',
+            'form_scope' => 'category',
+            'site_name' => $siteRow['name'],
+            'allMids' => $allMids,
+            'form_action' => site_url('admincp/linkshare/')
+        );
+
+        $this->load->view('xml', $data);
+    }  
 }

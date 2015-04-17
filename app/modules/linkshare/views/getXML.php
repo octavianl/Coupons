@@ -3,7 +3,7 @@
 
 <input type="button" value="ADVERTISERS XML" onclick="javascript:location.href='admincp/linkshare/getXmlAdvertiser'">
 
-<input type="button" value="CATEGORIES XML" onclick="javascript:location.href='admincp2/linkshare/getXmlCategories'">
+<input type="button" value="CATEGORIES XML" onclick="javascript:location.href='admincp2/linkshare/getXmlCreativeCategories'">
 
 <input type="button" value="PRODUCTS XML" onclick="javascript:location.href='admincp3/linkshare/getXmlProducts'">
 

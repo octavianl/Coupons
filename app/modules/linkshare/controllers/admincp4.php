@@ -16,6 +16,9 @@ if (!defined('BASEPATH')) {
 
 use app\third_party\LOG\Log;
 
+require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
+require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
+
 class Admincp4 extends Admincp_Controller
 {
     public function __construct()

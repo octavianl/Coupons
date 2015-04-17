@@ -52,7 +52,7 @@ class Admincp extends Admincp_Controller
     public function listSites()
     {
         $this->admin_navigation->module_link('Add channel', site_url('admincp/linkshare/addSite/'));
-
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
 
         $columns = array(
@@ -242,7 +242,7 @@ class Admincp extends Admincp_Controller
     public function listNetworks()
     {
         $this->admin_navigation->module_link('Add network', site_url('admincp/linkshare/addNetwork/'));
-
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
 
         $columns = array(
@@ -390,7 +390,7 @@ class Admincp extends Admincp_Controller
     public function listStatus()
     {
         $this->admin_navigation->module_link('Add status', site_url('admincp/linkshare/addStatus/'));
-
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
 
         $columns = array(
@@ -1119,27 +1119,26 @@ class Admincp extends Admincp_Controller
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
         $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
-        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteID['id'])),
-                               $this->advertiser_model->getAdvertisers(array('id_status' => 2,'id_site'=>$siteID['id'])));
+        $current = array_merge(
+            $this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteID['id'])),
+            $this->advertiser_model->getAdvertisers(array('id_status' => 2,'id_site'=>$siteID['id']))
+        );
 
         foreach ($current as $val) {
-
             $existsTempMID = $this->advertiser_model->existsAdvertiser($val['mid'],$siteID['id']);
             if($existsTempMID){
-                //Update advertiser linkshare_advertiser from linkshare_advertiser_temp by mid
+                // Update advertiser linkshare_advertiser from linkshare_advertiser_temp by mid
                 $tempRow = $this->advertiser_model->getTempAdvertiserByMID($val['mid'],$siteID['id']);
                 $this->advertiser_model->updateAdvertiserFromTemp($tempRow,$val['mid']);
-                $this->advertiser_model->deleteTempAdvertiserByMID($val['mid']);               
+                $this->advertiser_model->deleteTempAdvertiserByMID($val['mid'],$siteID['id']);                
             }else {
-                //Delete advertiser from linkshare_advertiser_temp by mid
+                // Delete advertiser from linkshare_advertiser_temp by mid
                 $this->advertiser_model->deleteAdvertiserByMID($val['mid'],$siteID['id']);
             }       
         }
         
-        foreach ($temp as $val) {
-            array_shift($val);
-            array_pop($val);
-
+        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        foreach ($temp as $val) {                                        
             $this->advertiser_model->newAdvertiser($val);
         }
 
@@ -1150,6 +1149,10 @@ class Admincp extends Admincp_Controller
     public function getXML(){
         $this->load->view('getXML');
     }
+    
+    public function info(){
+        $this->load->view('info');
+    }
 
     public function getXmlAdvertiser()
     {            
@@ -1157,11 +1160,11 @@ class Admincp extends Admincp_Controller
         $this->load->library('admin_form'); 
         $form = new Admin_form;
                 
-        $this->load->model('site_model');
-        $this->load->model('status_model');        
+        $this->load->model(array('site_model','status_model'));
+     
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();   
-        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML/'));
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML'));
         $linkshareConstants = array(
             'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
             'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED,
@@ -1205,9 +1208,10 @@ class Admincp extends Admincp_Controller
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Advertisers XML',
+            'form_scope' => 'advertiser',
             'site_name' => $siteRow['name'],
             'allStatus' => $allStatus,
-            'form_action' => site_url('admincp/linkshare/')
+            'form_action' => site_url('admincp/linkshare/getXmlAdvertiser/')
         );
 
         $this->load->view('xml', $data);
