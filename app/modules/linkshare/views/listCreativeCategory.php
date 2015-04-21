@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Creative categories</h1>
+<h1>Creative categories for <?=$site_name?></h1>
 <div style="width:1800px;text-align:center;" align="center">
         <?=$this->dataset->table_head();?>
 	<?

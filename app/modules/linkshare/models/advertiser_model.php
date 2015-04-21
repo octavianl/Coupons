@@ -356,6 +356,42 @@ class Advertiser_model extends CI_Model
     }
     
     /**
+     * Change PCC flag to 1
+     *
+     * Updates magazin
+     * 
+     * @param array $update_fields
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function changePCC($mid, $site_id)
+    {
+        $data = array('pcc' => 1);
+        $this->db->update('linkshare_advertisers', $data, array('mid' => $mid,'id_site' => $site_id));
+
+        return true;
+    }
+    
+    /**
+     * Change PCC flag to 1
+     *
+     * Updates magazin
+     * 
+     * @param array $update_fields
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function checkPCC()
+    {
+        $this->db->where('ppc', 0);
+        $result = $this->db->from('linkshare_advertisers');
+
+        return $result->num_rows();
+    }
+
+    /**
      * Update Advertisers from Temp
      *
      * Updates magazin

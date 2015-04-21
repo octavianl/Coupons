@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -13,42 +14,37 @@ if (!defined('BASEPATH')) {
  * @link     http://www.weblight.ro/
  *
  */
-
 use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
-class Admincp2 extends Admincp_Controller
-{
+class Admincp2 extends Admincp_Controller {
+
     /**
      * Default coupon-land
      * 
      * @var int 
      */
     private $siteID = 2531438;
-    
-    public function __construct()
-    {
+
+    public function __construct() {
         parent::__construct();
 
         $this->admin_navigation->parent_active('linkshare');
-        
+
         $siteID = $this->input->cookie('siteID');
         // change if value already in cookie
         if ($siteID) {
             $this->siteID = $siteID;
-        }                
-
+        }
     }
 
-    public function index()
-    {
+    public function index() {
         redirect('admincp2/linkshare/listCategories');
     }
 
-    public function listCategories()
-    {
+    public function listCategories() {
         $this->admin_navigation->module_link('Add category', site_url('admincp2/linkshare/addCategory'));
         $this->admin_navigation->module_link('Parse linkshare category', site_url('admincp2/linkshare/parseCategories'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
@@ -88,8 +84,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('listCategories');
     }
 
-    public function addCategory()
-    {
+    public function addCategory() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -107,8 +102,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('addCategory', $data);
     }
 
-    public function addCategoryValidate($action = 'new', $id = false)
-    {
+    public function addCategoryValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('id_category', 'Id categorie linkshare', 'required|trim');
@@ -149,8 +143,7 @@ class Admincp2 extends Admincp_Controller
         return true;
     }
 
-    public function editCategory($id)
-    {
+    public function editCategory($id) {
         $this->load->model('category_model');
         $categorie = $this->category_model->getCategory($id);
 
@@ -175,8 +168,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('addCategory', $data);
     }
 
-    public function deleteCategory($contents, $return_url)
-    {
+    public function deleteCategory($contents, $return_url) {
 
         $this->load->library('asciihex');
         $this->load->model('category_model');
@@ -195,8 +187,7 @@ class Admincp2 extends Admincp_Controller
         return true;
     }
 
-    public function parseCategoryUrl()
-    {
+    public function parseCategoryUrl() {
         $url = "http://helpcenter.linkshare.com/publisher/questions.php?questionid=709";
 
         $cUrl = curl_init();
@@ -236,8 +227,7 @@ class Admincp2 extends Admincp_Controller
         return $categories;
     }
 
-    public function parseCategories()
-    {
+    public function parseCategories() {
         $this->admin_navigation->module_link('Update linkshare categories', site_url('admincp2/linkshare/refreshCategories/'));
 
         $categories = $this->parseCategoryUrl();
@@ -287,8 +277,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('refreshCategories', $data);
     }
 
-    public function parseCreativeCategorySite($id)
-    {
+    public function parseCreativeCategorySite($id) {
         $this->admin_navigation->module_link('Update linkshare categories', site_url('admincp2/linkshare/refresh_categorii_site/' . $id));
 
         $aux = '';
@@ -338,14 +327,16 @@ class Admincp2 extends Admincp_Controller
 
         $this->load->view('parseCategories', $data);
     }
-    public function listCreativeCategory($id = 1)
-    {
+
+    public function listCreativeCategory() {
+        $this->load->model(array('site_model', 'category_creative_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+
         $this->admin_navigation->module_link('Add creative category', site_url('admincp2/linkshare/addCreativeCategory'));
-        $this->admin_navigation->module_link('Parse creative categories add them into DB', site_url('admincp2/linkshare/parseCreativeCategories/' . $id));
+        $this->admin_navigation->module_link('Parse ALL Creative Categories', site_url('admincp2/linkshare/parseCreativeCategories/'));
         $this->admin_navigation->module_link('Export CSV', site_url('admincp2/linkshare/export_csv/category_creative'));
-        
+
         $this->load->library('dataset');
-        $this->load->model('category_creative_model');
 
         $columns = array(
             array(
@@ -378,12 +369,12 @@ class Admincp2 extends Admincp_Controller
 
         $filters = array();
         $filters['limit'] = 50;
-        $filters['id_site'] = $id;
+        $filters['id_site'] = $siteRow['id'];
         $filters['name'] = true;
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'getCategories', $filters);
-        $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/' . $id));
+        $this->dataset->base_url(site_url('admincp2/linkshare/listCreativeCategory/'));
         $this->dataset->rows_per_page(50);
 
         if (isset($_GET['offset']))
@@ -404,7 +395,7 @@ class Admincp2 extends Admincp_Controller
         }
 
         // total rows
-        $this->db->where('id_site', $id);
+        $this->db->where('id_site', $siteRow['id']);
         $total_rows = $this->category_creative_model->getCategoriesLines($filters);
         $this->dataset->total_rows($total_rows);
 
@@ -412,12 +403,14 @@ class Admincp2 extends Admincp_Controller
 
         // add actions
         $this->dataset->action('Delete', 'admincp2/linkshare/deleteCreativeCategory');
+        $data = array(
+            'site_name' => $siteRow['name']
+        );
 
-        $this->load->view('listCreativeCategory');
+        $this->load->view('listCreativeCategory', $data);
     }
 
-    public function addCreativeCategory()
-    {
+    public function addCreativeCategory() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -438,8 +431,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('addCreativeCategory', $data);
     }
 
-    public function addCreativeCategoryValidate($action = 'new', $id = false)
-    {
+    public function addCreativeCategoryValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('cat_id', 'Creative category ID linkshare', 'required|trim');
@@ -483,8 +475,7 @@ class Admincp2 extends Admincp_Controller
         return true;
     }
 
-    public function editCreativeCategory($id)
-    {
+    public function editCreativeCategory($id) {
         $this->load->model('category_creative_model');
         $categorie = $this->category_creative_model->getCategory($id);
 
@@ -512,8 +503,7 @@ class Admincp2 extends Admincp_Controller
         $this->load->view('addCreativeCategory', $data);
     }
 
-    public function deleteCreativeCategory($contents, $return_url)
-    {
+    public function deleteCreativeCategory($contents, $return_url) {
 
         $this->load->library('asciihex');
         $this->load->model('category_creative_model');
@@ -532,116 +522,14 @@ class Admincp2 extends Admincp_Controller
         return true;
     }
 
-    public function parseCreativeCategories($id)
-    {
-        //error_reporting(E_ALL);
-        //ini_set('display_errors',1);
-        include "app/third_party/LOG/Log.php";
-        
-        $mids = array();
-        $aux = '';
-        $this->load->model('site_model');
-        $aux = $this->site_model->getSite($id);
-        $token = $aux['token'];
-        $i = 0;
-        $site = $aux['name'];
-        $offset = 0;
-        if (isset($_GET['offset']) && $_GET['offset'])
-            $offset = $_GET['offset'];
-
-        $this->load->model('advertiser_model');
-        $filters['id_site'] = $id;
-        $this->load->model('status_model');
-        $filters['id_status'] = $this->status_model->getStatusByName('approved');
-        $mag = array();
-        $mag = $this->advertiser_model->getAdvertisers($filters);
-        foreach ($mag as $val) {
-            $mids[] = $val['mid'];
-        }
-
-        $j = count($mids);
-
-        $cate = 0;
-
-        while ($j > 0) {
-            $cats = array();
-            $aux = @file_get_contents('http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $token . '/' . $mids[$j - 1]);
-            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-            //echo $categories->getName().'<br/>';die;
-            if (isset($categories) && is_object($categories)) {
-                $kids = $categories->children('ns1', true);
-                //var_dump(count($kids));die;
-
-                foreach ($kids as $child) {
-                    $cats[$i]['id'] = $i + 1;
-                    $cats[$i]['id_site'] = $id;
-                    $cats[$i]['cat_id'] = (string) $child->catId;
-                    $cats[$i]['name'] = (string) $child->catName;
-                    $cats[$i]['mid'] = (string) $child->mid;
-                    $cats[$i]['nid'] = (string) $child->nid;
-                    //$cats[$i]['limit'] = 10;
-                    //$cats[$i]['offset'] = $offset;
-                    $i++;
-                }
-
-                $cate += count($cats);
-
-                $this->load->model('category_creative_model');
-                //delete old categories for this mid and this site id
-                $this->category_creative_model->deleteCategoryByMid($id, $mids[$j - 1]);
-
-                foreach ($cats as $cat) {
-                    $cat['id'] = '';
-                    $this->category_creative_model->newCategory($cat);
-                }
-
-                //print '<pre>';print_r($cats);die;
-            } else {
-                $message = 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $token . '/' . $mids[$j - 1] . ' xml eroare ';
-                Log::error($message);
-            }
-            $j--;
-        }
-
-        $this->admin_navigation->module_link('See parsed creative category', site_url('admincp2/linkshare/listCreativeCategory/' . $id));
-
-        $this->load->library('dataset');
-
-        $columns = array(
-            array(
-                'name' => 'Parsed creative categories',
-                'width' => '50%'),
-            array(
-                'name' => 'Site ID',
-                'width' => '50%'),
-        );
-
-        $catz = array();
-        $catz[0]['site'] = $site;
-        $catz[0]['cate'] = $cate;
-
-        $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'parseCategories', $catz);
-        $this->dataset->base_url(site_url('admincp2/linkshare/parseCreativeCategories/' . $id));
-        $this->dataset->rows_per_page(10);
-
-        // total rows
-        $total_rows = 1;
-        $this->dataset->total_rows($total_rows);
-
-        $this->dataset->initialize();
-
-        $this->load->view('listCreativeCategoryParsed');
-    }
-    
-     function updateFilters() {
+    public function updateFilters() {
         $this->load->library('asciihex');
-        
+
         // old filters
         $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));
-        
+
         $filters = array();
-        
+
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
                 unset($_POST[$key]);
@@ -650,7 +538,7 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['merged_category'])) {
             $filters['merged_category'] = $_POST['merged_category'];
         }
-        
+
         if (!empty($_POST['all_page_category'])) {
             $filters['all_page_category'] = $_POST['all_page_category'];
         }
@@ -662,15 +550,15 @@ class Admincp2 extends Admincp_Controller
                 // current page checkboxes
                 $all_page_category_ok[] = $cat;
             }
-        }                
-        
+        }
+
         if (!empty($_POST['check_category'])) {
             $filters['check_category'] = $_POST['check_category'];
         }
-        
+
         $check_category_ok = array();
         $check_category = explode(',', $filters['check_category']);
-        
+
         // remove 0
         foreach ($check_category as $cat) {
             if ($cat) {
@@ -678,10 +566,10 @@ class Admincp2 extends Admincp_Controller
                 $check_category_ok[] = $cat;
             }
         }
-        
+
         $filters_decode_check_category_ok = array();
         $filters_decode_check_category = explode(',', $filters_decode['check_category']);
-        
+
         // remove 0
         foreach ($filters_decode_check_category as $cat) {
             if ($cat) {
@@ -696,16 +584,16 @@ class Admincp2 extends Admincp_Controller
                 $filters_decode_check_category_ok[] = $cat;
             }
         }
-        
+
         $checkboxes_to_remove = array();
         $checkboxes_to_remove = array_diff($all_page_category_ok, $check_category_ok);
         // remove old checkboxes from this page
-        $filters_decode_check_category_ok = array_diff($filters_decode_check_category_ok, $checkboxes_to_remove);                
-        
+        $filters_decode_check_category_ok = array_diff($filters_decode_check_category_ok, $checkboxes_to_remove);
+
         $filters_decode_check_category_ok = implode(',', $filters_decode_check_category_ok);
-        
+
         $filters['check_category'] = $filters_decode_check_category_ok;
-        
+
         if (!empty($_POST['nume'])) {
             $filters['nume'] = $_POST['nume'];
         }
@@ -715,19 +603,18 @@ class Admincp2 extends Admincp_Controller
         if (!empty($_POST['offset'])) {
             $filters['offset'] = $_POST['offset'];
         }
-        
+
         if (!empty($_POST['limit'])) {
             $filters['limit'] = $_POST['limit'];
         }
-        
+
         //print_r($filters);
-        
+
         $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
         echo $filters;
     }
 
-    public function joinCreativeCategory($id = 1)
-    {
+    public function joinCreativeCategory($id = 1) {
         $this->admin_navigation->module_link('View Merged Categories', site_url('admincp2/linkshare/listMergedCategories/'));
 
         $this->load->library('dataset');
@@ -768,66 +655,65 @@ class Admincp2 extends Admincp_Controller
         $filters = $filters_decode = array();
         //$filters['limit'] = 50;
         $filters['id_site'] = $id;
-        $filters['name'] = true; 
-        
-        if (isset($_GET['offset'])){
-        $filters['offset'] = $_GET['offset'];}
-       
-        if (isset($_GET['filterz'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filterz'])));            
-        } elseif (isset($_POST['filterz'])) {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));            
+        $filters['name'] = true;
+
+        if (isset($_GET['offset'])) {
+            $filters['offset'] = $_GET['offset'];
         }
-        
+
+        if (isset($_GET['filterz'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filterz'])));
+        } elseif (isset($_POST['filterz'])) {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));
+        }
+
 //        if (isset($filters_decode['nume']))
 //                $filters['nume'] = $filters_decode['nume'];
 //        
 //        $filters['offset'] = $filters_decode['offset'];
-       
+
         if (isset($filters_decode) && !empty($filters_decode)) {
             foreach ($filters_decode as $key => $val) {
                 $filters[$key] = $val;
             }
         }
-       
+
         foreach ($_POST as $key => $val) {
             if (in_array($val, array('filter results'))) {
                 unset($_POST[$key]);
             }
         }
-        
+
         print '<pre>FILTERS DECODE';
         print_r($filters_decode);
-        print '</pre>';      
- 
-        if ($_POST['saving'] == 'ok'){
-            if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])){
+        print '</pre>';
+
+        if ($_POST['saving'] == 'ok') {
+            if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])) {
                 $checked_values = array();
                 $checked_values = explode(',', $filters_decode['check_category']);
-                if(!empty($_POST['check_category'])){
+                if (!empty($_POST['check_category'])) {
                     foreach ($_POST['check_category'] as $cat) {
                         if ($cat) {
                             //curent checkboxes
                             $checked_values[] = $cat;
                         }
                     }
-                }  
-                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);            
-                $id_join_category = $this->category_creative_model->newJoinCategory($id_merged_category,$checked_values);
-                
-                $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
+                }
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);
+                $id_join_category = $this->category_creative_model->newJoinCategory($id_merged_category, $checked_values);
+
+                $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
                 $this->notices->SetNotice($message);
                 redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
-                
-            }elseif(isset($_POST['merged_category']) && !empty($_POST['check_category'])){
-                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);            
-                $this->category_creative_model->newJoinCategory($id_merged_category,$_POST['check_category']);
+            } elseif (isset($_POST['merged_category']) && !empty($_POST['check_category'])) {
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);
+                $this->category_creative_model->newJoinCategory($id_merged_category, $_POST['check_category']);
 
-                $message = "New Merged Category (".$_POST['merged_category'].") added successfully.";
+                $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
                 $this->notices->SetNotice($message);
                 redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
-
-            }  else {
+            } else {
                 $this->notices->SetNotice('Check if any checkboxes are selected!');
                 redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
             }
@@ -836,7 +722,7 @@ class Admincp2 extends Admincp_Controller
 //        $filters['nume'] = $filters_decode['nume'];
 //        
 //        $filters['mid'] = $filters_decode['mid'];
-        
+
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'getCreativeForMerge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
@@ -847,23 +733,23 @@ class Admincp2 extends Admincp_Controller
 
         if (isset($_GET['mid']))
             $filters['mid'] = $_GET['mid'];
-        
+
         // &limit=10&offset=20
         if (isset($_POST['offset'])) {
             $_GET['offset'] = $_POST['offset'];
         } else {
             $_GET['offset'] = $filters_decode['offset'];
         }
-        
+
         if (isset($_POST['limit'])) {
             $_GET['limit'] = $_POST['limit'];
         }
-        
+
         print '<pre>POST';
-        print_r($_POST);        
+        print_r($_POST);
         print '</pre>';
-        
-        print '<pre>GET';        
+
+        print '<pre>GET';
         print_r($_GET);
         print '</pre>';
 
@@ -874,24 +760,23 @@ class Admincp2 extends Admincp_Controller
         $this->db->where('id_site', $id);
         $total_rows = $this->category_creative_model->getCategoriesLines($filters);
 
-        $this->dataset->total_rows($total_rows); 
-        
+        $this->dataset->total_rows($total_rows);
+
         $this->dataset->initialize();
 
         // add actions
-        
+
         $data = array(
-          'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz'],
-          'name_search' => $filters['nume'],
-          'mid_search' => $filters['mid'],
-          'name_merged' => $filters['merged_category']
+            'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz'],
+            'name_search' => $filters['nume'],
+            'mid_search' => $filters['mid'],
+            'name_merged' => $filters['merged_category']
         );
 
         $this->load->view('joinCreativeCategory', $data);
     }
-    
-    public function listMergedCategories()
-    {
+
+    public function listMergedCategories() {
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
 
         $this->load->library('dataset');
@@ -914,10 +799,10 @@ class Admincp2 extends Admincp_Controller
 //        print_r($result);
 //        echo "</pre>";
 //        die;
-        
+
         $filters = array();
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model','listMergedCategory', $filters);
+        $this->dataset->datasource('category_creative_model', 'listMergedCategory', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listMergedCategories'));
         $this->dataset->rows_per_page(10);
 
@@ -932,73 +817,71 @@ class Admincp2 extends Admincp_Controller
 
         $this->load->view('listMergedCategory');
     }
-    
-    public function editMergedCategory($id)
-    {
+
+    public function editMergedCategory($id) {
         $this->load->model('category_creative_model');
         $fields['name'] = $this->input->post('category_name');
-        
+
         $category_name = $this->category_creative_model->getMergedCategoryByID($id);
-                
+
 //        echo "<pre>";
 //        print_r($category_name);
 //        echo "</pre>";
 //        die;
 
         if (!empty($fields['name']) && isset($fields['name'])) {
-            
+
             $this->category_creative_model->updateMergedCategory($fields, $id);
             $this->notices->SetNotice('Category updated successfully.');
 
             redirect('admincp2/linkshare/listMergedCategories/');
             return true;
         }
-        
-        $data = array(
-               	'merged_category_name' => $category_name[0]['name'],
-                'form_action' => site_url('admincp2/linkshare/editMergedCategory/'.$id),
-	);
-        
-    	$this->load->view('editMergedCategory',$data);
 
+        $data = array(
+            'merged_category_name' => $category_name[0]['name'],
+            'form_action' => site_url('admincp2/linkshare/editMergedCategory/' . $id),
+        );
+
+        $this->load->view('editMergedCategory', $data);
     }
-    
+
     function deleteMergedCatory($contents, $return_url) {
         $this->load->library('asciihex');
         $this->load->model('category_creative_model');
-        
+
         $contents = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
         $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
-        
+
         foreach ($contents as $content) {
             $this->category_creative_model->deleteMergedCategory($content);
         }
-        
+
         $this->notices->SetNotice('Merged Category deleted successfully.');
         redirect($return_url);
         return TRUE;
     }
-    
-    function ajaxDeleteCategory($MergedCategory_id, $JoinsCategory_id){
+
+    function ajaxDeleteCategory($MergedCategory_id, $JoinsCategory_id) {
         $this->load->model('category_creative_model');
         $this->category_creative_model->deleteJoinCategory($MergedCategory_id, $JoinsCategory_id);
-        
-        $message = "Joins Category id:".$JoinsCategory_id." from Merged Category id:".$MergedCategory_id."deleted successfully.";
+
+        $message = "Joins Category id:" . $JoinsCategory_id . " from Merged Category id:" . $MergedCategory_id . "deleted successfully.";
         $this->notices->SetNotice($message);
-        
+
         $return_url = site_url('admincp2/linkshare/listMergedCategories');
         redirect($return_url);
         return TRUE;
     }
-    
+
     function export_csv($table) {
         // Create the real model name based on the $table variable
-        $model = $table.'_model';
-        
+        $model = $table . '_model';
+
         // Since we might be dealing with very large data
         // Ensure we have time to process it
         set_time_limit(0);
-        
+
         $temp_file = FCPATH . 'writeable/' . $table . '-' . date("Y-m-d") . '.csv';
 
         $this->load->helper('file');
@@ -1008,8 +891,7 @@ class Admincp2 extends Admincp_Controller
         // If the file already exists, we need
         // to get rid of it since this is a new download.
         $f = @fopen($temp_file, 'r+');
-        if ($f !== false)
-        {
+        if ($f !== false) {
             ftruncate($f, 0);
             fclose($f);
         }
@@ -1018,9 +900,8 @@ class Admincp2 extends Admincp_Controller
         $need_header = true;    // Do we need the CSV header?
 
         $query = $this->$model->get_all_categories();
-        
-        foreach($query as $row)
-        {
+
+        foreach ($query as $row) {
             // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
             $main_array[] = array(
                 'id' => $row->cat_id,
@@ -1040,11 +921,10 @@ class Admincp2 extends Admincp_Controller
         $this->array_to_csv->input($main_array);
         $data = $this->array_to_csv->output($need_header, true);
         fwrite($csv_file, $data);
-        
+
         // Make sure we're not output buffering anymore so we don't
         // run out of memory due to buffering.
-        if (ob_get_level() > 0)
-        {
+        if (ob_get_level() > 0) {
             ob_end_flush();
         }
         //ob_implicit_flush(true);
@@ -1054,41 +934,108 @@ class Admincp2 extends Admincp_Controller
         readfile($temp_file);
         die();
     }
-  
-    public function getXmlCreativeCategories()
-    {            
-        $CI =& get_instance();
-        $this->load->library('admin_form'); 
+
+    public function parseCreativeCategories() {
+        //error_reporting(E_ALL);
+        //ini_set('display_errors',1);
+        include "app/third_party/LOG/Log.php";
+        $CI = & get_instance();
+
+        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+
+        $config = new LinkshareConfig();
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
+
+        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'])));
+        $valCurrent = array_shift($current);
+        
+        //echo"<pre>";print_r($valCurrent);die;
+        if ($valCurrent['pcc'] == 0) {
+            $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/' . $valCurrent['mid'];
+
+            $request = new CurlApi($categoriesRequestUrl);
+            $request->setHeaders($config->getMinimalHeaders($accessToken));
+            $request->setGetData();
+            $request->send();
+
+            $responseObj = $request->getFormattedResponse();
+
+            $cats = array();
+            $aux = $responseObj['body'];
+
+            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
+            //echo $categories->getName().'<br/>';die;
+            if (isset($categories) && is_object($categories)) {
+                $kids = $categories->children('ns1', true);
+                //echo"<pre>";print_r($kids);die;
+                foreach ($kids as $child) {
+                    //$cats[$i]['id'] = $i + 1;
+                    $temp = array(
+                        'id_site' => $siteRow['id'],
+                        'cat_id' => (string) $child->catId,
+                        'name' => (string) $child->catName,
+                        'mid' => (string) $child->mid,
+                        'nid' => (string) $child->nid
+                    );
+
+                    $cats[] = $temp;
+                    $i++;
+                }
+
+                // delete old categories for this mid and this site id
+                $this->category_creative_model->deleteCategoryByMid($siteRow['id'], $valCurrent['mid']);
+                //echo"<pre>";print_r($cats);die;
+                foreach ($cats as $cat) {
+                    unset($cat['id']);
+                    $this->category_creative_model->newCategory($cat);
+                }
+
+                print '<pre>';
+                print_r($cats);
+            } else {
+                $message = 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $valCurrent['mid'] . ' xml error Site name: ' . $valCurrent['name_site'];
+                Log::error($message);
+            }
+
+            $this->advertiser_model->changePCC($valCurrent['mid'], $siteRow['id']);
+        
+            echo '<META http-equiv="refresh" content="3; URL=/admincp2/linkshare/parseCreativeCategories/">';
+            
+        } else {  }
+
+                
+        $exit = $this->advertiser_model->checkPCC();
+        if ($exit == 0) { redirect('admincp2/linkshare/listCreativeCategory/'); }
+    }
+
+    public function getXmlCreativeCategories() {
+        $CI = & get_instance();
+        $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $this->load->model(array('site_model','advertiser_model'));
-        
+        $this->load->model(array('site_model', 'advertiser_model'));
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML/'));
+        $this->admin_navigation->module_link('Parse ALL Creative Categories', site_url('admincp2/linkshare/parseCreativeCategories'));
+
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
-        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteRow['id'])),
-                               $this->advertiser_model->getAdvertisers(array('id_status' => 2,'id_site'=>$siteRow['id'])));
-        
-        foreach ($current as $val){
-            $allMids[] = array( 'mid' => $val['mid'],'name' => $val['name']);
+        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'])));
+
+        foreach ($current as $val) {
+            $allMids[] = array('mid' => $val['mid'], 'name' => $val['name']);
         }
-     
-//        echo "<pre>";
-//        print_r($_GET['mid']);
-//        die();
-        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML/'));
 
         $responseObj = array();
 
-        if(isset($_GET['mid'])){
-            
-            $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/'.$_GET['mid'];
-            
+        if (isset($_GET['mid'])) {
+
+            $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/' . $_GET['mid'];
+
             $config = new LinkshareConfig();
 
             $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
-
-            //echo "accessToken = $accessToken" . PHP_EOL;
 
             $request = new CurlApi($categoriesRequestUrl);
             $request->setHeaders($config->getMinimalHeaders($accessToken));
@@ -1105,13 +1052,11 @@ class Admincp2 extends Admincp_Controller
                 //print_r($responseObj['header']);
             }
         }
-//        print_r($_GET['status']);
-//        die();                  
-        
+
         $form->fieldset('Xml');
         $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', true);
         $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
-        
+
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Categories XML',
@@ -1122,5 +1067,6 @@ class Admincp2 extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
-    }  
+    }
+
 }
