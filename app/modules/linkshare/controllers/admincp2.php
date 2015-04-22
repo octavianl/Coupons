@@ -187,46 +187,6 @@ class Admincp2 extends Admincp_Controller {
         return true;
     }
 
-    public function parseCategoryUrl() {
-        $url = "http://helpcenter.linkshare.com/publisher/questions.php?questionid=709";
-
-        $cUrl = curl_init();
-        curl_setopt($cUrl, CURLOPT_URL, $url);
-        curl_setopt($cUrl, CURLOPT_HTTPGET, 1);
-        //curl_setopt($cUrl, CURLOPT_USERAGENT,'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.2; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0)');
-        //curl_setopt($cUrl, CURLOPT_USERAGENT,$_SERVER['HTTP_USER_AGENT']);
-        curl_setopt($cUrl, CURLOPT_RETURNTRANSFER, 1);
-        //curl_setopt($cUrl, CURLOPT_TIMEOUT, '3');
-        //$pageContent = trim(curl_exec($cUrl));
-        $pageContent = curl_exec($cUrl);
-        curl_close($cUrl);
-
-        //preg_match_all('|<a href="(.*)" title="View all (.*)">|',$pageContent,$out);
-        preg_match_all('|<span>(.*)</span>|', $pageContent, $out);
-        $categories = array();
-        //$data['content'] = print_r($out,1);
-
-        foreach ($out[1] as $k => $v) {
-            if ($k > 2) {
-                if ($k % 2)
-                    $ids[] = $v;
-                else
-                    $cat[] = $v;
-            }
-        }
-
-        $categories = array();
-        foreach ($ids as $k => $v) {
-            $categories[] = array('id_category' => $v,
-                'name' => $cat[$k]
-            );
-        }
-
-        //print '<pre>';print_r($categories);die;
-
-        return $categories;
-    }
-
     public function parseCategories() {
         $this->admin_navigation->module_link('Update linkshare categories', site_url('admincp2/linkshare/refreshCategories/'));
 
@@ -947,11 +907,12 @@ class Admincp2 extends Admincp_Controller {
         $config = new LinkshareConfig();
         $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
 
-        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'])));
+        $current = $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'], 'pcc' => 0));
+        //echo"<pre>";print_r(count($current));die;
         $valCurrent = array_shift($current);
-        
+
         //echo"<pre>";print_r($valCurrent);die;
-        if ($valCurrent['pcc'] == 0) {
+        if (count($current) != 0) {
             $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/' . $valCurrent['mid'];
 
             $request = new CurlApi($categoriesRequestUrl);
@@ -970,7 +931,6 @@ class Admincp2 extends Admincp_Controller {
                 $kids = $categories->children('ns1', true);
                 //echo"<pre>";print_r($kids);die;
                 foreach ($kids as $child) {
-                    //$cats[$i]['id'] = $i + 1;
                     $temp = array(
                         'id_site' => $siteRow['id'],
                         'cat_id' => (string) $child->catId,
@@ -986,27 +946,30 @@ class Admincp2 extends Admincp_Controller {
                 // delete old categories for this mid and this site id
                 $this->category_creative_model->deleteCategoryByMid($siteRow['id'], $valCurrent['mid']);
                 //echo"<pre>";print_r($cats);die;
-                foreach ($cats as $cat) {
-                    unset($cat['id']);
-                    $this->category_creative_model->newCategory($cat);
+                foreach ($cats as $key => $cat) {
+                    if ($cat['name'] == 'Default') {
+                        unset($cats[$key]);
+                    } elseif ($cat['mid'] == 0) {
+                        unset($cats[$key]);
+                    } else {
+                        $this->category_creative_model->newCategory($cat);
+                    }
                 }
-
-                print '<pre>';
-                print_r($cats);
+//                die;
+//                print '<pre>';
+//                print_r($cats);
             } else {
+                $this->advertiser_model->changePCC(2, $valCurrent['mid'], $siteRow['id']);
                 $message = 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $valCurrent['mid'] . ' xml error Site name: ' . $valCurrent['name_site'];
                 Log::error($message);
             }
 
-            $this->advertiser_model->changePCC($valCurrent['mid'], $siteRow['id']);
-        
-            echo '<META http-equiv="refresh" content="3; URL=/admincp2/linkshare/parseCreativeCategories/">';
-            
-        } else {  }
+            $this->advertiser_model->changePCC(1, $valCurrent['mid'], $siteRow['id']);
 
-                
-        $exit = $this->advertiser_model->checkPCC();
-        if ($exit == 0) { redirect('admincp2/linkshare/listCreativeCategory/'); }
+            echo '<META http-equiv="refresh" content="10; URL=/admincp2/linkshare/parseCreativeCategories/">';
+        } else {
+            redirect('admincp2/linkshare/listCreativeCategory/');
+        }
     }
 
     public function getXmlCreativeCategories() {

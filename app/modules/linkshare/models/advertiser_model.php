@@ -62,6 +62,10 @@ class Advertiser_model extends CI_Model
         if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
         }
+        
+        if (isset($filters['pcc'])) {
+            $this->db->where('pcc', $filters['pcc']);
+        }
 
         if (isset($filters['id_status']))
             $this->db->where('id_status', $filters['id_status']);
@@ -365,9 +369,9 @@ class Advertiser_model extends CI_Model
      *
      * @return boolean true
      */
-    function changePCC($mid, $site_id)
+    function changePCC($pcc, $mid, $site_id)
     {
-        $data = array('pcc' => 1);
+        $data = array('pcc' => $pcc);
         $this->db->update('linkshare_advertisers', $data, array('mid' => $mid,'id_site' => $site_id));
 
         return true;
@@ -401,13 +405,20 @@ class Advertiser_model extends CI_Model
      *
      * @return boolean true
      */
-    function updateAdvertiserFromTemp($update_fields, $mid)
+    function updateAdvertiserFromTemp($update_fields, $mid, $id_site)
     {
         if (array_key_exists('id', $update_fields)) {
             unset($update_fields['id']);
         }
+        
+        if (array_key_exists('id_site', $update_fields)) {
+            unset($update_fields['id_site']);
+        }
+        if (array_key_exists('live', $update_fields)) {
+            unset($update_fields['live']);
+        }
                 
-        $this->db->update('linkshare_advertisers', $update_fields, array('mid' => $mid));
+        $this->db->update('linkshare_advertisers', $update_fields, array('mid' => $mid, 'id_site' => $id_site));
 
         return true;
     }

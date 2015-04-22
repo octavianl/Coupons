@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -13,44 +14,40 @@ if (!defined('BASEPATH')) {
  * @link     http://www.weblight.ro/
  *
  */
-
 use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
-class Admincp extends Admincp_Controller
-{
+class Admincp extends Admincp_Controller {
+
     /**
      * Default coupon-land
      * 
      * @var int 
      */
     private $siteID = 2531438;
-    
-    public function __construct()
-    {
+
+    public function __construct() {
         parent::__construct();
-        
+
         $this->admin_navigation->parent_active('linkshare');
-        
+
         $siteID = $this->input->cookie('siteID');
         // change if value already in cookie
         if ($siteID) {
             $this->siteID = $siteID;
-        }                
+        }
 
-        error_reporting(E_ALL^E_NOTICE);
+        error_reporting(E_ALL ^ E_NOTICE);
         error_reporting(E_WARNING);
     }
 
-    public function index()
-    {
+    public function index() {
         redirect('admincp/linkshare/siteAdvertisers');
     }
 
-    public function listSites()
-    {
+    public function listSites() {
         $this->admin_navigation->module_link('Add channel', site_url('admincp/linkshare/addSite/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -99,25 +96,23 @@ class Admincp extends Admincp_Controller
         $this->load->view('listSites');
     }
 
-    public function chooseSites($id = 0)
-    {
+    public function chooseSites($id = 0) {
         $this->load->model('site_model');
-        $site = $this->site_model->getSite($id);        
+        $site = $this->site_model->getSite($id);
 
         if (!$id) {
             $this->load->view('chooseSites');
         } else {
-            $CI =& get_instance();
+            $CI = & get_instance();
             $config = new LinkshareConfig();
             $config->setSiteCookieAndGetAccessToken($CI, $site['SID']);
             $this->siteID = $CI->input->cookie('siteID');
             $this->notices->SetNotice('Site cookie for ' . $site['name'] . ' successfully set!');
             redirect('admincp/linkshare/index');
-        }                        
+        }
     }
 
-    public function addSite()
-    {
+    public function addSite() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -136,8 +131,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addSite', $data);
     }
 
-    public function addSiteValidate($action = 'new', $id = false)
-    {
+    public function addSiteValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Site name', 'required|trim');
         $this->form_validation->set_rules('sid', 'Site ID', 'required|trim');
@@ -180,8 +174,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function editSite($id)
-    {
+    public function editSite($id) {
         $this->load->model('site_model');
         $site = $this->site_model->getSite($id);
 
@@ -206,9 +199,8 @@ class Admincp extends Admincp_Controller
 
         $this->load->view('addSite', $data);
     }
-    
-    public function deleteSite($id)
-    {
+
+    public function deleteSite($id) {
         $this->load->model('site_model');
 
         $this->site_model->deleteSite($id);
@@ -220,8 +212,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function infoSite($id)
-    {
+    public function infoSite($id) {
         $this->admin_navigation->module_link('See creative categories linkshare', site_url('admincp/linkshare/listCreativeCategory/' . $id));
         $this->admin_navigation->module_link('See advertisers linkshare', site_url('admincp/linkshare/siteAdvertisers/' . $id));
         $this->admin_navigation->module_link('See products linkshare', site_url('admincp/linkshare/site_produse/' . $id));
@@ -239,8 +230,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('infoSite', $data);
     }
 
-    public function listNetworks()
-    {
+    public function listNetworks() {
         $this->admin_navigation->module_link('Add network', site_url('admincp/linkshare/addNetwork/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -278,8 +268,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('listNetworks');
     }
 
-    public function addNetwork()
-    {
+    public function addNetwork() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -297,8 +286,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addNetwork', $data);
     }
 
-    public function addNetworkValidate($action = 'new', $id = false)
-    {
+    public function addNetworkValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('nid', 'Network id', 'required|trim');
@@ -339,8 +327,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function editNetwork($id)
-    {
+    public function editNetwork($id) {
         $this->load->model('network_model');
         $network = $this->network_model->getNetwork($id);
 
@@ -365,8 +352,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addNetwork', $data);
     }
 
-    public function deleteNetwork($contents, $return_url)
-    {
+    public function deleteNetwork($contents, $return_url) {
 
         $this->load->library('asciihex');
         $this->load->model('network_model');
@@ -387,8 +373,7 @@ class Admincp extends Admincp_Controller
 
     /* status */
 
-    public function listStatus()
-    {
+    public function listStatus() {
         $this->admin_navigation->module_link('Add status', site_url('admincp/linkshare/addStatus/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -429,8 +414,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('listStatus');
     }
 
-    public function addStatus()
-    {
+    public function addStatus() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -449,8 +433,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addStatus', $data);
     }
 
-    public function addStatusValidate($action = 'new', $id = false)
-    {
+    public function addStatusValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_status', 'SID', 'required|trim');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
@@ -494,8 +477,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function editStatus($id)
-    {
+    public function editStatus($id) {
         $this->load->model('status_model');
         $status = $this->status_model->getStatus($id);
 
@@ -521,8 +503,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addStatus', $data);
     }
 
-    public function deleteStatus($contents, $return_url)
-    {
+    public function deleteStatus($contents, $return_url) {
 
         $this->load->library('asciihex');
         $this->load->model('status_model');
@@ -541,8 +522,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function siteAdvertisers()
-    {
+    public function siteAdvertisers() {
         $this->load->model('site_model');
         $this->load->model('advertiser_model');
         $site = $this->site_model->getSiteBySID($this->siteID);
@@ -607,7 +587,7 @@ class Admincp extends Admincp_Controller
                 'name' => 'LIVE',
                 'width' => '5%'),
             array(
-                'name' => 'UPDATED',
+                'name' => 'Deleted',
                 'width' => '5%'),
         );
 
@@ -642,11 +622,10 @@ class Admincp extends Admincp_Controller
             'form_action' => site_url('admincp/linkshare/siteAdvertisers/'),
         );
 
-        $this->load->view('listAdvertisers',$data);
+        $this->load->view('listAdvertisers', $data);
     }
 
-    public function addAdvertiser()
-    {
+    public function addAdvertiser() {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -676,8 +655,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addAdvertiser', $data);
     }
 
-    public function addAdvertiserValidate($action = 'new', $id = false)
-    {
+    public function addAdvertiserValidate($action = 'new', $id = false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Advertiser name', 'required|trim');
         $this->form_validation->set_rules('mid', 'Advertiser ID', 'required|trim');
@@ -726,8 +704,7 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function editAdvertiser($id)
-    {
+    public function editAdvertiser($id) {
         $this->load->model('advertiser_model');
         $magazin = $this->advertiser_model->getAdvertiser($id);
 
@@ -749,7 +726,7 @@ class Admincp extends Admincp_Controller
         $form->text('Commission', 'commission', $magazin['commission'], 'Insert commission.', true, 'e.g., sale : 0-2000 8%', true);
         $form->text('Offer id', 'offer_id', $magazin['offer_id'], 'Insert offer_id.', true, 'e.g., 228980', true);
         $form->text('Offer name', 'offer_name', $magazin['offer_name'], 'Insert offer_name.', true, 'e.g., Baseline Offer', true);
-        
+
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Edit advertiser',
@@ -760,8 +737,7 @@ class Admincp extends Admincp_Controller
         $this->load->view('addAdvertiser', $data);
     }
 
-    public function deleteAdvertiser($contents, $return_url)
-    {
+    public function deleteAdvertiser($contents, $return_url) {
 
         $this->load->library('asciihex');
         $this->load->model('advertiser_model');
@@ -780,151 +756,11 @@ class Admincp extends Admincp_Controller
         return true;
     }
 
-    public function refreshAdvertisers($token, $status)
-    {
-        $this->db->query("TRUNCATE TABLE linkshare_advertisers");
-        $this->load->model('site_model');
-        $aux = $this->site_model->getSiteByToken($token);
-        $id_site = $aux['id'];
-        $aux = '';
-        $i = 0;
-        $cate = 0;
-
-        $j = 1;
-        $statuses = array();
-        if ($status == 'all') {
-            $this->load->model('status_model');
-            $aux = $this->status_model->getStatuses();
-            foreach ($aux as $val) {
-                $statuses[] = str_replace(' ', '%20', $val['id_status']);
-            }
-            $j = count($statuses);
-        } else {
-            $statuses[] = $status;
-        }
-
-        while ($j > 0) {
-            $mids = array();
-            $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
-
-            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-            //echo $categories->getName().'<br/>';
-            if (isset($categories)) {
-                $kids = $categories->children('ns1', true);
-                //var_dump(count($kids));
-
-                $this->load->model('status_model');
-
-                foreach ($kids as $child) {
-                    $mids[$i]['id_site'] = $id_site;
-                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
-                    $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
-                    $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
-                    $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
-                    $mids[$i]['name'] = mysql_real_escape_string($child->name);
-                    $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
-                    $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
-                    $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
-                    $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
-                    $i++;
-                }
-            }
-
-            $statuses[$j - 1] = str_replace('%20', ' ', $statuses[$j - 1]);
-            $this->load->model('status_model');
-            $id_status = $this->status_model->getStatusByName($statuses[$j - 1]);
-
-            $this->load->model('advertiser_model');
-            $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
-            $cate += $this->advertiser_model->newAdvertisers($mids);
-
-            $i = 0;
-            unset($mids);
-            $j--;
-        }
-
-
-        $this->notices->SetNotice($cate . ' advertisers updated successfully.');
-        redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
-    }
-
-
-    public function parseAdvertisersAdd($token, $status)
-    {
-        //error_reporting(E_ALL);
-        //ini_set('display_errors',1);            
-        $this->load->model('site_model');
-        $aux = $this->site_model->getSiteByToken($token);
-        $id_site = $aux['id'];
-        $aux = '';
-        $i = 0;
-        $cate = 0;
-
-        $j = 1;
-        $statuses = array();
-        if ($status == 'all') {
-            $this->load->model('status_model');
-            $aux = $this->status_model->getStatuses();
-            foreach ($aux as $val) {
-                $statuses[] = str_replace(' ', '%20', $val['id_status']);
-            }
-            $j = count($statuses);
-        } else {
-            $statuses[] = $status;
-        }
-
-        while ($j > 0) {
-            $mids = array();
-            $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getMerchByAppStatus/' . $token . '/' . $statuses[$j - 1]);
-
-            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-            //echo $categories->getName().'<br/>';
-            if (isset($categories)) {
-                $kids = $categories->children('ns1', true);
-                //var_dump(count($kids));
-
-                $this->load->model('status_model');
-
-                foreach ($kids as $child) {
-                    $mids[$i]['id_site'] = $id_site;
-                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
-                    $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
-                    $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
-                    $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
-                    $mids[$i]['name'] = mysql_real_escape_string($child->name);
-                    $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
-                    $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
-                    $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
-                    $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
-                    $i++;
-                }
-            }
-
-            $statuses[$j - 1] = str_replace('%20', ' ', $statuses[$j - 1]);
-            $this->load->model('status_model');
-            $id_status = $this->status_model->getStatusByName($statuses[$j - 1]);
-
-            $this->load->model('advertiser_model');
-            $this->advertiser_model->deleteAdvertiserByStatus($id_site, $id_status);
-            $cate += $this->advertiser_model->newAdvertisers($mids);
-
-            $i = 0;
-            unset($mids);
-            $j--;
-        }
-
-
-        $this->notices->SetNotice($cate . ' parsed advertisers added successfully.');
-        redirect('admincp/linkshare/siteAdvertisers/' . $id_site);
-    }
-    
-    
-    public function parseAdvertisers($allApproved = 0)
-    {
+    public function parseAdvertisers($allApproved = 0) {
         error_reporting(E_ALL);
-        ini_set('display_errors',1);
-        
-        $this->load->library('admin_form');    
+        ini_set('display_errors', 1);
+
+        $this->load->library('admin_form');
         $this->load->model('site_model');
         $this->load->model('status_model');
         $this->load->model('advertiser_model');
@@ -935,39 +771,39 @@ class Admincp extends Admincp_Controller
         $mids = array();
         $i = 0;
 
-        $CI =& get_instance();
-                             
+        $CI = & get_instance();
+
         $linkshareConstants = array(
-            'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
+            'approved' => LinkshareConfig::URL_ADVERTISERS_APPROVED,
             'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED,
-            'perm rejected'     => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
-            'perm removed'      => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
-            'self removed'      => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
-            'temp removed'      => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
-            'temp rejected'     => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
-            'wait'              => LinkshareConfig::URL_ADVERTISERS_WAIT
-            );
-        
-        $config = new LinkshareConfig();        
+            'perm rejected' => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
+            'perm removed' => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
+            'self removed' => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
+            'temp removed' => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
+            'temp rejected' => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
+            'wait' => LinkshareConfig::URL_ADVERTISERS_WAIT
+        );
+
+        $config = new LinkshareConfig();
         $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
         $this->advertiser_model->deleteTempAdvertiser();
-        
-        if($allApproved==1){
+
+        if ($allApproved == 1) {
             $linkshareConstants = array(
-            'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
-            'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED);
-            
+                'approved' => LinkshareConfig::URL_ADVERTISERS_APPROVED,
+                'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED);
+
             foreach ($linkshareConstants as $const) {
-            $request = new CurlApi($const);              
-            //$request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
-            $request->setHeaders($config->getMinimalHeaders($accessToken));
-            $request->setGetData();
-            $request->send();                      
+                $request = new CurlApi($const);
+                //$request = new CurlApi(LinkshareConfig::URL_ADVERTISERS_APPROVED);
+                $request->setHeaders($config->getMinimalHeaders($accessToken));
+                $request->setGetData();
+                $request->send();
 
-            $responseObj = $request->getFormattedResponse();
+                $responseObj = $request->getFormattedResponse();
 
-            $aux = $responseObj['body'];
-            $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
+                $aux = $responseObj['body'];
+                $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
                 if (isset($categories)) {
                     $kids = $categories->children('ns1', true);
 
@@ -983,65 +819,64 @@ class Admincp extends Admincp_Controller
                         $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
                         $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
                         $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
-                        
+
                         $this->advertiser_model->newTempAdvertiser($mids[$i]);
-                        
+
                         $i++;
                     }
                 }
-                }
-        }else {
-            $request = new CurlApi($linkshareConstants[$_GET['status']]);              
+            }
+        } else {
+            $request = new CurlApi($linkshareConstants[$_GET['status']]);
             $request->setHeaders($config->getMinimalHeaders($accessToken));
             $request->setGetData();
-            $request->send();                      
+            $request->send();
 
             $responseObj = $request->getFormattedResponse();
 
             $aux = $responseObj['body'];
             $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-                if (isset($categories)) {
-                    $kids = $categories->children('ns1', true);
+            if (isset($categories)) {
+                $kids = $categories->children('ns1', true);
 
-                    foreach ($kids as $child) {
-                        $mids[$i]['id'] = $i + 1;
-                        $mids[$i]['id_site'] = $siteRow['id'];
-                        $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
-                        $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
-                        $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
-                        $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
-                        $mids[$i]['name'] = mysql_real_escape_string($child->name);
-                        $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
-                        $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
-                        $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
-                        $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
-                        
-                        $this->advertiser_model->newTempAdvertiser($mids[$i]);
-                        
-                        $i++;
-                    }
+                foreach ($kids as $child) {
+                    $mids[$i]['id'] = $i + 1;
+                    $mids[$i]['id_site'] = $siteRow['id'];
+                    $mids[$i]['id_status'] = mysql_real_escape_string($this->status_model->getStatusByApplicationStatus($child->applicationStatus));
+                    $mids[$i]['status'] = mysql_real_escape_string($child->applicationStatus);
+                    $mids[$i]['id_categories'] = mysql_real_escape_string($child->categories);
+                    $mids[$i]['mid'] = mysql_real_escape_string($child->mid);
+                    $mids[$i]['name'] = mysql_real_escape_string($child->name);
+                    $mids[$i]['offer_also'] = mysql_real_escape_string($child->offer->alsoName);
+                    $mids[$i]['commission'] = mysql_real_escape_string($child->offer->commissionTerms);
+                    $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
+                    $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
+
+                    $this->advertiser_model->newTempAdvertiser($mids[$i]);
+
+                    $i++;
                 }
+            }
         }
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
-    
-    public function listTempAdvertisers()
-    {
+
+    public function listTempAdvertisers() {
         error_reporting(E_ALL);
-        ini_set('display_errors',1);
-        
-        $this->load->library('admin_form');    
+        ini_set('display_errors', 1);
+
+        $this->load->library('admin_form');
         $this->load->model('site_model');
         $this->load->model('status_model');
-        $this->load->model('advertiser_model');        
-        $siteRow = $this->site_model->getSiteBySID($this->siteID);  
+        $this->load->model('advertiser_model');
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();
         $selectStatus = $this->advertiser_model->getTempStatusName();
-        
+
         $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/moveTempAdvertisers/'));
 
         $this->load->library('dataset');
-        
+
         $columns = array(
             array(
                 'name' => 'ID #',
@@ -1093,7 +928,7 @@ class Admincp extends Admincp_Controller
         $this->dataset->datasource('advertiser_model', 'getTempAdvertisers', $filters);
         $this->dataset->base_url(site_url('admincp/linkshare/listTempAdvertisers/'));
         $this->dataset->rows_per_page(10);
-        
+
         // total rows
         $total_rows = $this->db->get('linkshare_advertisers_temp')->num_rows();
         $this->dataset->total_rows($total_rows);
@@ -1105,79 +940,81 @@ class Admincp extends Admincp_Controller
             'form_action' => site_url('admincp/linkshare/listTempAdvertisers/'),
         );
         $this->notices->SetNotice($total_rows . ' parsed advertisers in temporary table.');
-        $this->load->view('listAdvertisersParsed',$data);
+        $this->load->view('listAdvertisersParsed', $data);
     }
-    
-    public function moveTempAdvertisers()
-    {
+
+    public function moveTempAdvertisers() {
         error_reporting(E_ALL);
-        ini_set('display_errors',1);
-        
-        $this->load->library('admin_form');    
+        ini_set('display_errors', 1);
+
+        $this->load->library('admin_form');
         $this->load->model('advertiser_model');
         $this->load->model('site_model');
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
         $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
         $current = array_merge(
-            $this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteID['id'])),
-            $this->advertiser_model->getAdvertisers(array('id_status' => 2,'id_site'=>$siteID['id']))
+                $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteID['id'])), $this->advertiser_model->getAdvertisers(array('id_status' => 2, 'id_site' => $siteID['id']))
         );
 
         foreach ($current as $val) {
-            $existsTempMID = $this->advertiser_model->existsAdvertiser($val['mid'],$siteID['id']);
-            if($existsTempMID){
+            $existsTempMID = $this->advertiser_model->existsAdvertiser($val['mid'], $siteID['id']);
+            if (!empty($existsTempMID)) {
                 // Update advertiser linkshare_advertiser from linkshare_advertiser_temp by mid
-                $tempRow = $this->advertiser_model->getTempAdvertiserByMID($val['mid'],$siteID['id']);
-                $this->advertiser_model->updateAdvertiserFromTemp($tempRow,$val['mid']);
-                $this->advertiser_model->deleteTempAdvertiserByMID($val['mid'],$siteID['id']);                
-            }else {
-                // Delete advertiser from linkshare_advertiser_temp by mid
-                $this->advertiser_model->deleteAdvertiserByMID($val['mid'],$siteID['id']);
-            }       
+                $tempRow = $this->advertiser_model->getTempAdvertiserByMID($val['mid'], $siteID['id']);
+                $this->advertiser_model->updateAdvertiserFromTemp($tempRow, $val['mid'], $siteID['id']);
+                $this->advertiser_model->deleteTempAdvertiserByMID($val['mid'], $siteID['id']);
+            } else {
+                if ($val['live'] == 1) {
+                    // Mark live items to be deleted by a later cron
+                    $this->advertiser_model->updateAdvertiserFromTemp(array('deleted' => 1), $val['mid'], $siteID['id']);
+                } else {
+                    // Delete advertiser from linkshare_advertiser by mid                
+                    $this->advertiser_model->deleteAdvertiserByMID($val['mid'], $siteID['id']);
+                }
+            }
         }
-        
+
         $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
-        foreach ($temp as $val) {                                        
+        foreach ($temp as $val) {
             $this->advertiser_model->newAdvertiser($val);
         }
 
         $this->advertiser_model->deleteTempAdvertiser();
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
-    
-    public function getXML(){
+
+    public function getXML() {
         $this->load->view('getXML');
     }
-    
-    public function info(){
+
+    public function info() {
         $this->load->view('info');
     }
 
-    public function getXmlAdvertiser()
-    {            
-        $CI =& get_instance();
-        $this->load->library('admin_form'); 
+    public function getXmlAdvertiser() {
+        $CI = & get_instance();
+        $this->load->library('admin_form');
         $form = new Admin_form;
-                
-        $this->load->model(array('site_model','status_model'));
-     
+
+        $this->load->model(array('site_model', 'status_model'));
+
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
-        $allStatus = $this->status_model->getStatuses();   
+        $allStatus = $this->status_model->getStatuses();
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML'));
         $linkshareConstants = array(
-            'approved'          => LinkshareConfig::URL_ADVERTISERS_APPROVED,
+            'approved' => LinkshareConfig::URL_ADVERTISERS_APPROVED,
             'approval extended' => LinkshareConfig::URL_ADVERTISERS_APPROVAL_EXTENDED,
-            'perm rejected'     => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
-            'perm removed'      => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
-            'self removed'      => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
-            'temp removed'      => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
-            'temp rejected'     => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
-            'wait'              => LinkshareConfig::URL_ADVERTISERS_WAIT
-            );
+            'perm rejected' => LinkshareConfig::URL_ADVERTISERS_PERM_REJECTED,
+            'perm removed' => LinkshareConfig::URL_ADVERTISERS_PERM_REMOVED,
+            'self removed' => LinkshareConfig::URL_ADVERTISERS_SELF_REMOVED,
+            'temp removed' => LinkshareConfig::URL_ADVERTISERS_TEMP_REMOVED,
+            'temp rejected' => LinkshareConfig::URL_ADVERTISERS_TEMP_REJECTED,
+            'wait' => LinkshareConfig::URL_ADVERTISERS_WAIT
+        );
         $responseObj = array();
-        
-        if(isset($_GET['status'])){
+
+        if (isset($_GET['status'])) {
             $config = new LinkshareConfig();
 
             $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
@@ -1191,20 +1028,20 @@ class Admincp extends Admincp_Controller
 
             $responseObj = $request->getFormattedResponse();
         }
-            if (!$responseObj) {
-                $this->notices->SetError('Refresh token');
-                $responseObj['header'] = $responseObj['body'] = 'ERROR';
-            } else {
-                //print '<pre>';
-                //print_r($responseObj['header']);
-            }
+        if (!$responseObj) {
+            $this->notices->SetError('Refresh token');
+            $responseObj['header'] = $responseObj['body'] = 'ERROR';
+        } else {
+            //print '<pre>';
+            //print_r($responseObj['header']);
+        }
 
 //        die();
-        
+
         $form->fieldset('Xml');
         $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', true);
         $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
-        
+
         $data = array(
             'form' => $form->display(),
             'form_title' => 'Advertisers XML',
@@ -1215,6 +1052,6 @@ class Admincp extends Admincp_Controller
         );
 
         $this->load->view('xml', $data);
-    }  
+    }
 
 }
