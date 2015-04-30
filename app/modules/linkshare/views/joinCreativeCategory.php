@@ -8,7 +8,8 @@ jQuery(document).ready(function(){
         var filter_var = link_array.split('=');
         var merged_category = $('input[name="merged_category"]').val();
         var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');        
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(','); 
+        var check_mids = $('input[name="check_mids[]"]').map(function() {return this.value;}).get().join(','); 
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
         var offset = parseInt(filter_var[5]);
@@ -21,7 +22,7 @@ jQuery(document).ready(function(){
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/updateFilters/',
-            data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
+            data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&check_mids='+check_mids+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {
                 $('input[name="filterz"]').val(data);
@@ -44,7 +45,7 @@ jQuery(document).ready(function(){
     });
 });
 </script>
-<h1>Join Creative Categories</h1>
+<h1>Join Creative Categories for <?=$site_name?></h1>
 <div><strong>INSTRUCTION</strong>: First search a keyword on Name filter, chose category ( checkboxes ) you want to merge then write a name for the NEW category and press SAVE !<br/><br/></div>
 
 <?=$this->dataset->table_head();?>
@@ -65,7 +66,7 @@ jQuery(document).ready(function(){
                                     <?php } else { echo "<span style='color:#ff0000'>|</span> Not merged!"; } ?>
                                 </td>
 				<td align="center"><?=$row['name'];?></td>
-                                <td align="center"><?=$row['mid'];?></td>
+                                <td align="center"><input type="button" name="check_mids[]" value="<?=$row['mid'];?>"></td>
                                 <td align="left"><?=$row['nid'];?></td>
                                 <td  align="left" class="options">
                                     <script>

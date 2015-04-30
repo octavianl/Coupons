@@ -11,7 +11,7 @@ jQuery(document).ready(function(){
         
  });
 </script>
-<h1>List Merged Categories</h1>
+<h1>List Merged Categories for <?=$site_name?></h1>
 <div>
 	<?=$this->dataset->table_head();?>
 	<?		
@@ -38,7 +38,7 @@ jQuery(document).ready(function(){
 	else {
 	?>
 	<tr>
-		<td colspan="7">Nu sunt categorii.</td>
+		<td colspan="7">NO Merged Categories</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

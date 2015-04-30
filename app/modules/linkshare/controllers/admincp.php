@@ -866,13 +866,12 @@ class Admincp extends Admincp_Controller {
         ini_set('display_errors', 1);
 
         $this->load->library('admin_form');
-        $this->load->model('site_model');
-        $this->load->model('status_model');
-        $this->load->model('advertiser_model');
+        $this->load->model(array('site_model', 'status_model', 'advertiser_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();
         $selectStatus = $this->advertiser_model->getTempStatusName();
 
+        $this->admin_navigation->module_link('Clear Temp', site_url('admincp/linkshare/clearTempAdv/'));
         $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/moveTempAdvertisers/'));
 
         $this->load->library('dataset');
@@ -941,6 +940,11 @@ class Admincp extends Admincp_Controller {
         );
         $this->notices->SetNotice($total_rows . ' parsed advertisers in temporary table.');
         $this->load->view('listAdvertisersParsed', $data);
+    }
+    public function clearTempAdv() {
+        $this->load->model('advertiser_model');
+        $this->advertiser_model->deleteTempAdvertiser();
+        redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
     public function moveTempAdvertisers() {

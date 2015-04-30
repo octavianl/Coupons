@@ -27,8 +27,8 @@
                                 <td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">Edit</a>
 				</td>
-                                <td align="center"><a href="#"><img src="<?php if($row['live']==0){$liveflag = 'liveoff-icon.png';}else{$liveflag = 'liveon-icon.png';}?><?=site_url('app/modules/linkshare/assets/'.$liveflag);?>" /></a></td>
-                                <td align="center"><a href="#"><img src="<?php if($row['deleted']==0){$deletedflag = 'updateoff-icon.png';}else{$deletedflag = 'updateon-icon.png';}?><?=site_url('app/modules/linkshare/assets/'.$deletedflag);?>" /></a></td>
+                                <td align="center"><a href="#"><img src="<?php if($row['live']==0){$liveflag = 'offline.gif';}else{$liveflag = 'live.gif';}?><?=site_url('app/modules/linkshare/assets/'.$liveflag);?>" /></a></td>
+                                <td align="center"><a href="#"><img src="<?php if($row['deleted']==0){$deletedflag = 'nodelete.gif';}else{$deletedflag = 'delete.gif';}?><?=site_url('app/modules/linkshare/assets/'.$deletedflag);?>" /></a></td>
 			</tr>
 		<?
 		}

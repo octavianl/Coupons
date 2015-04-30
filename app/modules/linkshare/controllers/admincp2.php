@@ -237,63 +237,149 @@ class Admincp2 extends Admincp_Controller {
         $this->load->view('refreshCategories', $data);
     }
 
-    public function parseCreativeCategorySite($id) {
-        $this->admin_navigation->module_link('Update linkshare categories', site_url('admincp2/linkshare/refresh_categorii_site/' . $id));
+    public function listTempCreativeCategory() {
+        $this->load->model(array('site_model', 'category_creative_model', 'advertiser_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        $retryCount = $this->advertiser_model->checkPCC(2, $siteRow['id']);
 
-        $aux = '';
-        $aux = file_get_contents('http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f/216');
-
-        $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-        //echo $categories->getName().'<br/>';
-        $kids = $categories->children('ns1', true);
-        //var_dump(count($kids));
-        foreach ($kids as $child) {
-            echo $child->catId . '<br/>';
-            echo $child->catName . '<br/>';
-            echo $child->mid . '<br/>';
-            echo $child->nid . '<br/>----<br/>';
-        }
-
-        die;
+        $this->admin_navigation->module_link('Clear Temp', site_url('admincp2/linkshare/clearTempCC/'));
+        $this->admin_navigation->module_link('Retry PCC (' . $retryCount . ')', site_url('admincp2/linkshare/parseCreativeCategories/2'));
+        $this->admin_navigation->module_link('Parse ALL Creative Categories', site_url('admincp2/linkshare/parseCreativeCategories/'));
+        $this->admin_navigation->module_link('Move CC', site_url('admincp2/linkshare/moveTempCategoryCreative'));
 
         $this->load->library('dataset');
 
         $columns = array(
             array(
+                'name' => 'ID #',
+                'width' => '15%'),
+            array(
+                'name' => 'Site',
+                'width' => '15%'),
+            array(
                 'name' => 'Category ID #',
-                'width' => '35%'),
+                'width' => '10%'),
             array(
                 'name' => 'Name',
-                'width' => '65%'),
+                'width' => '20%',
+                'type' => 'text',
+                'filter' => 'nume'),
+            array(
+                'name' => 'Mid',
+                'width' => '15%',
+                'type' => 'text',
+                'filter' => 'mid'),
+            array(
+                'name' => 'Nid',
+                'width' => '5%'),
+            array(
+                'name' => 'Actions',
+                'width' => '20%'
+            )
         );
 
-        $filters['categories'] = $categories;
+        $filters = array();
         $filters['limit'] = 50;
-        if (isset($_GET['offset']))
-            $filters['offset'] = $_GET['offset'];
-        $this->dataset->rows_per_page(50);
+        $filters['id_site'] = $siteRow['id'];
+        $filters['name'] = true;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_model', 'getCategoriesParse', $filters);
-        $this->dataset->base_url(site_url('admincp2/linkshare/parseCategories'));
+        $this->dataset->datasource('category_creative_model', 'getTempCreativeCategories', $filters);
+        $this->dataset->base_url(site_url('admincp2/linkshare/listTempCreativeCategory/'));
+        $this->dataset->rows_per_page(50);
 
+        if (isset($_GET['offset']))
+            $filters['offset'] = $_GET['offset'];
+
+        if (isset($_GET['nume']))
+            $filters['nume'] = $_GET['nume'];
+        if (isset($_GET['mid']))
+            $filters['mid'] = $_GET['mid'];
+
+        $this->load->library('asciihex');
+        $this->load->model('forms/form_model');
+
+        if (isset($_GET['filters'])) {
+            $aux = unserialize(base64_decode($this->asciihex->HexToAscii($_GET['filters'])));
+            if (isset($aux['nume']))
+                $filters['nume'] = $aux['nume'];
+        }
 
         // total rows
-        $total_rows = count($categories);
+        $this->db->where('id_site', $siteRow['id']);
+        $total_rows = $this->category_creative_model->getTempCategoriesLines($filters);
         $this->dataset->total_rows($total_rows);
 
-        $data['cate'] = $total_rows;
         $this->dataset->initialize();
 
-        $this->load->view('parseCategories', $data);
+        // add actions
+        $this->dataset->action('Delete', 'admincp2/linkshare/deleteCreativeCategory');
+        $data = array(
+            'form_title' => 'Temporary Creative Category for',
+            'site_name' => $siteRow['name']
+        );
+
+        $this->load->view('listCreativeCategory', $data);
+    }
+
+    public function clearTempCC() 
+    {
+        $this->load->model('category_creative_model');
+        $this->category_creative_model->deleteTempCreativeCategories();
+        redirect('admincp2/linkshare/listTempCreativeCategory/');
+    }
+
+    public function moveTempCategoryCreative() 
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
+        $this->load->library('admin_form');
+        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model'));
+        $siteID = $this->site_model->getSiteBySID($this->siteID);
+
+        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+
+        $currentCC = $this->category_creative_model->getCategories(array('id_site' => $siteID['id']));
+
+        foreach ($currentCC as $val) {
+            $existsTempCC = $this->category_creative_model->existsTempCC($siteID['id'], $val['cat_id'], $val['mid']);
+
+            if (!empty($existsTempCC)) {
+                // Update creative categories from  linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)
+                $tempRow = $this->category_creative_model->getTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                $this->category_creative_model->updateCreativeCategoriesFromTemp($tempRow, $siteID['id'], $val['cat_id'], $val['mid']);
+                $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+            } else {
+                if ($val['live'] == 1) {
+                    // Mark live items to be deleted by a later cron
+                    $this->category_creative_model->updateCreativeCategoriesFromTemp(array('deleted' => 1), $siteID['id'], $val['cat_id'], $val['mid']);
+                } else {
+                    // Delete advertiser from linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)             
+                    $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                }
+            }
+        }
+
+        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+
+        foreach ($tempCC as $val) {
+            $this->category_creative_model->newCreativeCategory($val);
+        }
+
+        $this->advertiser_model->resetPCC(0, $siteID['id']);
+        
+        $this->category_creative_model->deleteTempCreativeCategories();
+        redirect('admincp2/linkshare/listTempCreativeCategory/');
     }
 
     public function listCreativeCategory() {
-        $this->load->model(array('site_model', 'category_creative_model'));
+        $this->load->model(array('site_model', 'category_creative_model', 'advertiser_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        $retryCount = $this->advertiser_model->checkPCC(2, $siteRow['id']);
 
         $this->admin_navigation->module_link('Add creative category', site_url('admincp2/linkshare/addCreativeCategory'));
-        $this->admin_navigation->module_link('Parse ALL Creative Categories', site_url('admincp2/linkshare/parseCreativeCategories/'));
+        $this->admin_navigation->module_link('Parse Creative Categories', site_url('admincp2/linkshare/listTempCreativeCategory/'));
         $this->admin_navigation->module_link('Export CSV', site_url('admincp2/linkshare/export_csv/category_creative'));
 
         $this->load->library('dataset');
@@ -364,6 +450,7 @@ class Admincp2 extends Admincp_Controller {
         // add actions
         $this->dataset->action('Delete', 'admincp2/linkshare/deleteCreativeCategory');
         $data = array(
+            'form_title' => 'Creative Category for',
             'site_name' => $siteRow['name']
         );
 
@@ -420,7 +507,7 @@ class Admincp2 extends Admincp_Controller {
         $fields['nid'] = $this->input->post('nid');
 
         if ($action == 'new') {
-            $type_id = $this->category_creative_model->newCategory($fields);
+            $type_id = $this->category_creative_model->newCreativeCategory($fields);
 
             $this->notices->SetNotice('Creative category added successfully.');
 
@@ -504,6 +591,7 @@ class Admincp2 extends Admincp_Controller {
         }
         $all_page_category_ok = array();
         $all_page_category = explode(',', $filters['all_page_category']);
+
         // remove 0
         foreach ($all_page_category as $cat) {
             if ($cat) {
@@ -514,6 +602,10 @@ class Admincp2 extends Admincp_Controller {
 
         if (!empty($_POST['check_category'])) {
             $filters['check_category'] = $_POST['check_category'];
+        }
+        
+        if (!empty($_POST['check_mids'])) {
+            $filters['check_mids'] = $_POST['check_mids'];
         }
 
         $check_category_ok = array();
@@ -526,7 +618,7 @@ class Admincp2 extends Admincp_Controller {
                 $check_category_ok[] = $cat;
             }
         }
-
+                echo "MIDSs<pre>"; print_r($check_category_ok); die();
         $filters_decode_check_category_ok = array();
         $filters_decode_check_category = explode(',', $filters_decode['check_category']);
 
@@ -574,12 +666,15 @@ class Admincp2 extends Admincp_Controller {
         echo $filters;
     }
 
-    public function joinCreativeCategory($id = 1) {
+    public function joinCreativeCategory() 
+    {
         $this->admin_navigation->module_link('View Merged Categories', site_url('admincp2/linkshare/listMergedCategories/'));
 
         $this->load->library('dataset');
-        $this->load->model('category_creative_model');
+        $this->load->model(array('category_creative_model','site_model'));
 
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        
         $columns = array(
             array(
                 'name' => 'ID #',
@@ -614,7 +709,7 @@ class Admincp2 extends Admincp_Controller {
 
         $filters = $filters_decode = array();
         //$filters['limit'] = 50;
-        $filters['id_site'] = $id;
+        $filters['id_site'] = $siteRow['id'];
         $filters['name'] = true;
 
         if (isset($_GET['offset'])) {
@@ -660,22 +755,22 @@ class Admincp2 extends Admincp_Controller {
                         }
                     }
                 }
-                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category'],$siteRow['id']);
                 $id_join_category = $this->category_creative_model->newJoinCategory($id_merged_category, $checked_values);
 
                 $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
                 $this->notices->SetNotice($message);
                 redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
             } elseif (isset($_POST['merged_category']) && !empty($_POST['check_category'])) {
-                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category']);
+                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category'],$siteRow['id']);
                 $this->category_creative_model->newJoinCategory($id_merged_category, $_POST['check_category']);
 
                 $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
                 $this->notices->SetNotice($message);
-                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
+                redirect(site_url('admincp2/linkshare/joinCreativeCategory'));
             } else {
                 $this->notices->SetNotice('Check if any checkboxes are selected!');
-                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
+                redirect(site_url('admincp2/linkshare/joinCreativeCategory'));
             }
         }
 
@@ -685,7 +780,7 @@ class Admincp2 extends Admincp_Controller {
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'getCreativeForMerge', $filters);
-        $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/' . $id));
+        $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/'));
 
 
         if (isset($_GET['nume']))
@@ -717,30 +812,37 @@ class Admincp2 extends Admincp_Controller {
         $this->load->model('forms/form_model');
 
         // total rows
-        $this->db->where('id_site', $id);
+        $this->db->where('id_site', $siteRow['id']);
         $total_rows = $this->category_creative_model->getCategoriesLines($filters);
 
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
 
-        // add actions
 
         $data = array(
             'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz'],
             'name_search' => $filters['nume'],
             'mid_search' => $filters['mid'],
-            'name_merged' => $filters['merged_category']
+            'name_merged' => $filters['merged_category'],
+            'site_name' => $siteRow['name']
         );
 
         $this->load->view('joinCreativeCategory', $data);
     }
 
     public function listMergedCategories() {
+        
+        $this->load->model(array('category_creative_model','site_model'));
+        
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
 
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        
         $this->load->library('dataset');
-        $this->load->model('category_creative_model');
+        $this->load->model(array('category_creative_model','site_model'));
+
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $columns = array(
             array(
@@ -755,12 +857,9 @@ class Admincp2 extends Admincp_Controller {
             )
         );
 
-//        echo "<pre>";
-//        print_r($result);
-//        echo "</pre>";
-//        die;
-
         $filters = array();
+        $filters['id_site'] = $siteRow['id'];
+                
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'listMergedCategory', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listMergedCategories'));
@@ -774,8 +873,12 @@ class Admincp2 extends Admincp_Controller {
 
         // add actions
         $this->dataset->action('Delete', 'admincp2/linkshare/deleteMergedCatory');
-
-        $this->load->view('listMergedCategory');
+        
+        $data = array(
+            'site_name' => $siteRow['name']
+        );
+        
+        $this->load->view('listMergedCategory',$data);
     }
 
     public function editMergedCategory($id) {
@@ -895,7 +998,7 @@ class Admincp2 extends Admincp_Controller {
         die();
     }
 
-    public function parseCreativeCategories() {
+    public function parseCreativeCategories($pcc = 0) {
         //error_reporting(E_ALL);
         //ini_set('display_errors',1);
         include "app/third_party/LOG/Log.php";
@@ -906,13 +1009,16 @@ class Admincp2 extends Admincp_Controller {
 
         $config = new LinkshareConfig();
         $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
+        if ($pcc == 2) {
+            $current = $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'], 'pcc' => 2, 'retry' => true));
+        } else {
+            $current = $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'], 'pcc' => 0));
+        }
 
-        $current = $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'], 'pcc' => 0));
-        //echo"<pre>";print_r(count($current));die;
         $valCurrent = array_shift($current);
 
         //echo"<pre>";print_r($valCurrent);die;
-        if (count($current) != 0) {
+        if (count($valCurrent)!=0 && $valCurrent['retry']!=0) {
             $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/' . $valCurrent['mid'];
 
             $request = new CurlApi($categoriesRequestUrl);
@@ -944,7 +1050,7 @@ class Admincp2 extends Admincp_Controller {
                 }
 
                 // delete old categories for this mid and this site id
-                $this->category_creative_model->deleteCategoryByMid($siteRow['id'], $valCurrent['mid']);
+                $this->category_creative_model->deleteTempCategoryByMid($siteRow['id'], $valCurrent['mid']);
                 //echo"<pre>";print_r($cats);die;
                 foreach ($cats as $key => $cat) {
                     if ($cat['name'] == 'Default') {
@@ -952,23 +1058,29 @@ class Admincp2 extends Admincp_Controller {
                     } elseif ($cat['mid'] == 0) {
                         unset($cats[$key]);
                     } else {
-                        $this->category_creative_model->newCategory($cat);
+                        $this->category_creative_model->newTempCreativeCategory($cat);
                     }
                 }
-//                die;
-//                print '<pre>';
-//                print_r($cats);
+
+                $this->advertiser_model->changePCC(1, $valCurrent['mid'], $siteRow['id']);
             } else {
-                $this->advertiser_model->changePCC(2, $valCurrent['mid'], $siteRow['id']);
+                if ($pcc != 2) {
+                    $this->advertiser_model->changePCC(2, $valCurrent['mid'], $siteRow['id']);
+                } else { }
                 $message = 'http://lld2.linksynergy.com/services/restLinks/getCreativeCategories/' . $valCurrent['mid'] . ' xml error Site name: ' . $valCurrent['name_site'];
                 Log::error($message);
             }
-
-            $this->advertiser_model->changePCC(1, $valCurrent['mid'], $siteRow['id']);
-
-            echo '<META http-equiv="refresh" content="10; URL=/admincp2/linkshare/parseCreativeCategories/">';
+            
+            if ($pcc == 2) {
+                    $retry = --$valCurrent['retry'];
+                    //echo"<pre>";print_r($retry);die;
+                    $this->advertiser_model->changePCC(2, $valCurrent['mid'], $siteRow['id'], $retry);
+                    echo '<META http-equiv="refresh" content="10; URL=/admincp2/linkshare/parseCreativeCategories/2">';
+            } else {
+                echo '<META http-equiv="refresh" content="10; URL=/admincp2/linkshare/parseCreativeCategories/">';
+            }
         } else {
-            redirect('admincp2/linkshare/listCreativeCategory/');
+            redirect('admincp2/linkshare/listTempCreativeCategory/');
         }
     }
 

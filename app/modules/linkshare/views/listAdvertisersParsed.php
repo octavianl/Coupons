@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Parsed advertisers list for <?=$site_name?>
+<h1>Temporary Advertisers for <?=$site_name?>
 <h4><input type="button" value="ALL APROVED"  onclick="javascript:location.href='admincp/linkshare/parseAdvertisers/1'"/></h4>
 <h4>Select advertisers status</h4>
     <form method="GET" action="admincp/linkshare/parseAdvertisers/">
