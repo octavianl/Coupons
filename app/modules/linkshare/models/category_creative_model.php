@@ -380,19 +380,22 @@ class Category_creative_model extends CI_Model {
     }
 
     function newJoinCategory($id_merged_category, $check_category) {
-        foreach ($check_category as $category) {
-            //echo "<pre>"; print_r($category);die();
-            $category = (int) $category;
-            if (!$category) {
+        
+        foreach ($check_category as $values) {   
+            $check_values = explode('|', $values);
+       
+            if (!$values) {
                 continue;
             }
             $insert_fields = array(
-                'cat_id' => $category,
+                'cat_id' => $check_values[0],
+                'mid' => $check_values[1],
                 'id_categ_merged' => $id_merged_category,
             );
             $this->db->insert('linkshare_categories_joins', $insert_fields);
             $insert_id[] = $this->db->insert_id();
         }
+
         return $insert_id;
     }
 
@@ -407,9 +410,9 @@ class Category_creative_model extends CI_Model {
         $this->load->model('site_model');
         $row = array();
 
-        print '<pre>MODEL';
-        print_r($filters);
-        print '</pre>';
+//        print '<pre>MODEL';
+//        print_r($filters);
+//        print '</pre>';
 
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;

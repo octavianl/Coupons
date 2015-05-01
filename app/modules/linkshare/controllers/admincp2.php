@@ -603,10 +603,7 @@ class Admincp2 extends Admincp_Controller {
         if (!empty($_POST['check_category'])) {
             $filters['check_category'] = $_POST['check_category'];
         }
-        
-        if (!empty($_POST['check_mids'])) {
-            $filters['check_mids'] = $_POST['check_mids'];
-        }
+
 
         $check_category_ok = array();
         $check_category = explode(',', $filters['check_category']);
@@ -618,7 +615,7 @@ class Admincp2 extends Admincp_Controller {
                 $check_category_ok[] = $cat;
             }
         }
-                echo "MIDSs<pre>"; print_r($check_category_ok); die();
+
         $filters_decode_check_category_ok = array();
         $filters_decode_check_category = explode(',', $filters_decode['check_category']);
 
@@ -739,9 +736,9 @@ class Admincp2 extends Admincp_Controller {
             }
         }
 
-        print '<pre>FILTERS DECODE';
-        print_r($filters_decode);
-        print '</pre>';
+//        print '<pre>FILTERS DECODE';
+//        print_r($filters_decode);
+//        print '</pre>';
 
         if ($_POST['saving'] == 'ok') {
             if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])) {
@@ -800,13 +797,13 @@ class Admincp2 extends Admincp_Controller {
             $_GET['limit'] = $_POST['limit'];
         }
 
-        print '<pre>POST';
-        print_r($_POST);
-        print '</pre>';
+//        print '<pre>POST';
+//        print_r($_POST);
+//        print '</pre>';
 
-        print '<pre>GET';
-        print_r($_GET);
-        print '</pre>';
+//        print '<pre>GET';
+//        print_r($_GET);
+//        print '</pre>';
 
         $this->load->library('asciihex');
         $this->load->model('forms/form_model');
@@ -922,7 +919,7 @@ class Admincp2 extends Admincp_Controller {
 
         $this->notices->SetNotice('Merged Category deleted successfully.');
         redirect($return_url);
-        return TRUE;
+        return true;
     }
 
     function ajaxDeleteCategory($MergedCategory_id, $JoinsCategory_id) {
@@ -934,7 +931,7 @@ class Admincp2 extends Admincp_Controller {
 
         $return_url = site_url('admincp2/linkshare/listMergedCategories');
         redirect($return_url);
-        return TRUE;
+        return true;
     }
 
     function export_csv($table) {

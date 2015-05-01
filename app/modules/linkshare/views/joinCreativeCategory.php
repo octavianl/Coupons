@@ -8,8 +8,7 @@ jQuery(document).ready(function(){
         var filter_var = link_array.split('=');
         var merged_category = $('input[name="merged_category"]').val();
         var all_page_category = $('input[name="check_category[]"]').map(function() {return this.value;}).get().join(',');
-        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(','); 
-        var check_mids = $('input[name="check_mids[]"]').map(function() {return this.value;}).get().join(','); 
+        var check_category = $('input[name="check_category[]"]:checked').map(function() {return this.value;}).get().join(',');
         var name_var = $('input[name="nume"]').val();
         var mid_var = $('input[name="mid"]').val();
         var offset = parseInt(filter_var[5]);
@@ -22,7 +21,7 @@ jQuery(document).ready(function(){
         $.ajax({
             type: 'post',
             url: '/admincp2/linkshare/updateFilters/',
-            data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&check_mids='+check_mids+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
+            data: 'filterz='+filterz+'&all_page_category='+all_page_category+'&check_category='+check_category+'&merged_category='+merged_category+'&nume='+name_var+'&mid='+mid_var+'&offset='+offset+'&limit='+limit,
             dataType:'html',
             success: function(data, textStatus, XMLHttpRequest) {
                 $('input[name="filterz"]').val(data);
@@ -51,13 +50,13 @@ jQuery(document).ready(function(){
 <?=$this->dataset->table_head();?>
     <input type="hidden" name="filterz" value="<?php echo $filterz; ?>"/>
     <input type="hidden" name="saving" value=""/>
-    	<?
+    	<?php
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
 		?>
 			<tr>			
 				<td align="left"><?=$row['id'];?></td>
-                                <td align="left"><input type="checkbox" name="check_category[]" value="<?=$row['cat_id']?>" class="action_items" <?php if(($row['checked'])==1){echo 'checked';}?>></td>
+                                <td align="left"><input type="checkbox" name="check_category[]" value="<?php echo $row['cat_id'].'|'.$row['mid'];?>" class="action_items" <?php if(($row['checked'])==1){echo 'checked';}?>></td>
                                 <td align="left"><?=$row['id_site'];?></td>
                                 <td align="left"><?=$row['cat_id'];?> 
                                     <?php if(!empty($row['merge_categories'])){ ?>
@@ -66,7 +65,7 @@ jQuery(document).ready(function(){
                                     <?php } else { echo "<span style='color:#ff0000'>|</span> Not merged!"; } ?>
                                 </td>
 				<td align="center"><?=$row['name'];?></td>
-                                <td align="center"><input type="button" name="check_mids[]" value="<?=$row['mid'];?>"></td>
+                                <td align="center"><?=$row['mid'];?></td>
                                 <td align="left"><?=$row['nid'];?></td>
                                 <td  align="left" class="options">
                                     <script>
@@ -77,7 +76,7 @@ jQuery(document).ready(function(){
                                     <a href="<?=site_url('admincp2/linkshare/editCreativeCategory/' . $row['id']);?>">editeaza</a>
 				</td>
 			</tr>
-		<?
+		<?php
 		}
 	}
 	else {
@@ -85,7 +84,7 @@ jQuery(document).ready(function(){
 	<tr>
 		<td colspan="7">Nu sunt categorii creative.</td>
 	</tr>
-	<? } ?>
+	<?php } ?>
         <tr>
         <tr>
             <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($name_merged)){echo $name_merged;}?>"><button id="save" type="button">Save</button></div></td>
