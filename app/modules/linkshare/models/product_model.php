@@ -171,7 +171,7 @@ class Product_model extends CI_Model
 
         return $insert_id;
     }
-    
+ 
     /**
      * Update Produs
      *
@@ -245,4 +245,63 @@ class Product_model extends CI_Model
         return false;
     }
 
+    // TEMP PRODUCTS
+       
+    /**
+     * Create New Temp Products
+     *
+     * Creates a new produs
+     *
+     * @param array $insert_fields	
+     *
+     * @return int $insert_id
+     */
+    function newTempProduct($insert_fields)
+    {
+        $this->db->insert('linkshare_produs_temp', $insert_fields);
+        $insert_id = $this->db->insert_id();
+
+        return $insert_id;
+    }
+    
+    /**
+     * 
+     * Get Temp Products
+     *
+     * @return array
+     */
+    function getTempProducts($mid,$cat_id,$limit=0,$flag)
+    {
+        $row = array();
+        if($limit) { $this->db->limit($limit, 0); }
+        $this->db->where('mid', $mid);
+        $this->db->where('cat_creative_id', $cat_id);
+        $this->db->where('parsed', $flag);
+        $result = $this->db->get('linkshare_produs_temp');
+
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
+
+        return $row;
+    }
+    
+    
+    /**
+     * Delete Produs
+     *
+     * Deletes produs
+     * 	
+     * @param int $id	
+     *
+     * @return boolean true
+     */
+    function deleteTempProduct($id)
+    {
+        $this->db->delete('linkshare_produs_temp', array('id' => $id));
+
+        return true;
+    }
+    
+    
 }

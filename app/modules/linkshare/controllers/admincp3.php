@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -13,31 +14,32 @@ if (!defined('BASEPATH')) {
  * @link     http://www.weblight.ro/
  *
  */
-
 use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
 
-class Admincp3 extends Admincp_Controller
-{
-    public function __construct()
-    {
+class Admincp3 extends Admincp_Controller {
+
+    private $specialChars = "(&=?{}\()[]-;~|$!><*%).";
+
+    public function __construct() {
         parent::__construct();
 
         $this->admin_navigation->parent_active('linkshare');
 
-        //error_reporting(E_ALL^E_NOTICE);
-        //error_reporting(E_WARNING);
+        $siteID = $this->input->cookie('siteID');
+        // change if value already in cookie
+        if ($siteID) {
+            $this->siteID = $siteID;
+        }
     }
 
-    public function index()
-    {
+    public function index() {
         redirect('admincp3/linkshare/listProducts');
     }
 
-    public function listProducts($id_site, $mid)
-    {
+    public function listProducts($id_site, $mid) {
         $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp3/linkshare/siteAdvertisers/' . $id_site));
 
         $this->load->library('dataset');
@@ -170,166 +172,190 @@ class Admincp3 extends Admincp_Controller
 
         $this->load->view('listProducts', $data);
     }
-    
-    public function changeProductStatus($id_product, $ret_url)
-    {
+
+    public function changeProductStatus($id_product, $ret_url) {
         $ret_url = base64_decode($ret_url);
         $this->load->model('product_model');
         $this->product_model->changeProductStatus($id_product);
         echo '<META http-equiv="refresh" content="0;URL=' . $ret_url . '">';
     }
 
-    public function parseProductSearch($id, $mid, $creative_cat_id = 0)
+    private function cleanLink($link) {
+        for ($i = 0; $i < strlen($link); $i++) {
+            if (strpos($this->specialChars, $link[$i]) !== false) {
+                $link = substr($link, 0, $i);
+                break;
+            }
+        }
+
+        return trim($link);
+    }
+
+    public function parseShortProduct($mid, $cat_id = 0)
     {
         error_reporting(E_ERROR);
         include "app/third_party/LOG/Log.php";
-        
-        $aux = '';
-        $this->load->model('site_model');
-        $aux = $this->site_model->getSite($id);
-        $token = $aux['token'];
+        $CI = & get_instance();
 
-        $this->load->model('product_model');
-        $this->load->model('product_new_model');
+        $this->load->model(array('site_model', 'product_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
-        $creative_categories = array();
-        $this->load->model('category_creative_model');
-        $filters['id_site'] = $id;
-        $filters['mid'] = $mid;
-        $creative_categories = $this->category_creative_model->getCategories($filters);
+        $config = new LinkshareConfig();
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
 
-        $data = array();
-
-        // print '<pre>';
-        // print_r($creative_categories);
-        // print "count = ".count($creative_categories);
-        // die;
-        //the creative category is not present it means we have finished adding/updating new products...now we must set the old ones to available='no' and return from method
-
-        if (!array_key_exists($creative_cat_id, $creative_categories)) {
-            $old = $this->product_new_model->markOld($mid);
-            $data['message'] = "$old products marked as not available";
-            $this->load->view('parseProductSearch', $data);
-            return;
-        }
-
-        $creative_category = $creative_categories[$creative_cat_id]['cat_id'];
         $campaignID = -1;
         $page = 1;
 
-        do {
-            $kids = 0;
-            $i = $j = $k = 0;
-            if (isset($product))
-                unset($product);
-            $product = array();
-            $message = '';
+        $categoriesRequestUrl = "https://api.rakutenmarketing.com/linklocator/1.0/getProductLinks/$mid/$cat_id/$campaignID/$page";
 
-            $categories = simplexml_load_file("http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page", "SimpleXMLElement", LIBXML_NOCDATA);
-            //  print '<pre>';
-            //  print_r($categories);
-            // eg. http://lld2.linksynergy.com/services/restLinks/getProductLinks/c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f/37557/200338012/-1/1
-                        
-            if (is_object($categories) && isset($categories)) {
-                $copii = $categories->children('ns1', true);
-                $kids = count($copii);
-                if ($kids) {
-                    //var_dump($kids);
-                    foreach ($copii as $child) {
-                        $product[$i]['id_site'] = $id;
-                        $product[$i]['cat_creative_id'] = addslashes($child->categoryID);
-                        $product[$i]['cat_creative_name'] = addslashes($child->categoryName);
-                        $product[$i]['mid'] = $mid;
-                        $product[$i]['linkid'] = addslashes($child->linkID);
-                        $product[$i]['linkname'] = addslashes($child->linkName);
-                        $product[$i]['nid'] = $child->nid;
-                        $product[$i]['click_url'] = addslashes($child->clickURL);
-                        $product[$i]['icon_url'] = addslashes($child->iconURL);
-                        $product[$i]['show_url'] = addslashes($child->showURL);
-                        $product[$i]['available'] = 'yes';
-                        $product[$i]['insert_date'] = date("Y-m-d H:i:s");
-                        $product[$i]['last_update_date'] = date("Y-m-d H:i:s");
+        $request = new CurlApi($categoriesRequestUrl);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
 
-                        $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=$token&keyword=\"{$child->linkName}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
-            //  http://productsearch.linksynergy.com/productsearch?token=c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f&keyword=%22Heart%20Brooch%20in%2014%20Karat%20Gold%22&MaxResults=1&pagenumber=1&mid=37557
- 
-                        print '<pre>';
-                        print_r($product);
-                       
-                        if (is_object($produs) && isset($produs)) {
-                            $x = $produs->item[0];
-                            $product[$i]['merchantname'] = addslashes($x->merchantname);
-                            $product[$i]['createdon'] = addslashes($x->createdon);
-                            $product[$i]['sku'] = addslashes($x->sku);
-                            $product[$i]['productname'] = addslashes($x->productname);
-                            $product[$i]['categ_primary'] = addslashes($x->category->primary);
-                            $product[$i]['categ_secondary'] = addslashes($x->category->secondary);
-                            $product[$i]['price'] = $x->price;
-                            $product[$i]['currency'] = addslashes($x->price["currency"]);
-                            $product[$i]['upccode'] = addslashes($x->upccode);
-                            $product[$i]['description_short'] = addslashes($x->description->short);
-                            $product[$i]['description_long'] = addslashes($x->description->long);
-                            $product[$i]['keywords'] = addslashes($x->keywords);
-                            $product[$i]['linkurl'] = addslashes($x->linkurl);
-                            $product[$i]['imageurl'] = addslashes($x->imageurl);
-                            $product[$i]['price_list'] = $x->saleprice;
-                            $product[$i]['price_save'] = 0;
-                            $product[$i]['price_final'] = 0;
-                        } else {
-                            $product[$i]['merchantname'] = '';
-                            $product[$i]['createdon'] = '';
-                            $product[$i]['sku'] = $product[$i]['linkid'];
-                            $product[$i]['productname'] = $product[$i]['linkname'];
-                            $product[$i]['categ_primary'] = '';
-                            $product[$i]['categ_secondary'] = '';
-                            $product[$i]['price'] = 0;
-                            $product[$i]['currency'] = "USD";
-                            $product[$i]['upccode'] = '';
-                            $product[$i]['description_short'] = '';
-                            $product[$i]['description_long'] = '';
-                            $product[$i]['keywords'] = '';
-                            $product[$i]['linkurl'] = '';
-                            $product[$i]['imageurl'] = '';
-                            $product[$i]['price_list'] = 0;
-                            $product[$i]['price_save'] = 0;
-                            $product[$i]['price_final'] = 0;
-                        }
+        $responseObj = $request->getFormattedResponse();
 
-                        $this->product_new_model->newProduct($product[$i]);
+        $aux = $responseObj['body'];
+        $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
 
-                        $exista = $this->product_model->existsProduct($product[$i]['linkid']);
-                        if (!$exista) {
-                            $this->product_model->newProduct($product[$i]);
-                            $j++;
-                        } else {
-                            $this->product_model->updateProductByLinkID($product[$i], $product[$i]['linkid']);
-                            $k++;
-                        }
-                        $i++;
-                        //echo $i.'<br/>';
-                    }
-                }
-            }
-            
-            $logMessage = "http://lld2.linksynergy.com/services/restLinks/getProductLinks/$token/$mid/$creative_category/$campaignID/$page $i total products $j inserted $k updated ";
+        //if (is_object($categories) && isset($categories)) {
+        $kids = $categories->children('ns1', true);
 
-            Log::warn($logMessage);
- 
-            $message .= "cat_id $creative_cat_id creative_category $creative_category page $page " . count($product) . " products parsed<br/>";
-            $page++;
-        } while ($kids > 0);
+        foreach ($kids as $child) {
+
+            $temp_shortProd = array(
+                'id_site' => $siteRow['id'],
+                'cat_creative_id' => addslashes($child->categoryID),
+                'cat_creative_name' => addslashes($child->categoryName),
+                'linkid' => addslashes($child->linkID),
+                'linkname' => addslashes($child->linkName),
+                'mid' => $mid,
+                'nid' => addslashes($child->nid),
+                'click_url' => addslashes($child->clickURL),
+                'icon_url' => addslashes($child->iconURL),
+                'show_url' => addslashes($child->showURL),
+                'available' => 'yes',
+                'insert_date' => date("Y-m-d H:i:s"),
+                'last_update_date' => date("Y-m-d H:i:s"),
+                'parsed' => 0
+            );
+            //echo"<pre>";print_r($temp_shortProd);
+            $this->product_model->newTempProduct($temp_shortProd);
+            //$shortProd[] = $temp_shortProd;
+        }
+
+        return true;
+        //echo"<pre>";print_r($shortProd);die();
+    }
+
+    public function parseProductSearch($mid, $cat_id = 0)
+    {
+        error_reporting(E_ERROR);
+        include "app/third_party/LOG/Log.php";
+        $CI = & get_instance();
+
+        $this->load->model(array('site_model', 'product_model', 'product_new_model', 'category_creative_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+
+        $config = new LinkshareConfig();
+        $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
+        
+        $flag = 0;
+        $limit = 1;
+        $shortProd = $this->product_model->getTempProducts($mid,$cat_id,$limit,$flag);
+
+        $tempLink = $this->cleanLink($shortProd['linkname']);
+        $keyword = urlencode($tempLink);
+        
+//      // LEGACY
+//      $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746&keyword=\"{$keyword}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
+//      //  http://productsearch.linksynergy.com/productsearch?token=c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f&keyword=%22Heart%20Brooch%20in%2014%20Karat%20Gold%22&MaxResults=1&pagenumber=1&mid=37557       
+//      echo "<pre>"; print_r($produs);die();
+//      // END LEGACY
+
+        $requestLink = "https://api.rakutenmarketing.com/productsearch/1.0?keyword={$keyword}&max=100&mid=$mid";
+
+        $request = new CurlApi($requestLink);
+        $request->setHeaders($config->getMinimalHeaders($accessToken));
+        $request->setGetData();
+        $request->send();
+
+        $responseObj = $request->getFormattedResponse();
+
+        $auxProd = $responseObj['body'];
+
+        $prod = simplexml_load_string($auxProd, "SimpleXMLElement", LIBXML_NOCDATA);
+
+        foreach ($prod->item as $valProd) {
+            $keyProd = $valProd->linkid;
+            $tempProd = array(
+                'mid' => addslashes($valProd->mid),
+                'merchantname' => addslashes($valProd->merchantname),
+                'linkid' => addslashes($valProd->linkid),
+                'createdon' => addslashes($valProd->createdon),
+                'sku' => addslashes($valProd->sku),
+                'productname' => addslashes($valProd->productname),
+                'categ_primary' => addslashes($valProd->category->primary),
+                'categ_secondary' => addslashes($valProd->category->secondary),
+                'price' => addslashes($valProd->price),
+                'currency' => addslashes($valProd->price["currency"]),
+                'upccode' => addslashes($valProd->upccode),
+                'description_short' => addslashes($valProd->description->short),
+                'description_long' => addslashes($valProd->description->long),
+                'saleprice' => addslashes($valProd->saleprice),
+                'keywords' => addslashes($valProd->keywords),
+                'linkurl' => addslashes($valProd->linkurl),
+                'imageurl' => addslashes($valProd->imageurl),
+                'price_list' => addslashes($valProd->saleprice),
+                'price_save' => 0,
+                'price_final' => 0,
+                'parsed' => 1
+            );
+
+            $longProd[] = array("$keyProd" => $tempProd);
+
+        }
+        
+        echo"<pre>";print_r($longProd); die();
+        
+        if (is_null($prod->item[0]->linkurl)) {
+            // delete prod
+            $this->product_model->deleteTempProduct($shortProd['id']);
+        }
+
+//        echo 'LINKURL = ' . $prod->item[0]->linkurl;
+//        echo "<br>";
+//        echo $prodShort['linkid'].'|'.$prod->item[0]->linkid;
+//        echo "<br>";
+//        if (strpos($prod->item[0]->linkurl,$prodShort['linkid']) !== false) { echo 'TRUE in string |'; }else { echo 'FALSE in string |'; }
+//        if($prodShort['linkid'] == addslashes($prod->item[0]->linkid)){ echo " DA"; } else { echo " NU";}
+//        echo "<br>--------<br>";
+
+        $Test_longProd[] = $longProd;
+
+        
+        echo"<pre>LONG PROD";
+        print_r($Test_longProd);
+        die();
+
+        $logMessage = " ";
+
+        Log::warn($logMessage);
+
+        $message .= "cat_id $cat_id creative_category $creative_category page $page " . count($product) . " products parsed<br/>";
+        $page++;
+
 
         $data['message'] = $message;
 
         $this->load->view('parseProductSearch', $data);
 
-        $creative_cat_id++;
-        echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+        $cat_id++;
+        echo '<META http-equiv="refresh" content="10;URL=/admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id . '">';
         die;
     }
 
-    public function parseProductXmlReaderSearch($id, $mid, $creative_cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0)
-    {
+    public function parseProductXmlReaderSearch($id, $mid, $cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0) {
         error_reporting(E_ERROR);
         $aux = '';
         $this->load->model('site_model');
@@ -356,14 +382,14 @@ class Admincp3 extends Admincp_Controller
         if (!$partial) {
 
             //the creative category is not present it means we have finished adding/updating new products...now we must set the old ones to available='no' and return from method
-            if (!array_key_exists($creative_cat_id, $creative_categories)) {
+            if (!array_key_exists($cat_id, $creative_categories)) {
                 $old = $this->product_new_model->markOld($mid);
                 $data['message'] = "$old products marked as not available";
                 $this->load->view('parseProductSearch', $data);
                 return;
             }
 
-            $creative_category = $creative_categories[$creative_cat_id]['cat_id'];
+            $creative_category = $creative_categories[$cat_id]['cat_id'];
             $campaignID = -1;
 
             $xml = new XMLReader();
@@ -379,8 +405,8 @@ class Admincp3 extends Admincp_Controller
 
                 $this->load->view('parseProductSearch', $data);
 
-                $creative_cat_id++;
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+                $cat_id++;
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $cat_id . '">';
                 die;
             } else {
                 $i = 0;
@@ -435,8 +461,8 @@ class Admincp3 extends Admincp_Controller
 
                     $this->load->view('parseProductSearch', $data);
 
-                    $creative_cat_id++;
-                    echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '">';
+                    $cat_id++;
+                    echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $cat_id . '">';
                     die;
                 }
 
@@ -448,7 +474,7 @@ class Admincp3 extends Admincp_Controller
 
                 $this->load->view('parseProductSearch', $data);
 
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
                 die;
             }
         } else {
@@ -515,7 +541,7 @@ class Admincp3 extends Admincp_Controller
 
                 $this->load->view('parseProductSearch', $data);
 
-                echo '<META http-equiv="refresh" content="0;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
+                echo '<META http-equiv="refresh" content="0;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $cat_id . '/' . $partial . '/' . $page . '/' . $id_produs_partial . '/' . $j . '/' . $k . '/' . '">';
                 die;
             } else {
 
@@ -529,9 +555,9 @@ class Admincp3 extends Admincp_Controller
                 $partial = 0;
                 $page++;
 
-                $data['message'] = "cat_id $creative_cat_id creative_category $creative_category page $page $i products parsed<br/>";
+                $data['message'] = "cat_id $cat_id creative_category $creative_category page $page $i products parsed<br/>";
                 $this->load->view('parseProductSearch', $data);
-                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $creative_cat_id . '/' . $partial . '/' . $page . '">';
+                echo '<META http-equiv="refresh" content="1;URL=/admincp3/linkshare/parseProductXmlReaderSearch/' . $id . '/' . $mid . '/' . $cat_id . '/' . $partial . '/' . $page . '">';
                 die;
             }
         }
@@ -540,33 +566,82 @@ class Admincp3 extends Admincp_Controller
 
         $this->load->view('parseProductSearch', $data);
     }
-    
 
-    public function testMarkOld()
-    {
+    public function testMarkOld() {
         $this->load->model('product_model');
         $this->load->model('product_new_model');
-                
-        $id = 2; $mid = 37920; $creative_cat_id = 200260395;
-        $linkid = 78900666;
-        
-        // Delete product from linkshare_produs
-        $this->product_new_model->deleteOldFromCurrent($linkid,$mid);
-        
-        //$produs = array();
-        
-        //$produs = $this->product_new_model->getProductsByLinkID($linkid,$mid);
-       
 
-        
-//        echo "<pre>";
-//        print_r ($produs);
-//        echo "</pre>";
-//        die();
-       
+        $id = 2;
+        $mid = 37920;
+        $cat_id = 200260395;
+        $linkid = 78900666;
+
+        // Delete product from linkshare_produs
+        $this->product_new_model->deleteOldFromCurrent($linkid, $mid);
+
+        //$produs = array();
+        //$produs = $this->product_new_model->getProductsByLinkID($linkid,$mid);
         //$this->product_new_model->copyToProductsOld($produs);
-       
     }
-    
-    
+
+    public function getXmlProducts() {
+        $CI = & get_instance();
+        $this->load->library('admin_form');
+        $form = new Admin_form;
+
+        $this->load->model(array('site_model', 'advertiser_model'));
+        $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/getXML/'));
+        $this->admin_navigation->module_link('Parse ALL Creative Categories', site_url('admincp2/linkshare/parseCreativeCategories'));
+
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+
+        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteRow['id'])));
+
+        foreach ($current as $val) {
+            $allMids[] = array('mid' => $val['mid'], 'name' => $val['name']);
+        }
+
+        $responseObj = array();
+
+        if (isset($_GET['mid'])) {
+
+            $categoriesRequestUrl = 'https://api.rakutenmarketing.com/linklocator/1.0/getCreativeCategories/' . $_GET['mid'];
+
+            $config = new LinkshareConfig();
+
+            $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
+
+            $request = new CurlApi($categoriesRequestUrl);
+            $request->setHeaders($config->getMinimalHeaders($accessToken));
+            $request->setGetData();
+            $request->send();
+
+            $responseObj = $request->getFormattedResponse();
+
+            if (!$responseObj) {
+                $this->notices->SetError('Refresh token');
+                $responseObj['header'] = $responseObj['body'] = 'ERROR';
+            } else {
+                //print '<pre>';
+                //print_r($responseObj['header']);
+            }
+        }
+
+        $form->fieldset('Xml');
+        $form->textarea('Header', 'header', $responseObj['header'], 'header', true, 'e.g., header', true);
+        $form->textarea('Body', 'body', $responseObj['body'], 'body', true, 'e.g., body', true);
+
+        $data = array(
+            'form' => $form->display(),
+            'form_title' => 'Products XML',
+            'form_scope' => 'products',
+            'site_name' => $siteRow['name'],
+            'allMids' => $allMids,
+            'form_action' => site_url('admincp/linkshare/')
+        );
+
+        $this->load->view('xml', $data);
+    }
+
 }

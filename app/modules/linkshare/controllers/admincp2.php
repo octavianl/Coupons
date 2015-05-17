@@ -387,7 +387,7 @@ class Admincp2 extends Admincp_Controller {
         $columns = array(
             array(
                 'name' => 'ID #',
-                'width' => '15%'),
+                'width' => '5%'),
             array(
                 'name' => 'Site',
                 'width' => '15%'),
@@ -396,20 +396,29 @@ class Admincp2 extends Admincp_Controller {
                 'width' => '10%'),
             array(
                 'name' => 'Name',
-                'width' => '20%',
+                'width' => '30%',
                 'type' => 'text',
                 'filter' => 'nume'),
             array(
                 'name' => 'Mid',
-                'width' => '15%',
+                'width' => '10%',
                 'type' => 'text',
                 'filter' => 'mid'),
             array(
                 'name' => 'Nid',
-                'width' => '5%'),
+                'width' => '3%'),
+            array(
+                'name' => 'Parse products',
+                'width' => '7%'),
+            array(
+                'name' => 'Products',
+                'width' => '7%'),
+            array(
+                'name' => 'No',
+                'width' => '3%'),
             array(
                 'name' => 'Actions',
-                'width' => '20%'
+                'width' => '10%'
             )
         );
 

@@ -29,6 +29,31 @@
     </select>
     <button type="submit">GET XML</button>
     </form>
+<?php } if($form_scope == 'products'){ ?>
+<h4>Select approved advertiser mids and category</h4>
+    <form method="GET" action="admincp3/linkshare/getXmlProducts/">
+        MIDS &nbsp;
+        <select name="mid">
+            <?php
+                foreach ($allMids as $val){
+                ?>
+                    <option value="<?=$val['mid']?>" <?php if(isset($_GET['mid']) && $_GET['mid']==$val['mid']){ echo 'selected';} ?> ><?php echo $val['mid'].' '.$val['name']; ?></option>
+                <?php
+                    }
+            ?>
+        </select>
+        &nbsp; CATEGORY &nbsp;
+        <select name="category_select">
+            <?php
+                foreach ($allMids as $val){
+                ?>
+                    <option value="<?=$val['mid']?>" <?php if(isset($_GET['mid']) && $_GET['mid']==$val['mid']){ echo 'selected';} ?> ><?php echo $val['mid'].' '.$val['name']; ?></option>
+                <?php
+                    }
+            ?>
+        </select>
+    <button type="submit">GET XML</button>
+    </form>
 <?php } ?>
 </h1>
 <form class="form validate" enctype="multipart/form-data" id="form_type" method="post" action="<?=$form_action;?>">
