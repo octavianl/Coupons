@@ -285,10 +285,9 @@ class Product_model extends CI_Model
 
         return $row;
     }
-    
-    
+       
     /**
-     * Delete Produs
+     * Delete Temp Produs
      *
      * Deletes produs
      * 	
@@ -303,5 +302,21 @@ class Product_model extends CI_Model
         return true;
     }
     
-    
+    /**
+     * Update Temp Produs By Linkid
+     *
+     * Updates produs
+     * 
+     * @param array $update_fields
+     * @param int $linkid	
+     *
+     * @return boolean true
+     */
+    function updateTempProductByLinkID($update_fields, $linkid)
+    {
+        $this->db->where('linkid', $linkid);
+        $this->db->update('linkshare_produs_temp', $update_fields);
+
+        return true;
+    }
 }

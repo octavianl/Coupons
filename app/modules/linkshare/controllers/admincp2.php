@@ -393,7 +393,9 @@ class Admincp2 extends Admincp_Controller {
                 'width' => '15%'),
             array(
                 'name' => 'Category ID #',
-                'width' => '10%'),
+                'width' => '10%',
+                'type' => 'text',
+                'filter' => 'cat_id'),
             array(
                 'name' => 'Name',
                 'width' => '30%',
@@ -434,9 +436,10 @@ class Admincp2 extends Admincp_Controller {
 
         if (isset($_GET['offset']))
             $filters['offset'] = $_GET['offset'];
-
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
+        if (isset($_GET['cat_id']))
+            $filters['cat_id'] = $_GET['cat_id'];
         if (isset($_GET['mid']))
             $filters['mid'] = $_GET['mid'];
 

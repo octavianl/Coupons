@@ -21,8 +21,6 @@
                                 <td align="center"><?=$row['commission'];?></td>
                                 <td align="center"><?=$row['offer_id'];?></td>
                                 <td align="center"><?=$row['offer_name'];?></td>
-                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parseProductSearch/' . $row['id_site'].'/'.$row['mid']);?>">Parse products</a></td>
-                                <td align="center"><a href="<?=site_url('admincp3/linkshare/listProducts/'.$row['id_site'].'/' . $row['mid']);?>">See products</a></td>
                                 <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
                                 <td class="options" align="center">
 					<a href="<?=site_url('admincp/linkshare/editAdvertiser/' . $row['id']);?>">Edit</a>

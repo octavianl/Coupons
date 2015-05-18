@@ -38,6 +38,8 @@ class Category_creative_model extends CI_Model {
             $this->db->where('id_site', $filters['id_site']);
         if (isset($filters['mid']))
             $this->db->where('mid', $filters['mid']);
+        if (isset($filters['cat_id']))
+            $this->db->where('cat_id', $filters['cat_id']);
         if (isset($filters['mid']))
             $this->db->order_by('cat_id');
         else
@@ -54,17 +56,42 @@ class Category_creative_model extends CI_Model {
         if (isset($filters['name']))
             $this->load->model('site_model');
 
+        $nr_products = $this->getCountProductsByMID($filters['id_site'], $filters['cat_id'], $filters['mid']);
+        
         foreach ($result->result_array() as $linie) {
             if (isset($filters['name'])) {
                 $site = $this->site_model->getSite($linie['id_site']);
                 $linie['id_site'] = $site['name'];
             }
+
+            $linie['nr_products'] = $nr_products;
+            
             $row[] = $linie;
         }
 
         return $row;
     }
 
+    /**
+     * Get Count Products By Mid
+     *
+     * @param int $mid
+     * @param int $id_site
+     * @param array $filters
+     *
+     * @return array
+     */
+    function getCountProductsByMID($id_site, $cat_id, $mid, $flag = 1) {
+
+        $this->db->where('id_site', $id_site);
+        $this->db->where('cat_creative_id', $cat_id);
+        $this->db->where('mid', $mid);
+        $this->db->where('parsed', $flag);
+        $result = $this->db->get('linkshare_produs');
+
+        return $result->num_rows();
+    }
+    
     /**
      * Get Temporary Creative Categories
      *
@@ -152,6 +179,8 @@ class Category_creative_model extends CI_Model {
             $this->db->where('id_site', $filters['id_site']);
         if (isset($filters['mid']))
             $this->db->where('mid', $filters['mid']);
+        if (isset($filters['cat_id']))
+            $this->db->where('cat_id', $filters['cat_id']);
 
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);

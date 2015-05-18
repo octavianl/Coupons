@@ -40,7 +40,7 @@ class Admincp3 extends Admincp_Controller {
     }
 
     public function listProducts($id_site, $mid) {
-        $this->admin_navigation->module_link('Inapoi la magazine', site_url('admincp3/linkshare/siteAdvertisers/' . $id_site));
+        $this->admin_navigation->module_link('Back to advertiser', site_url('admincp3/linkshare/listCreativeCategory/' . $id_site));
 
         $this->load->library('dataset');
 
@@ -108,19 +108,6 @@ class Admincp3 extends Admincp_Controller {
                 'width' => '5%'
             )
         );
-        /*
-          //click url
-          http://click.linksynergy.com/fs-bin/click?id=eRClQ*mKkgw&offerid=270100.1772&type=2 BAZA
-          //icon url
-          http://www.glam-net.com/media/catalog/product/g/n/gn_ring.jpg BAZA
-          //show url
-          http://ad.linksynergy.com/fs-bin/show?id=eRClQ*mKkgw&bids=270100.1772&type=2 varza nu e bun de nimik
-          //link url
-          http://click.linksynergy.com/link?id=eRClQ*mKkgw&offerid=270100.1772&type=15&murl=http%3A%2F%2Fwww.glam-net.com%2Fniin-cosmo-agate-ring.html are in plus url de redirect
-          //image url
-          http://www.glam-net.com/media/catalog/product/g/n/gn_ring.jpg same shit
-         *
-         */
 
         $filters = array();
         $filters['limit'] = 20;
@@ -191,8 +178,7 @@ class Admincp3 extends Admincp_Controller {
         return trim($link);
     }
 
-    public function parseShortProduct($mid, $cat_id = 0)
-    {
+    public function parseShortProduct($mid, $cat_id = 0) {
         error_reporting(E_ERROR);
         include "app/third_party/LOG/Log.php";
         $CI = & get_instance();
@@ -244,12 +230,11 @@ class Admincp3 extends Admincp_Controller {
             //$shortProd[] = $temp_shortProd;
         }
 
-        return true;
+        redirect("admincp3/linkshare/parseProductSearch/" . $mid . "/" . $cat_id . "");
         //echo"<pre>";print_r($shortProd);die();
     }
 
-    public function parseProductSearch($mid, $cat_id = 0)
-    {
+    public function parseProductSearch($mid, $cat_id = 0) {
         error_reporting(E_ERROR);
         include "app/third_party/LOG/Log.php";
         $CI = & get_instance();
@@ -259,14 +244,16 @@ class Admincp3 extends Admincp_Controller {
 
         $config = new LinkshareConfig();
         $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
-        
+
         $flag = 0;
         $limit = 1;
-        $shortProd = $this->product_model->getTempProducts($mid,$cat_id,$limit,$flag);
+        $shortProd = $this->product_model->getTempProducts($mid, $cat_id, $limit, $flag);
 
+        if(empty($shortProd)){redirect("admincp3/linkshare/listProducts/" . $mid . "/" . $cat_id . "");}
+        
         $tempLink = $this->cleanLink($shortProd['linkname']);
         $keyword = urlencode($tempLink);
-        
+
 //      // LEGACY
 //      $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746&keyword=\"{$keyword}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
 //      //  http://productsearch.linksynergy.com/productsearch?token=c9b4a2805e6d69846a3b7c9f0c23c26249cb86bc50fe864ff13746a8ab7dc92f&keyword=%22Heart%20Brooch%20in%2014%20Karat%20Gold%22&MaxResults=1&pagenumber=1&mid=37557       
@@ -312,47 +299,28 @@ class Admincp3 extends Admincp_Controller {
                 'parsed' => 1
             );
 
-            $longProd[] = array("$keyProd" => $tempProd);
-
+            $longProd["$keyProd"] = $tempProd;
         }
-        
-        echo"<pre>";print_r($longProd); die();
-        
+
         if (is_null($prod->item[0]->linkurl)) {
-            // delete prod
+            // Delete short prod
             $this->product_model->deleteTempProduct($shortProd['id']);
         }
 
-//        echo 'LINKURL = ' . $prod->item[0]->linkurl;
-//        echo "<br>";
-//        echo $prodShort['linkid'].'|'.$prod->item[0]->linkid;
-//        echo "<br>";
-//        if (strpos($prod->item[0]->linkurl,$prodShort['linkid']) !== false) { echo 'TRUE in string |'; }else { echo 'FALSE in string |'; }
-//        if($prodShort['linkid'] == addslashes($prod->item[0]->linkid)){ echo " DA"; } else { echo " NU";}
-//        echo "<br>--------<br>";
-
-        $Test_longProd[] = $longProd;
-
-        
-        echo"<pre>LONG PROD";
-        print_r($Test_longProd);
-        die();
-
-        $logMessage = " ";
-
-        Log::warn($logMessage);
-
-        $message .= "cat_id $cat_id creative_category $creative_category page $page " . count($product) . " products parsed<br/>";
-        $page++;
-
-
-        $data['message'] = $message;
-
-        $this->load->view('parseProductSearch', $data);
-
-        $cat_id++;
+        if (array_key_exists($shortProd['linkid'], $longProd)) {
+            // Update short product to full details
+            $keyProdtoUpdate = $shortProd['linkid'];
+            $update_fields = $longProd["$keyProdtoUpdate"];
+            
+            $this->product_model->updateTempProductByLinkID($update_fields,$shortProd['linkid']);
+            
+        } else {
+            $logMessage = "Product from Category $cat_id and Advertiser mid $mid with linkid : {$shortProd['linkid']}. | NOT found on search product!";
+            Log::warn($logMessage);
+        }
+//      die();
         echo '<META http-equiv="refresh" content="10;URL=/admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id . '">';
-        die;
+
     }
 
     public function parseProductXmlReaderSearch($id, $mid, $cat_id = 0, $partial = 0, $page = 1, $id_produs_partial = 1, $j = 0, $k = 0) {

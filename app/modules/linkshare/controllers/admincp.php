@@ -566,20 +566,15 @@ class Admincp extends Admincp_Controller {
                 'filter' => 'name'),
             array(
                 'name' => 'Commission',
-                'width' => '10%'),
+                'width' => '16%'),
             array(
                 'name' => 'Offer ID',
                 'width' => '5%'),
             array(
                 'name' => 'Offer name',
                 'width' => '10%'),
-            array(
-                'name' => 'Parse products',
+            array('name' => 'Parsed Products',
                 'width' => '5%'),
-            array('name' => 'Products',
-                'width' => '5%'),
-            array('name' => 'No',
-                'width' => '1%'),
             array(
                 'name' => 'Actions',
                 'width' => '5%'),
