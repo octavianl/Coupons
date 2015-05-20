@@ -71,6 +71,36 @@ class Product_model extends CI_Model
     }
 
     /**
+     * Get Produse By Mid and cat_id
+     * @param array $params
+     *
+     * @return array
+     */
+    function getTempProductsByMid($filters)
+    {
+        $row = array();
+        if (isset($filters['limit'])) {
+            $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
+            $this->db->limit($filters['limit'], $offset);
+        }
+        if (isset($filters['id_site']))
+            $this->db->where('id_site', $filters['id_site']);
+        if (isset($filters['mid']))
+            $this->db->where('mid', $filters['mid']);
+        if (isset($filters['cat_creative_id']))
+            $this->db->where('cat_creative_id', $filters['cat_creative_id']);
+        if (isset($params['cat_creative_name']))
+            $this->db->where('cat_creative_name', $filters['cat_creative_name']);
+        $result = $this->db->get('linkshare_produs_temp');
+
+        foreach ($result->result_array() as $linie) {
+            $row[] = $linie;
+        }
+
+        return $row;
+    }
+    
+    /**
      * Get Produs Status
      *
      *
@@ -111,6 +141,37 @@ class Product_model extends CI_Model
 
         $update_fields['available'] = $available;
         $this->updateProduct($update_fields, $id_product);
+
+        return true;
+    }
+    
+    /**
+     * Change Temp Produs Status
+     * @param int $id_product
+     *
+     * @return boolean
+     */
+    function changeTempProductStatus($id_product,$sid,$cat_id,$mid,$linkid)
+    {
+        $row = array();
+        $this->db->where('id', $id_product);
+        $this->db->where('id_site', $sid);
+        $this->db->where('cat_creative_id', $cat_id);
+        $this->db->where('mid', $mid);
+        $this->db->where('linkid', $linkid);
+        $result = $this->db->get('linkshare_produs_temp');
+
+        foreach ($result->result_array() as $value) {
+            $available = $value['available'];
+        }
+
+        if ($available == 'yes')
+            $available = 'no';
+        elseif ($available == 'no')
+            $available = 'yes';
+
+        $update_fields['available'] = $available;
+        $this->updateTempProduct($update_fields, $sid, $mid, $cat_id, $linkid);
 
         return true;
     }
@@ -265,6 +326,26 @@ class Product_model extends CI_Model
     }
     
     /**
+     * Create New Temp Products
+     *
+     * Creates a new produs
+     *
+     * @param array $insert_fields	
+     *
+     * @return int $insert_id
+     */
+    function updateTempProduct($update_fields, $sid, $mid, $cat_id, $linkid)
+    {
+        $this->db->where('id_site', $sid);
+        $this->db->where('mid', $mid);
+        $this->db->where('cat_creative_id', $cat_id);
+        $this->db->where('linkid', $linkid);
+        $this->db->update('linkshare_produs_temp', $update_fields);
+
+        return $insert_id;
+    }
+    
+    /**
      * 
      * Get Temp Products
      *
@@ -303,6 +384,29 @@ class Product_model extends CI_Model
     }
     
     /**
+     * Check Temp Product exists by mid,sid,cat_id,link_id
+     *
+     * existsAdvertiser
+     * 	
+     * @param int $mid	
+     *
+     * @return boolean true
+     */
+    function existsTempProduct($sid, $cat_id, $mid, $link_id) {
+        $this->db->where('id_site', $sid);
+        $this->db->where('cat_creative_id', $cat_id);
+        $this->db->where('mid', $mid);
+        $this->db->where('linkid', $link_id);
+        $result = $this->db->get('linkshare_produs_temp');
+        
+        foreach ($result->result_array() as $row) {
+            if(isset($row)) {return true;} else { break; }
+        }
+
+        return false;
+    }
+    
+    /**
      * Update Temp Produs By Linkid
      *
      * Updates produs
@@ -319,4 +423,46 @@ class Product_model extends CI_Model
 
         return true;
     }
+    
+    public function checkProducts($current, $temp) 
+    {
+        $updateFields = array(
+            'linkname',
+            'nid'
+        );
+        
+        $productFields = array();
+        
+        foreach ($updateFields as $field) {
+            if (isset($temp[$field])
+                && $temp['field'] != $current['field']) {
+                $productFields[$field] = $temp[$field];
+            }
+        }
+        
+        return $productFields;
+    }
+    
+    /**
+     * Update Produs
+     *
+     * Updates produs
+     * 
+     * @param array $update_fields desc
+     * @param array $fields	 desc
+     *
+     * @return boolean true
+     */
+    function updateProductArray($update_fields, $fields)
+    {                
+        $this->db->update('linkshare_produs', $update_fields, $fields);
+
+        return true;
+    }
+    
+    // $fields vine din controller cu siteid,mid,catid
+    public function updateProductCurrent($current, $temp, $fields)
+    {
+        $this->updateProductArray($this->checkProducts($current, $temp), $fields);
+    }        
 }

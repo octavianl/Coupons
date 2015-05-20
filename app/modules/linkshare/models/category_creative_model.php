@@ -55,8 +55,6 @@ class Category_creative_model extends CI_Model {
         $result = $this->db->get('linkshare_categories_creative');
         if (isset($filters['name']))
             $this->load->model('site_model');
-
-        $nr_products = $this->getCountProductsByMID($filters['id_site'], $filters['cat_id'], $filters['mid']);
         
         foreach ($result->result_array() as $linie) {
             if (isset($filters['name'])) {
@@ -64,6 +62,8 @@ class Category_creative_model extends CI_Model {
                 $linie['id_site'] = $site['name'];
             }
 
+            $nr_products = $this->getCountProductsByMID($filters['id_site'], $linie['cat_id'], $linie['mid']);
+            
             $linie['nr_products'] = $nr_products;
             
             $row[] = $linie;
@@ -580,7 +580,7 @@ class Category_creative_model extends CI_Model {
 
         return $row;
     }
-
+    
     /**
      * Update Creative Categories from Temp
      *

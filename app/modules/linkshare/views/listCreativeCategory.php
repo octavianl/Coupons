@@ -15,7 +15,7 @@
 				<td align="center"><?=$row['name'];?></td>
                                 <td align="center"><?=$row['mid'];?></td>
                                 <td align="center"><?=$row['nid'];?></td>
-                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parseProductSearch/' . $row['mid'].'/'.$row['cat_id']);?>">Parse products</a></td>
+                                <td align="center"><a href="<?=site_url('admincp3/linkshare/parseShortProduct/' . $row['mid'].'/'.$row['cat_id']);?>">Parse products</a></td>
                                 <td align="center"><a href="<?=site_url('admincp3/linkshare/listProducts/'.$row['mid'].'/' . $row['cat_id']);?>">See products</a></td>
                                 <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
 				<td class="options" align="center">
