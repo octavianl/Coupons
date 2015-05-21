@@ -292,13 +292,12 @@ class Admincp3 extends Admincp_Controller {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
 
-        $this->load->library('admin_form');
-        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model'));
+        $this->load->model(array('site_model', 'product_model', 'category_creative_model'));
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
-        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+        $tempProducts = $this->product_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
 
-        $currentCC = $this->category_creative_model->getCategories(array('id_site' => $siteID['id']));
+        $currentProducts = $this->product_model->getCategories(array('id_site' => $siteID['id']));
 
         foreach ($currentCC as $val) {
             $existsTempCC = $this->category_creative_model->existsTempCC($siteID['id'], $val['cat_id'], $val['mid']);
