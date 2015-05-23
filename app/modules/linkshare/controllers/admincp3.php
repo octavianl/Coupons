@@ -39,9 +39,12 @@ class Admincp3 extends Admincp_Controller {
         redirect('admincp3/linkshare/listProducts');
     }
 
-    public function listProducts($id_site, $mid) {
+    public function listProducts($mid,$cat_id) {
         $this->admin_navigation->module_link('Back to advertiser', site_url('admincp3/linkshare/listCreativeCategory/' . $id_site));
 
+        $this->load->model(array('site_model', 'product_model'));
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        
         $this->load->library('dataset');
 
         $columns = array(
@@ -125,18 +128,19 @@ class Admincp3 extends Admincp_Controller {
                 $filters['cat_creative_name'] = $aux['cat_creative_name'];
         }
 
-        $filters['id_site'] = $id_site;
+        $filters['id_site'] = $siteRow['id'];
         $filters['mid'] = $mid;
+        //$filters['parsed'] = 1;
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('product_model', 'getProductsByMid', $filters);
-        $this->dataset->base_url(site_url('admincp3/linkshare/listProducts/' . $id_site . '/' . $mid));
+        $this->dataset->base_url(site_url('admincp3/linkshare/listProducts/' . $mid . '/' . $cat_id));
         $this->dataset->rows_per_page(20);
 
         $this->load->model('advertiser_model');
 
         // total rows
-        $total_rows = $this->advertiser_model->getCountProductsByMID($mid, $id_site, $filters);
+        $total_rows = $this->product_model->getCountProductsByMID($mid, $siteRow['id'], $filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -263,7 +267,7 @@ class Admincp3 extends Admincp_Controller {
         $this->load->model('advertiser_model');
 
         // total rows
-        $total_rows = $this->advertiser_model->getCountProductsByMID($mid, $siteRow['id'], $filters);
+        $total_rows = $this->product_model->getCountTempProductsByMID($mid, $siteRow['id'], $filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -288,46 +292,80 @@ class Admincp3 extends Admincp_Controller {
         $this->load->view('listTempProducts', $data);
     }
     
-    public function moveProducts($mid,$cat_id){
+    public function moveProducts($mid,$cat_id,$offset=0){
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
+        $batch_current = 100;
 
         $this->load->model(array('site_model', 'product_model', 'category_creative_model'));
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
-        $tempProducts = $this->product_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+        $currentProducts = $this->product_model->getProductsByMid(array('id_site' => $siteID['id'], 'mid' => $mid, 'cat_creative_id' => $cat_id, 'offset' =>$offset,'limit' =>$batch_current));
 
-        $currentProducts = $this->product_model->getCategories(array('id_site' => $siteID['id']));
+        //echo"<pre>"; print_r($currentProducts); die();
+        
+        foreach ($currentProducts as $val) {
+            $filters = array('id_site' => $siteID['id'], 'mid' => $val['mid'], 'cat_creative_id' => $val['cat_creative_id'], 'linkid' => $val['linkid']);
+            $existsTempProducts = $this->product_model->existsTempProduct($siteID['id'], $val['cat_creative_id'], $val['mid'],$val['linkid']);
 
-        foreach ($currentCC as $val) {
-            $existsTempCC = $this->category_creative_model->existsTempCC($siteID['id'], $val['cat_id'], $val['mid']);
+        //echo"<pre>"; print_r($filters); die();
+            
+            if (!empty($existsTempProducts)) {
+                // Update Products from linkshare_products_temp by (site_id,cat_id,mid,linkid)
+                $tempProductRow = $this->product_model->getTempProduct($filters);
+ 
+                $this->product_model->updateProductCurrent($val, $tempProductRow);
 
-            if (!empty($existsTempCC)) {
-                // Update creative categories from  linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)
-                $tempRow = $this->category_creative_model->getTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
-                $this->category_creative_model->updateCreativeCategoriesFromTemp($tempRow, $siteID['id'], $val['cat_id'], $val['mid']);
-                $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                $this->product_model->deleteTempProduct($filters);
             } else {
-                if ($val['live'] == 1) {
+                if ($val['live'] == 1) { 
                     // Mark live items to be deleted by a later cron
-                    $this->category_creative_model->updateCreativeCategoriesFromTemp(array('deleted' => 1), $siteID['id'], $val['cat_id'], $val['mid']);
+                    $this->product_model->updateProduct(array('deleted' => 1), $filters);
                 } else {
-                    // Delete advertiser from linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)             
-                    $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                    // Delete advertiser from linkshare_products_temp by (site_id,cat_id,mid,linkid)   
+                    $this->product_model->deleteProduct($filters);
                 }
+                //echo"<pre> ZZ "; print_r($filters); die();
+                $this->product_model->deleteTempProduct($filters);
             }
         }
-
-        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
-
-        foreach ($tempCC as $val) {
-            $this->category_creative_model->newCreativeCategory($val);
-        }
-
-        $this->advertiser_model->resetPCC(0, $siteID['id']);
         
-        $this->category_creative_model->deleteTempCreativeCategories();
-        redirect('admincp2/linkshare/listTempCreativeCategory/');
+        if(!empty($currentProducts)) {
+            $offset += $batch_current;
+            echo "$offset" . "Current";
+            echo '<META http-equiv="refresh" content="1; URL=/admincp3/linkshare/moveProducts/' . $mid . '/' . $cat_id . '/' . $offset . '">';
+            return;
+        }
+        
+        redirect('admincp3/linkshare/moveProductsTemp/' . $mid . '/' . $cat_id);
+    }
+    
+    public function moveProductsTemp($mid, $cat_id, $offset = 0) 
+    {
+        $batch_temp = 1000;
+        
+        $this->load->model(array('site_model', 'product_model'));
+        $siteID = $this->site_model->getSiteBySID($this->siteID);
+                
+        $tempProducts = $this->product_model->getTempProductsByMid(array('id_site' => $siteID['id'],'mid' => $mid,'cat_creative_id' => $cat_id, 'offset' => $offset,'limit' => $batch_temp));                
+           
+        if(!empty($tempProducts)) {
+            foreach ($tempProducts as $val) {
+                $temp = $val;
+                unset($temp['id']);
+                $this->product_model->newProduct($temp);
+                $this->product_model->deleteTempProduct(array('id'=> $val['id']));
+            }
+             
+            //$offset += $batch_temp;
+            echo "$offset" . "Temp";
+            echo '<META http-equiv="refresh" content="1; URL=/admincp3/linkshare/moveProductsTemp/' . $mid . '/' . $cat_id . '/' . $offset .'">';
+            return;
+        }
+        
+        //$this->product_model->deleteTempProducts();
+        
+        redirect('admincp3/linkshare/listProducts/' . $mid . '/' . $cat_id);
     }
     
     public function changeTempProductStatus($id_product, $sid, $cat_id, $mid, $linkid, $ret_url) {
@@ -381,7 +419,7 @@ class Admincp3 extends Admincp_Controller {
 
             $value = $this->product_model->existsTempProduct($siteRow['id'], $cat_id, $mid, $child->linkID);
 
-            if($value){          
+            if(!empty($value)){          
                 $temp_shortProd = array(
                     'id_site' => $siteRow['id'],
                     'cat_creative_id' => addslashes($child->categoryID),
@@ -434,7 +472,7 @@ class Admincp3 extends Admincp_Controller {
         include "app/third_party/LOG/Log.php";
         $CI = & get_instance();
 
-        $this->load->model(array('site_model', 'product_model', 'product_new_model', 'category_creative_model'));
+        $this->load->model(array('site_model', 'product_model', 'category_creative_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $config = new LinkshareConfig();
@@ -499,7 +537,8 @@ class Admincp3 extends Admincp_Controller {
 
         if (is_null($prod->item[0]->linkurl)) {
             // Delete short prod
-            $this->product_model->deleteTempProduct($shortProd['id']);
+            $filters = array('id' => $shortProd['id']);
+            $this->product_model->deleteTempProduct($filters);
         }
 
         if (array_key_exists($shortProd['linkid'], $longProd)) {
@@ -514,7 +553,7 @@ class Admincp3 extends Admincp_Controller {
             Log::warn($logMessage);
         }
 //      die();
-        echo '<META http-equiv="refresh" content="10;URL=/admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id . '">';
+        echo '<META http-equiv="refresh" content="3;URL=/admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id . '">';
 
     }
 

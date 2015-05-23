@@ -87,7 +87,7 @@ class Category_creative_model extends CI_Model {
         $this->db->where('cat_creative_id', $cat_id);
         $this->db->where('mid', $mid);
         $this->db->where('parsed', $flag);
-        $result = $this->db->get('linkshare_produs');
+        $result = $this->db->get('linkshare_products');
 
         return $result->num_rows();
     }

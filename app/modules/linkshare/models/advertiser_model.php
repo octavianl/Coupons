@@ -248,36 +248,6 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Get Count Products By Mid
-     *
-     * @param int $mid
-     * @param int $id_site
-     * @param array $filters
-     *
-     * @return array
-     */
-    function getCountProductsByMID($mid, $id_site, $filters = array()) {
-        /* $i = 0;
-          $row = array(); */
-        $this->db->where('mid', $mid);
-        $this->db->where('id_site', $id_site);
-        if (isset($filters['cat_creative_id']))
-            $this->db->where('cat_creative_id', $filters['cat_creative_id']);
-        if (isset($filters['cat_creative_name']))
-            $this->db->where('cat_creative_name', $filters['cat_creative_name']);
-        $result = $this->db->get('linkshare_produs');
-
-        return $result->num_rows();
-
-        //crapa memoria daca parcurg tot vectorul :)
-        /* foreach ($result->result_array() as $row) {
-          $i++;
-          }
-
-          return $i; */
-    }
-
-    /**
      * Create New Magazin
      *
      * Creates a new magazin

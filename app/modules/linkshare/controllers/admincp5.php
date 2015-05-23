@@ -2406,7 +2406,7 @@ class Admincp3 extends Admincp_Controller
         $this->load->model('advertiser_model');
 
         // total rows
-        $total_rows = $this->advertiser_model->getCountProductsByMID($mid, $id_site, $filters);
+        $total_rows = $this->product_model->getCountProductsByMID($mid, $id_site, $filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -2417,7 +2417,7 @@ class Admincp3 extends Admincp_Controller
         $magazin = '';
 
         $this->load->model('advertiser_model');
-        $aux = $this->advertiser_model->getAdvertiserByMID($mid, $id_site);
+        $aux = $this->product_model->getAdvertiserByMID($mid, $id_site);
         if ($aux)
             $magazin = $aux['name'];
 
