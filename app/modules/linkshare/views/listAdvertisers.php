@@ -5,7 +5,7 @@
 <div style="width:1800px;text-align:center;" align="center">
 
     <?=$this->dataset->table_head();?>
-	<?
+	<?php
 	if (!empty($this->dataset->data)) {
 		foreach ($this->dataset->data as $row) {
 		?>
@@ -28,7 +28,7 @@
                                 <td align="center"><a href="#"><img src="<?php if($row['live']==0){$liveflag = 'offline.gif';}else{$liveflag = 'live.gif';}?><?=site_url('app/modules/linkshare/assets/'.$liveflag);?>" /></a></td>
                                 <td align="center"><a href="#"><img src="<?php if($row['deleted']==0){$deletedflag = 'nodelete.gif';}else{$deletedflag = 'delete.gif';}?><?=site_url('app/modules/linkshare/assets/'.$deletedflag);?>" /></a></td>
 			</tr>
-		<?
+		<?php
 		}
 	}
 	else {
@@ -36,7 +36,7 @@
 	<tr>
 		<td colspan="10">No advertisers available.</td>
 	</tr>
-	<? } ?>
+	<?php } ?>
 	<?=$this->dataset->table_close();?>
 </div>
 <?=$this->load->view(branded_view('cp/footer'));?>

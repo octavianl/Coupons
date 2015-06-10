@@ -57,10 +57,12 @@ class Product_model extends CI_Model
             $this->db->where('id_site', $params['id_site']);
         if (isset($params['mid']))
             $this->db->where('mid', $params['mid']);
+        if (isset($params['linkid']))
+            $this->db->where('linkid', $params['linkid']);
         if (isset($params['cat_creative_id']))
             $this->db->where('cat_creative_id', $params['cat_creative_id']);
         if (isset($params['cat_creative_name']))
-            $this->db->where('cat_creative_name', $params['cat_creative_name']);
+            $this->db->like('cat_creative_name', $params['cat_creative_name']);
         if (isset($params['parsed']))
             $this->db->where('parsed', $params['parsed']);
         $result = $this->db->get('linkshare_products');
@@ -151,12 +153,16 @@ class Product_model extends CI_Model
         }
         if (isset($filters['id_site']))
             $this->db->where('id_site', $filters['id_site']);
+        if (isset($filters['linkid']))
+            $this->db->where('linkid', $filters['linkid']);
         if (isset($filters['mid']))
             $this->db->where('mid', $filters['mid']);
         if (isset($filters['cat_creative_id']))
             $this->db->where('cat_creative_id', $filters['cat_creative_id']);
         if (isset($filters['cat_creative_name']))
-            $this->db->where('cat_creative_name', $filters['cat_creative_name']);
+            $this->db->like('cat_creative_name', $filters['cat_creative_name']);
+        if (isset($filters['parsed']))
+            $this->db->where('parsed', $filters['parsed']);
         $result = $this->db->get('linkshare_products_temp');
 
         foreach ($result->result_array() as $linie) {

@@ -455,6 +455,8 @@ class Category_creative_model extends CI_Model {
             $filters['nume'] = str_replace('+', ' ', $filters['nume']);
             $this->db->like('name', $filters['nume']);
         }
+        if (isset($filters['cat_creativ_id']))
+            $this->db->where('cat_id', $filters['cat_creativ_id']);
         if ($filters['mid'] != '') {
             $this->db->where('mid', $filters['mid']);
             $this->db->order_by('cat_id');
@@ -477,6 +479,9 @@ class Category_creative_model extends CI_Model {
                 $check_array = explode(',', $filters['check_category']);
                 in_array($linie['cat_id'], $check_array, true) ? $linie['checked'] = 1 : $linie['checked'] = 0;
 
+                $nr_products = $this->getCountProductsByMID($filters['id_site'], $linie['cat_id'], $linie['mid']);            
+                $linie['nr_products'] = $nr_products;
+            
                 $row[] = $linie;
             }
         return $row;

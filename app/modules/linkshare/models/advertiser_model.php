@@ -31,6 +31,7 @@ class Advertiser_model extends CI_Model {
         $order_dir = (isset($filters['sort_dir'])) ? $filters['sort_dir'] : 'ASC';
 
         $this->load->model('site_model');
+        $this->load->model('product_model');
 
         if (isset($filters['sort']))
             $this->db->order_by($filters['sort'], $order_dir);
@@ -79,10 +80,11 @@ class Advertiser_model extends CI_Model {
             $site = $this->site_model->getSite($linie['id_site']);
             $linie['name_site'] = $site['name'];
 
-            $nr_products = $this->getCountProductsByMID($linie['mid'], $linie['id_site']);
+            $nr_products = $this->product_model->getCountProductsByMID($linie['mid'], $linie['id_site']);
             $linie['nr_products'] = $nr_products;
             $row[] = $linie;
         }
+
         return $row;
     }
 

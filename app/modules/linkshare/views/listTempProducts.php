@@ -1,5 +1,5 @@
 <?=$this->load->view(branded_view('cp/header'));?>
-<h1>Products List for Advertiser: <?=$magazin?> | Mid: <?=$mid?> | Category ID: <?=$category?></h1>
+<h2>Products List for Advertiser: <?=$magazin?> | Mid: <?=$mid?> | Category ID: <?=$category?></h2>
 <div style="width:1800px;text-align:center;" align="center">
 	<?=$this->dataset->table_head();?>
 	<? 

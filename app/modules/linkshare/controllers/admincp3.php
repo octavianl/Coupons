@@ -56,15 +56,13 @@ class Admincp3 extends Admincp_Controller {
                 'width' => '1%'),
             array(
                 'name' => 'MID',
-                'width' => '1%'),
+                'width' => '1%',),
             array(
                 'name' => 'Magazin',
                 'width' => '5%'),
             array(
                 'name' => 'Creat_cat_ID',
-                'width' => '2%',
-                'type' => 'text',
-                'filter' => 'cat_creative_id'),
+                'width' => '2%'),
             array(
                 'name' => 'Cat Creativa',
                 'width' => '9%',
@@ -96,7 +94,9 @@ class Admincp3 extends Admincp_Controller {
                 'width' => '5%'),
             array(
                 'name' => 'Linkid',
-                'width' => '5%'),
+                'width' => '5%',
+                'type' => 'text',
+                'filter' => 'linkid'),
             array(
                 'name' => 'SKU',
                 'width' => '5%'),
@@ -129,8 +129,8 @@ class Admincp3 extends Admincp_Controller {
         }
 
         $filters['id_site'] = $siteRow['id'];
+        $filters['cat_creative_id'] = $cat_id;
         $filters['mid'] = $mid;
-        //$filters['parsed'] = 1;
 
         $this->dataset->columns($columns);
         $this->dataset->datasource('product_model', 'getProductsByMid', $filters);
@@ -166,7 +166,8 @@ class Admincp3 extends Admincp_Controller {
 
     public function listTempProducts($mid,$cat_id) {
 
-        $this->admin_navigation->module_link('Back to Creative Categories', site_url('admincp2/linkshare/listCreativeCategory/'));
+        $this->admin_navigation->module_link('Clear', site_url('admincp2/linkshare/listCreativeCategory/'));
+        $this->admin_navigation->module_link('Back to CC', site_url('admincp2/linkshare/listCreativeCategory/'));
         $this->admin_navigation->module_link('Move to CURRENT', site_url('admincp3/linkshare/moveProducts/' . $mid . '/' . $cat_id));
         $this->admin_navigation->module_link('Parse FULL Products', site_url('admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id));
         
@@ -190,9 +191,7 @@ class Admincp3 extends Admincp_Controller {
                 'width' => '5%'),
             array(
                 'name' => 'Creat_cat_ID',
-                'width' => '2%',
-                'type' => 'text',
-                'filter' => 'cat_creative_id'),
+                'width' => '2%'),
             array(
                 'name' => 'Cat Creativa',
                 'width' => '9%',
@@ -224,7 +223,9 @@ class Admincp3 extends Admincp_Controller {
                 'width' => '5%'),
             array(
                 'name' => 'Linkid',
-                'width' => '5%'),
+                'width' => '5%',
+                'type' => 'text',
+                'filter' => 'linkid'),
             array(
                 'name' => 'SKU',
                 'width' => '5%'),
@@ -257,6 +258,7 @@ class Admincp3 extends Admincp_Controller {
         }
         
         $filters['id_site']=$siteRow['id'];
+        $filters['cat_creative_id'] = $cat_id;
         $filters['mid'] = $mid;
 
         $this->dataset->columns($columns);
@@ -347,8 +349,12 @@ class Admincp3 extends Admincp_Controller {
         $this->load->model(array('site_model', 'product_model'));
         $siteID = $this->site_model->getSiteBySID($this->siteID);
                 
-        $tempProducts = $this->product_model->getTempProductsByMid(array('id_site' => $siteID['id'],'mid' => $mid,'cat_creative_id' => $cat_id, 'offset' => $offset,'limit' => $batch_temp));                
-           
+        $tempProducts = $this->product_model->getTempProductsByMid(array('id_site' => $siteID['id'], 'mid' => $mid, 'cat_creative_id' => $cat_id, 'parsed'=> 1, 'offset' => $offset, 'limit' => $batch_temp));                
+        
+//            echo "<pre>";
+//            print_r($tempProducts);
+//            die();
+        
         if(!empty($tempProducts)) {
             foreach ($tempProducts as $val) {
                 $temp = $val;
@@ -467,7 +473,8 @@ class Admincp3 extends Admincp_Controller {
         //echo"<pre>";print_r($shortProd);die();
     }
 
-    public function parseProductSearch($mid, $cat_id = 0) {
+    public function parseProductSearch($mid, $cat_id = 0) 
+    {
         error_reporting(E_ERROR);
         include "app/third_party/LOG/Log.php";
         $CI = & get_instance();
@@ -486,6 +493,8 @@ class Admincp3 extends Admincp_Controller {
         
         $tempLink = $this->cleanLink($shortProd['linkname']);
         $keyword = urlencode($tempLink);
+        
+        echo "keyword = $keyword" . PHP_EOL;
 
 //      // LEGACY
 //      $produs = simplexml_load_file("http://productsearch.linksynergy.com/productsearch?token=ff8c950f7a1c7f4f7b3db7e9407bbd89822f611a6c44c441bc9043c5edaa4746&keyword=\"{$keyword}\"&MaxResults=1&pagenumber=1&mid=$mid", "SimpleXMLElement", LIBXML_NOCDATA);
@@ -505,54 +514,68 @@ class Admincp3 extends Admincp_Controller {
         $auxProd = $responseObj['body'];
 
         $prod = simplexml_load_string($auxProd, "SimpleXMLElement", LIBXML_NOCDATA);
-
+                
+        $found = false;
         foreach ($prod->item as $valProd) {
             $keyProd = $valProd->linkid;
-            $tempProd = array(
-                'mid' => addslashes($valProd->mid),
-                'merchantname' => addslashes($valProd->merchantname),
-                'linkid' => addslashes($valProd->linkid),
-                'createdon' => addslashes($valProd->createdon),
-                'sku' => addslashes($valProd->sku),
-                'productname' => addslashes($valProd->productname),
-                'categ_primary' => addslashes($valProd->category->primary),
-                'categ_secondary' => addslashes($valProd->category->secondary),
-                'price' => addslashes($valProd->price),
-                'currency' => addslashes($valProd->price["currency"]),
-                'upccode' => addslashes($valProd->upccode),
-                'description_short' => addslashes($valProd->description->short),
-                'description_long' => addslashes($valProd->description->long),
-                'saleprice' => addslashes($valProd->saleprice),
-                'keywords' => addslashes($valProd->keywords),
-                'linkurl' => addslashes($valProd->linkurl),
-                'imageurl' => addslashes($valProd->imageurl),
-                'price_list' => addslashes($valProd->saleprice),
-                'price_save' => 0,
-                'price_final' => 0,
-                'parsed' => 1
-            );
-
-            $longProd["$keyProd"] = $tempProd;
-        }
-
-        if (is_null($prod->item[0]->linkurl)) {
+            
+            if ($shortProd['linkid'] == $valProd->linkid) {
+                $found = true;
+                
+                $tempProd = array(
+                    'mid' => addslashes($valProd->mid),
+                    'merchantname' => addslashes($valProd->merchantname),
+                    'linkid' => addslashes($valProd->linkid),
+                    'createdon' => addslashes($valProd->createdon),
+                    'sku' => addslashes($valProd->sku),
+                    'productname' => addslashes($valProd->productname),
+                    'categ_primary' => addslashes($valProd->category->primary),
+                    'categ_secondary' => addslashes($valProd->category->secondary),
+                    'price' => addslashes($valProd->price),
+                    'currency' => addslashes($valProd->price["currency"]),
+                    'upccode' => addslashes($valProd->upccode),
+                    'description_short' => addslashes($valProd->description->short),
+                    'description_long' => addslashes($valProd->description->long),
+                    'saleprice' => addslashes($valProd->saleprice),
+                    'keywords' => addslashes($valProd->keywords),
+                    'linkurl' => addslashes($valProd->linkurl),
+                    'imageurl' => addslashes($valProd->imageurl),
+                    'price_list' => addslashes($valProd->saleprice),
+                    'price_save' => 0,
+                    'price_final' => 0,
+                    'parsed' => 1
+                );
+                
+                $longProd["$keyProd"] = $tempProd;
+                
+                break;
+            }                                                
+        }          
+            
+//        echo "<pre>";
+//        print_r($longProd);
+//        die();
+        
+        if (!$found) {
+            echo "Delete shot prod id : ".$shortProd['id'];
             // Delete short prod
             $filters = array('id' => $shortProd['id']);
             $this->product_model->deleteTempProduct($filters);
-        }
+            $logMessage = "Product from Category $cat_id and Advertiser mid $mid with linkid : {$shortProd['linkid']}. | NOT found on search product!";
+            Log::warn($logMessage);
+        } else {
+            echo "Update shot prod id : " . $shortProd['linkid'] .PHP_EOL;
 
-        if (array_key_exists($shortProd['linkid'], $longProd)) {
             // Update short product to full details
             $keyProdtoUpdate = $shortProd['linkid'];
             $update_fields = $longProd["$keyProdtoUpdate"];
             
-            $this->product_model->updateTempProductByLinkID($update_fields,$shortProd['linkid']);
+            echo "<pre>";
+            print_r($keyProdtoUpdate);
             
-        } else {
-            $logMessage = "Product from Category $cat_id and Advertiser mid $mid with linkid : {$shortProd['linkid']}. | NOT found on search product!";
-            Log::warn($logMessage);
+            $this->product_model->updateTempProductByLinkID($update_fields,$shortProd['linkid']);
         }
-//      die();
+        
         echo '<META http-equiv="refresh" content="3;URL=/admincp3/linkshare/parseProductSearch/' . $mid . '/' . $cat_id . '">';
 
     }

@@ -22,12 +22,14 @@ jQuery(document).ready(function(){
 			<tr>			
 				<td><input type="checkbox" name="check_<?=$row['category_merged_ID'];?>" value="1" class="action_items" /></td>
 				<td><?=$row['category_merged_name'];?></td>
+                                <td></td>
                                 <td>
                                     <?php foreach($row['categories_merged'] as $id)
                                            {$delete_link = site_url('admincp2/linkshare/ajaxDeleteCategory/'.$id.'/'.$row['category_merged_ID']); 
                                             echo "<div style='margin:7px 0;'>".$id."&nbsp; <button id='DeleteLink".$id."' value='".$delete_link."'>delete this category id</button><div>"; }
                                     ?>
-                                </td>			
+                                </td>	
+                                <td></td>
 				<td class="options" align="center">
 				<a href="<?=site_url('admincp2/linkshare/editMergedCategory/'.$row['category_merged_ID']);?>">edit category name</a>
 				</td>

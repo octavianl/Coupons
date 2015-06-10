@@ -380,7 +380,6 @@ class Admincp2 extends Admincp_Controller {
 
         $this->admin_navigation->module_link('Add creative category', site_url('admincp2/linkshare/addCreativeCategory'));
         $this->admin_navigation->module_link('Parse Creative Categories', site_url('admincp2/linkshare/listTempCreativeCategory/'));
-        $this->admin_navigation->module_link('Export CSV', site_url('admincp2/linkshare/export_csv/category_creative'));
 
         $this->load->library('dataset');
 
@@ -689,17 +688,19 @@ class Admincp2 extends Admincp_Controller {
                 'name' => 'ID #',
                 'width' => '5%'),
             array(
-                'name' => 'SELECT CATEG TO MERGE',
-                'width' => '10%'),
+                'name' => 'SELECT TO MERGE',
+                'width' => '8%'),
             array(
                 'name' => 'SITE',
-                'width' => '15%'),
+                'width' => '10%'),
             array(
                 'name' => 'CATEGORY ID #',
-                'width' => '30%'),
+                'width' => '25%',
+                'type' => 'text',
+                'filter' => 'cat_creativ_id'),
             array(
                 'name' => 'Name',
-                'width' => '20%',
+                'width' => '18%',
                 'type' => 'text',
                 'filter' => 'nume'),
             array(
@@ -711,9 +712,14 @@ class Admincp2 extends Admincp_Controller {
                 'name' => 'Nid',
                 'width' => '5%'),
             array(
+                'name' => 'See Products',
+                'width' => '7%'),
+            array(
+                'name' => 'No. Products',
+                'width' => '7%'),
+            array(
                 'name' => 'Actions',
-                'width' => '5%'
-            )
+                'width' => '5%')
         );
 
         $filters = $filters_decode = array();
@@ -790,7 +796,9 @@ class Admincp2 extends Admincp_Controller {
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'getCreativeForMerge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/'));
-
+        
+        if (isset($_GET['cat_creativ_id']))
+            $filters['cat_creativ_id'] = $_GET['cat_creativ_id'];
 
         if (isset($_GET['nume']))
             $filters['nume'] = $_GET['nume'];
@@ -831,6 +839,7 @@ class Admincp2 extends Admincp_Controller {
 
         $data = array(
             'filterz' => isset($_GET['filterz']) ? $_GET['filterz'] : $_POST['filterz'],
+            'cat_creativ_id' => $filters['cat_creativ_id'],
             'name_search' => $filters['nume'],
             'mid_search' => $filters['mid'],
             'name_merged' => $filters['merged_category'],
@@ -840,11 +849,13 @@ class Admincp2 extends Admincp_Controller {
         $this->load->view('joinCreativeCategory', $data);
     }
 
-    public function listMergedCategories() {
+    public function listMergedCategories()
+    {
         
         $this->load->model(array('category_creative_model','site_model'));
         
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
+        $this->admin_navigation->module_link('Export CSV', site_url('admincp2/linkshare/export_csv/???'));
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         
@@ -856,13 +867,19 @@ class Admincp2 extends Admincp_Controller {
         $columns = array(
             array(
                 'name' => 'Merged Category Name',
+                'width' => '30%'),
+            array(
+                'name' => 'Total Creative Categories merged',
                 'width' => '20%'),
             array(
                 'name' => 'ID merged categories',
                 'width' => '20%'),
             array(
+                'name' => 'Total products merged',
+                'width' => '20%'),
+            array(
                 'name' => 'Actions',
-                'width' => '15%'
+                'width' => '10%'
             )
         );
 

@@ -67,6 +67,8 @@ jQuery(document).ready(function(){
 				<td align="center"><?=$row['name'];?></td>
                                 <td align="center"><?=$row['mid'];?></td>
                                 <td align="left"><?=$row['nid'];?></td>
+                                <td align="center"><a href="<?=site_url('admincp3/linkshare/listProducts/'.$row['mid'].'/' . $row['cat_id']);?>">See products</a></td>
+                                <td align="center"><?=number_format($row['nr_products'],0,'.',',');?></td>
                                 <td  align="left" class="options">
                                     <script>
                                         $('input[name="nume"]').val('<?=$name_search;?>');
@@ -87,7 +89,7 @@ jQuery(document).ready(function(){
 	<?php } ?>
         <tr>
         <tr>
-            <td colspan="8" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($name_merged)){echo $name_merged;}?>"><button id="save" type="button">Save</button></div></td>
+            <td colspan="10" style="background-color: #B9E2FA;"><div><span style="font-size: 16px; font-weight:bold; ">Chose a name for the new Merged Category: </span><input type="text" id="merged_category" name="merged_category" value="<?php if(isset($name_merged)){echo $name_merged;}?>"><button id="save" type="button">Save</button></div></td>
         </tr>
 
 <?=$this->dataset->table_close();?>

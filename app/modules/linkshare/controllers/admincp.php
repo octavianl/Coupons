@@ -523,6 +523,7 @@ class Admincp extends Admincp_Controller {
     }
 
     public function siteAdvertisers() {
+
         $this->load->model('site_model');
         $this->load->model('advertiser_model');
         $site = $this->site_model->getSiteBySID($this->siteID);
@@ -591,7 +592,7 @@ class Admincp extends Admincp_Controller {
         $filters['id_site'] = $site['id'];
         $this->dataset->columns($columns);
         $this->dataset->datasource('advertiser_model', 'getAdvertisers', $filters);
-        $this->dataset->base_url(site_url('admincp/linkshare/siteAdvertisers/'));
+        //$this->dataset->base_url(site_url('admincp/linkshare/siteAdvertisers/'));
         $this->dataset->rows_per_page(10);
 
         // total rows
@@ -618,6 +619,7 @@ class Admincp extends Admincp_Controller {
         );
 
         $this->load->view('listAdvertisers', $data);
+
     }
 
     public function addAdvertiser() {
