@@ -855,7 +855,7 @@ class Admincp2 extends Admincp_Controller {
         $this->load->model(array('category_creative_model','site_model'));
         
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
-        $this->admin_navigation->module_link('Export CSV', site_url('admincp2/linkshare/export_csv/???'));
+        $this->admin_navigation->module_link('Export CSV', site_url('admincp3/linkshare/exportCSV/???'));
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         
@@ -867,13 +867,13 @@ class Admincp2 extends Admincp_Controller {
         $columns = array(
             array(
                 'name' => 'Merged Category Name',
-                'width' => '30%'),
+                'width' => '20%'),
             array(
                 'name' => 'Total Creative Categories merged',
                 'width' => '20%'),
             array(
-                'name' => 'ID merged categories',
-                'width' => '20%'),
+                'name' => 'Merged categories',
+                'width' => '30%'),
             array(
                 'name' => 'Total products merged',
                 'width' => '20%'),
@@ -961,67 +961,6 @@ class Admincp2 extends Admincp_Controller {
         $return_url = site_url('admincp2/linkshare/listMergedCategories');
         redirect($return_url);
         return true;
-    }
-
-    function export_csv($table) {
-        // Create the real model name based on the $table variable
-        $model = $table . '_model';
-
-        // Since we might be dealing with very large data
-        // Ensure we have time to process it
-        set_time_limit(0);
-
-        $temp_file = FCPATH . 'writeable/' . $table . '-' . date("Y-m-d") . '.csv';
-
-        $this->load->helper('file');
-        $this->load->library('array_to_csv');
-        $this->load->model($model);
-
-        // If the file already exists, we need
-        // to get rid of it since this is a new download.
-        $f = @fopen($temp_file, 'r+');
-        if ($f !== false) {
-            ftruncate($f, 0);
-            fclose($f);
-        }
-
-        $csv_file = fopen($temp_file, 'a');
-        $need_header = true;    // Do we need the CSV header?
-
-        $query = $this->$model->get_all_categories();
-
-        foreach ($query as $row) {
-            // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
-            $main_array[] = array(
-                'id' => $row->cat_id,
-                'active' => 1,
-                'name' => $row->name,
-                'parent' => 0,
-                'root' => 1,
-                'description' => $row->name,
-                'meta_title' => $row->name,
-                'meta_keywords' => $row->name,
-                'meta_description' => $row->name,
-                'url_rewritten' => '',
-                'image_url' => '',
-                'shop_name' => $row->mid
-            );
-        }
-        $this->array_to_csv->input($main_array);
-        $data = $this->array_to_csv->output($need_header, true);
-        fwrite($csv_file, $data);
-
-        // Make sure we're not output buffering anymore so we don't
-        // run out of memory due to buffering.
-        if (ob_get_level() > 0) {
-            ob_end_flush();
-        }
-        //ob_implicit_flush(true);
-
-        header("Content-type: application/vnd.ms-excel");
-        header("Content-disposition: attachment; filename=export-" . $table . '-' . date("Y-m-d") . ".csv");
-        readfile($temp_file);
-        die();
     }
 
     public function parseCreativeCategories($pcc = 0) {
