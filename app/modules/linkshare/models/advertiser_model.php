@@ -147,7 +147,6 @@ class Advertiser_model extends CI_Model {
 
     /**
      * Get Temp Status Name
-     * array $filters
      *
      * @return array
      */
@@ -167,7 +166,6 @@ class Advertiser_model extends CI_Model {
 
     /**
      * Get Temp Status ID
-     * array $filters
      *
      * @return array
      */
@@ -182,7 +180,7 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Get Magazin
+     * Get Advertisers
      *
      * @param int $id
      * @param boolean $name 	
@@ -209,7 +207,7 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Get Magazin By Mid
+     * Get Advertisers By Mid
      *
      * @param int $mid
      * @param int $id_site	
@@ -232,8 +230,7 @@ class Advertiser_model extends CI_Model {
     /**
      * Get Temp Advertiser By Mid
      *
-     * @param int $mid
-     * @param int $id_site	
+     * @param int $mid	
      *
      * @return array
      */
@@ -250,9 +247,7 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Create New Magazin
-     *
-     * Creates a new magazin
+     * Create New Advertisers
      *
      * @param array $insert_fields	
      *
@@ -276,8 +271,6 @@ class Advertiser_model extends CI_Model {
     /**
      * Create New Temp Advertisers
      *
-     * Creates a new magazin
-     *
      * @param array $insert_fields	
      *
      * @return int $insert_id
@@ -290,9 +283,7 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Create New Magazine
-     *
-     * Creates new magazine
+     * Create New Advertisers
      *
      * @param array $mids
      *
@@ -309,8 +300,6 @@ class Advertiser_model extends CI_Model {
     /**
      * Update Advertisers
      *
-     * Updates magazin
-     * 
      * @param array $update_fields
      * @param int $id	
      *
@@ -323,9 +312,8 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Change PCC flag to 1
-     *
-     * Updates magazin
+     * Change PCC flag 
+     * PCC = Parsed Creative Category
      * 
      * @param array $update_fields
      * @param int $id	
@@ -343,12 +331,11 @@ class Advertiser_model extends CI_Model {
     }
     
     /**
-     * Reset PCC flag to 0
-     *
-     * Updates magazin
+     * Reset PCC flag
+     * PCC = Parsed Creative Category
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param int $pcc flag of parsed creative category
+     * @param int $site_id site id
      *
      * @return boolean true
      */
@@ -362,12 +349,11 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Change PCC flag to 1
-     *
-     * Updates magazin
+     * Check PCC flag
+     * PCC = Parsed Creative Category
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param int $pcc
+     * @param int $sid site id
      *
      * @return boolean true
      */
@@ -380,11 +366,10 @@ class Advertiser_model extends CI_Model {
 
     /**
      * Update Advertisers from Temp
-     *
-     * Updates magazin
      * 
      * @param array $update_fields
-     * @param int $id	
+     * @param int $mid merchandiser id
+     * @param int $id_site site id
      *
      * @return boolean true
      */
@@ -407,8 +392,6 @@ class Advertiser_model extends CI_Model {
 
     /**
      * Delete Advertisers
-     *
-     * Deletes magazin
      * 	
      * @param int $id	
      *
@@ -422,10 +405,7 @@ class Advertiser_model extends CI_Model {
 
     /**
      * Delete Temporary Advertisers
-     *
-     * Deletes magazin
-     * 	
-     * @param int $id	
+     * 		
      *
      * @return boolean true
      */
@@ -433,6 +413,14 @@ class Advertiser_model extends CI_Model {
         $this->db->truncate('linkshare_advertisers_temp');
         return true;
     }
+    
+    /**
+     * Parse Advertiser
+     * 	
+     * @param array $params	
+     *
+     * @return boolean true
+     */
 
     function parseAdvertiser($params) {
         if (isset($params[0]['limit']))
@@ -447,11 +435,10 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Check Advertiser exists by mid
-     *
-     * existsAdvertiser
+     * Check Advertiser
      * 	
-     * @param int $mid	
+     * @param int $mid merchendiser id	
+     * @param int $sid site id
      *
      * @return boolean true
      */
@@ -469,10 +456,10 @@ class Advertiser_model extends CI_Model {
     }
 
     /**
-     * Delete Magazin By Status	
+     * Delete Advertiser By Status	
      * 
-     * @param int $id_site	
-     * @param int $id_status	
+     * @param int $id_site site id
+     * @param int $id_status the status of Advertisers
      *
      * @return boolean true
      */
@@ -484,8 +471,8 @@ class Advertiser_model extends CI_Model {
     /**
      * Delete Advertisers By MID	
      * 
-     * @param int $id_site	
-     * @param int $id_status	
+     * @param int $mid merchendiser id
+     * @param int $sid site id	
      *
      * @return boolean true
      */
@@ -499,8 +486,8 @@ class Advertiser_model extends CI_Model {
     /**
      * Delete Temp Advertisers By MID	
      * 
-     * @param int $id_site	
-     * @param int $id_status	
+     * @param int $mid merchendiser id
+     * @param int $sid site id
      *
      * @return boolean true
      */
@@ -511,6 +498,14 @@ class Advertiser_model extends CI_Model {
 
         return true;
     }
+    
+    /**
+     * Get the number of Advertisers	
+     * 
+     * @param array $filters to search the Advertisers by	
+     *
+     * @return boolean
+     */
 
     function get_num_rows($filters = array()) {
 

@@ -23,8 +23,7 @@ class Product_model extends CI_Model
     }
 
     /**
-     * 
-     * Get Produse
+     * Get Products
      *
      * @return array
      */
@@ -41,7 +40,7 @@ class Product_model extends CI_Model
     }
 
     /**
-     * Get Produse By Mid
+     * Get Products By Mid
      * @param array $params
      *
      * @return array
@@ -107,7 +106,7 @@ class Product_model extends CI_Model
     }
     
     /**
-     * Get Count Products By Mid
+     * Get Count Temp Products By Mid
      *
      * @param int $mid
      * @param int $id_site
@@ -139,7 +138,7 @@ class Product_model extends CI_Model
     }
     
     /**
-     * Get Produse By Mid and cat_id
+     * Get Products By Mid
      * @param array $filters
      *
      * @return array
@@ -173,12 +172,10 @@ class Product_model extends CI_Model
         return $row;
     }
     
-        /**
-     * Check Temp Product exists by mid,sid,cat_id,link_id
-     *
-     * existsAdvertiser
+     /**
+     * Get Temp Product
      * 	
-     * @param int $mid	
+     * @param array $filters	
      *
      * @return boolean true
      */
@@ -198,8 +195,7 @@ class Product_model extends CI_Model
     }
     
     /**
-     * Get Produs Status
-     *
+     * Get Product Status
      *
      * @return array
      */
@@ -217,6 +213,7 @@ class Product_model extends CI_Model
 
     /**
      * Change Produs Status
+     * 
      * @param int $id_product
      *
      * @return boolean
@@ -245,7 +242,12 @@ class Product_model extends CI_Model
     
     /**
      * Change Temp Produs Status
+     * 
      * @param int $id_product
+     * @param int $sid
+     * @param int $cat_id
+     * @param int $mid
+     * @param int $linkid
      *
      * @return boolean
      */
@@ -317,8 +319,6 @@ class Product_model extends CI_Model
     /**
      * Create New Produs
      *
-     * Creates a new produs
-     *
      * @param array $insert_fields	
      *
      * @return int $insert_id
@@ -332,12 +332,10 @@ class Product_model extends CI_Model
     }
  
     /**
-     * Update Produs
-     *
-     * Updates produs
+     * Update Product
      * 
      * @param array $update_fields
-     * @param int $id	
+     * @param array $filters
      *
      * @return boolean true
      */
@@ -349,9 +347,7 @@ class Product_model extends CI_Model
     }
 
     /**
-     * Update Produs By Linkid
-     *
-     * Updates produs
+     * Update Product By Linkid
      * 
      * @param array $update_fields
      * @param int $linkid	
@@ -370,10 +366,8 @@ class Product_model extends CI_Model
 
     /**
      * Delete Produs
-     *
-     * Deletes produs
      * 	
-     * @param int $id	
+     * @param array $filters	
      *
      * @return boolean true
      */
@@ -385,9 +379,7 @@ class Product_model extends CI_Model
     }
 
     /**
-     * Checks if Produs Exists
-     *
-     * Exists produs
+     * Checks Product Exists
      * 	
      * @param int $linkid	
      *
@@ -409,8 +401,6 @@ class Product_model extends CI_Model
     /**
      * Create New Temp Products
      *
-     * Creates a new produs
-     *
      * @param array $insert_fields	
      *
      * @return int $insert_id
@@ -424,11 +414,13 @@ class Product_model extends CI_Model
     }
     
     /**
-     * Create New Temp Products
+     * Update New Temp Products
      *
-     * Creates a new produs
-     *
-     * @param array $insert_fields	
+     * @param array $update_fields	
+     * @param int $sid	
+     * @param int $mid	
+     * @param int $cat_id	
+     * @param int $linkid	
      *
      * @return int $insert_id
      */
@@ -444,7 +436,6 @@ class Product_model extends CI_Model
     }
     
     /**
-     * 
      * Get Temp Products
      *
      * @return array

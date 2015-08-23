@@ -26,7 +26,6 @@ class Status_model extends CI_Model
     /**
      * Get statuses
      *
-     *
      * @return array
      */
     function getStatuses()
@@ -81,7 +80,7 @@ class Status_model extends CI_Model
     }
     
     /**
-     * Get status by ID
+     * Get Status Name by ID
      *
      * @param string $id_status	
      *
@@ -101,7 +100,7 @@ class Status_model extends CI_Model
     }
 
     /**
-     * Get status
+     * Get Status By Application Status
      *
      * @param string $status	
      *
@@ -135,9 +134,7 @@ class Status_model extends CI_Model
     }
 
     /**
-     * Create New status
-     *
-     * Creates a new status
+     * Create New Status
      *
      * @param array $insert_fields	
      *
@@ -153,8 +150,6 @@ class Status_model extends CI_Model
 
     /**
      * Update status
-     *
-     * Updates status
      * 
      * @param array $update_fields
      * @param int $id	
@@ -170,9 +165,7 @@ class Status_model extends CI_Model
     }
 
     /**
-     * Delete status
-     *
-     * Deletes status
+     * Delete Status
      * 	
      * @param int $id	
      *

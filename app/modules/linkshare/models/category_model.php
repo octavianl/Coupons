@@ -39,7 +39,7 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Get Categorie Status
+     * Get Category Status
      *
      * @return array
      */
@@ -56,7 +56,7 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Get Categorie
+     * Get Category
      *
      * @param int $id	
      *
@@ -76,7 +76,7 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Get Categorie Name
+     * Get Category Name
      *
      * @param int $id	
      *
@@ -96,9 +96,7 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Create New Categorie
-     *
-     * Creates a new categorie
+     * Create New Category
      *
      * @param array $insert_fields	
      *
@@ -113,28 +111,23 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Update Categorie
-     *
-     * Updates categorie
+     * Update Category
      * 
      * @param array $update_fields
-     * @param int   $id	
+     * @param int $id	
      *
      * @return boolean true
      */
     function updateCategory($update_fields, $id)
     {
-
         $this->db->update('linkshare_categories', $update_fields, array('id' => $id));
 
         return true;
     }
 
     /**
-     * Delete Categorie
+     * Delete Category
      *
-     * Deletes categorie
-     * 	
      * @param int $id	
      *
      * @return boolean true
@@ -148,7 +141,7 @@ class Category_model extends CI_Model
     }
 
     /**
-     * Get Categorii Parse
+     * Get Categories Parse
      *
      * @param array $filters
      * @return array

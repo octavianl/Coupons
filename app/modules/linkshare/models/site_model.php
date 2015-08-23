@@ -26,7 +26,6 @@ class Site_model extends CI_Model
     /**
      * Get Sites
      *
-     *
      * @return array
      */
     function getSites()
@@ -61,7 +60,7 @@ class Site_model extends CI_Model
     }
     
     /**
-     * Get Site Name
+     * Get Site by Token
      *
      * @param string $token	
      *
@@ -81,9 +80,9 @@ class Site_model extends CI_Model
     }
 
     /**
-     * Get Site Name
+     * Get Site by SID
      *
-     * @param string $token 
+     * @param int $sid 
      *
      * @return string
      */
@@ -103,8 +102,6 @@ class Site_model extends CI_Model
     /**
      * Create New Site
      *
-     * Creates a new site
-     *
      * @param array $insert_fields	
      *
      * @return int $insert_id
@@ -119,8 +116,6 @@ class Site_model extends CI_Model
 
     /**
      * Update Site
-     *
-     * Updates site
      * 
      * @param array $update_fields
      * @param int $id	
@@ -137,8 +132,6 @@ class Site_model extends CI_Model
 
     /**
      * Delete Site
-     *
-     * Deletes site
      * 	
      * @param int $id	
      *
