@@ -773,18 +773,6 @@ class Admincp2 extends Admincp_Controller {
             $filters['offset'] = $_GET['offset'];
         }
 
-        if (isset($filters_decode) && !empty($filters_decode)) {
-            foreach ($filters_decode as $key => $val) {
-                $filters[$key] = $val;
-            }
-        }
-
-//        foreach ($_POST as $key => $val) {
-//            if (in_array($val, array('filter results'))) {
-//                unset($_POST[$key]);
-//            }
-//        }
-
         if ($this->input->post('saving') == 'ok') {
             $this->input->set_cookie("mergingCategory", $this->input->post('merged_category'), 2592000);
             header("Refresh:0");
@@ -834,25 +822,7 @@ class Admincp2 extends Admincp_Controller {
 
         if (isset($_GET['mid']))
             $filters['mid'] = $_GET['mid'];
-
-        // &limit=10&offset=20
-        if (isset($_POST['offset'])) {
-            $_GET['offset'] = $_POST['offset'];
-        } else {
-            $_GET['offset'] = $filters_decode['offset'];
-        }
-
-        if (isset($_POST['limit'])) {
-            $_GET['limit'] = $_POST['limit'];
-        }
-
-//        print '<pre>POST';
-//        print_r($_POST);
-//        print '</pre>';
-
-//        print '<pre>GET';
-//        print_r($_GET);
-//        print '</pre>';
+        
 
         //$this->load->library('asciihex');
         //$this->load->model('forms/form_model');
