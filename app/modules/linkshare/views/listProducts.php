@@ -42,7 +42,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="7">No products for advertiser <?php echo $magazin; ?>.</td>
+		<td colspan="20">No products for this advertiser <?php echo $magazin; ?>.</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>

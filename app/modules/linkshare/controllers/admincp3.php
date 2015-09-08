@@ -40,7 +40,7 @@ class Admincp3 extends Admincp_Controller {
     }
 
     public function listProducts($mid, $cat_id) {
-        $this->admin_navigation->module_link('Back to advertiser', site_url('admincp3/linkshare/listCreativeCategory/'));
+        $this->admin_navigation->module_link('Back to advertiser', site_url('admincp2/linkshare/listCreativeCategory/'));
 
         $this->load->model(array('site_model', 'product_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);

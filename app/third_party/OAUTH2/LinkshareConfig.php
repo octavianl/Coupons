@@ -265,7 +265,7 @@ class LinkshareConfig
     
     public function setSiteCookieAndGetAccessToken($ci, $scope)
     {
-        $ci->load->helper('cookie');      
+        $ci->load->helper('cookie');
         $siteID = $ci->input->cookie('siteID');
         $accessToken = $ci->input->cookie('accessToken');
                         

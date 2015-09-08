@@ -181,12 +181,17 @@ class Category_creative_model extends CI_Model {
      * @return array
      */
     function getCategoriesLines($filters) {
-        if (isset($filters['id_site']))
+        if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
-        if (isset($filters['mid']))
+        }
+            
+        if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
-        if (isset($filters['cat_id']))
+        }
+
+        if (isset($filters['cat_id'])) {
             $this->db->where('cat_id', $filters['cat_id']);
+        }
 
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
