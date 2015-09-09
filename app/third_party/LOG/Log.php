@@ -28,15 +28,12 @@ use app\exceptions\LogFileCouldNotWriteException;
 class Log
 {
 
-    const DEBUG = 1; // Most Verbose
+    const DEBUG = 1; // ...
     const INFO = 2; // ...
     const WARN = 3; // ...
     const ERROR = 4; // ...
-    const FATAL = 5; // Least Verbose
+    const FATAL = 5; // Fatality
     const OFF = 6; // Nothing at all.
-    const LOG_OPEN = 1;
-    const OPEN_FAILED = 2;
-    const LOG_CLOSED = 3;
 
     private static $loggerInstance;
 
@@ -55,17 +52,28 @@ class Log
     private $level = self::INFO;
     private $newLines = array();
     private $fileHandle;
+    private $delimiter = ',';
+    
+    private $filepath = FCPATH . APPPATH . 'logs/';
+    private $filename = 'general';
+    private $ext = 'csv';
 
     private function __construct()
     {
-        $filepath = FCPATH . APPPATH . 'logs/logs.csv';
-
         $this->logFile = $filepath;
 
         // $this->level = $logLevel;
 
         $this->checkPermissions();
         return;
+    }
+    
+    public function setFileName($filename = null)
+    {
+        if (is_null($filename)) {
+            return;
+        }
+        $this->filename = $this->filepath . $filename . '-' . date("D") . '.' . $this->ext;
     }
 
     private function checkPermissions()
@@ -101,8 +109,9 @@ class Log
         self::getInstance()->log($line, self::WARN);
     }
 
-    public static function error($line)
+    public static function error($line, $filename = null)
     {
+        self::setFileName($filename);
         self::getInstance()->log($line, self::ERROR);
     }
 
@@ -113,16 +122,25 @@ class Log
 
     protected function log($line, $level)
     {
-        if (self::getInstance()->level <= $level && $level != self::OFF) {
-            self::getInstance()->newLines[] = self::getInstance()->getLogLine($level, $line);
+        //$fp = fopen($this->filename, 'w');
+        try {
+            $this->openFile();
+        } catch (Exception $ex) {
+            // scrii in db !!!
         }
+        
+                
+        if (fputcsv($this->fileHandle, $line, $this->delimiter) === false) {
+//            throw new LogFileCouldNotWriteException(
+//                "The file could not be written to." .
+//                " Check that appropriate permissions have been set."
+//            );
+            // scrii in db
+        }
+                
+        $this->closeFile();
     }
-
-    public function __destruct()
-    {
-        $this->save();
-    }
-
+   
     /**
      * Opens the file and gains exclusive lock 
      * 
@@ -166,11 +184,7 @@ class Log
      * @throws LogFileCouldNotWriteException
      */
     public function save()
-    {
-        if (empty($this->newLines)) {
-            return false;
-        }
-        
+    {        
         if ($this->openFile()) {
             foreach ($this->newLines as $arrNewLine) {
                 if (fputcsv($this->fileHandle, $arrNewLine) === false) {
@@ -202,11 +216,11 @@ class Log
     protected function getLevelName($level)
     {
         $levelNames = array(
-            self::INFO => 'INFO',
-            self::WARN => 'WARN',
             self::DEBUG => 'DEBUG',
-            self::ERROR => 'ERROR',
-            self::FATAL => 'FATAL'
+            self::INFO => 'INFO',
+            self::NOTICE => 'NOTICE',
+            self::WARN => 'WARN',            
+            self::ERROR => 'ERROR'            
         );
         return isset($levelNames[$level]) ? $levelNames[$level] : 'LOG';
     }

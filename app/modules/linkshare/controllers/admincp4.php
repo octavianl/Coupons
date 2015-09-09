@@ -40,9 +40,13 @@ class Admincp4 extends Admincp_Controller
     {
         include "app/third_party/LOG/Log.php";
 
+        $string = "Test error";
+
+        Log::error($string,'advertisers');
+        
         $string = "Test";
 
-        Log::info($string);
+        Log::warn($string);
     }
 
 /**
