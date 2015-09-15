@@ -27,12 +27,11 @@ use app\exceptions\LogFileCouldNotWriteException;
 
 class Log
 {
-
     const DEBUG = 1; // ...
     const INFO = 2; // ...
-    const WARN = 3; // ...
-    const ERROR = 4; // ...
-    const FATAL = 5; // Fatality
+    const NOTICE = 3; // ...
+    const WARN = 4; // ...
+    const ERROR = 5; // Fatality
     const OFF = 6; // Nothing at all.
 
     private static $loggerInstance;
@@ -54,20 +53,44 @@ class Log
     private $fileHandle;
     private $delimiter = ',';
     
-    private $filepath = FCPATH . APPPATH . 'logs/';
+    //private $filepath = FCPATH . APPPATH . 'logs/';
     private $filename = 'general';
     private $ext = 'csv';
 
     private function __construct()
     {
         $this->logFile = $filepath;
-
         // $this->level = $logLevel;
 
+        $this->checkFolder();
         $this->checkPermissions();
         return;
     }
+
+    private function checkFolder()
+    {
+        $current_year = FCPATH . APPPATH . 'logs/' . date("Y");
+        $current_month = FCPATH . APPPATH . 'logs/' . date("Y").'/'.date('m');
+
+        if(!is_dir($current_year) || !is_dir($current_month)){
+            
+            throw new Exception("Folder for current month doesn't exist! Make new folder.");
+            
+            mkdir($current_month, 0777, true);
+            
+        }
+    }
     
+    private function checkPermissions()
+    {
+        if (file_exists($this->logFile) && !is_writable($this->logFile)) {
+            throw new Exception(
+                "The file exists, but could not be opened for writing." .
+                " Check that appropriate permissions have been set."
+            );
+        }
+    }
+
     public function setFileName($filename = null)
     {
         if (is_null($filename)) {
@@ -75,17 +98,7 @@ class Log
         }
         $this->filename = $this->filepath . $filename . '-' . date("D") . '.' . $this->ext;
     }
-
-    private function checkPermissions()
-    {
-        if (file_exists($this->logFile) && !is_writable($this->logFile)) {
-            throw new LogFileCouldNotWriteException(
-                "The file exists, but could not be opened for writing." .
-                " Check that appropriate permissions have been set."
-            );
-        }
-    }
-
+    
     public static function getInstance()
     {
         if (null == self::$loggerInstance) {
@@ -94,30 +107,31 @@ class Log
         return self::$loggerInstance;
     }
 
-    public static function info($line)
+    // LEVEL OF LOGS
+    public static function debug($line, $filename = null)
+    {
+        self::getInstance()->log($line, self::DEBUG);
+    }
+    
+    public static function info($line, $filename = null)
     {
         self::getInstance()->log($line, self::INFO);
     }
 
-    public static function debug($line)
+    public static function notice($line, $filename = null)
     {
-        self::getInstance()->log($line, self::DEBUG);
+        self::setFileName($filename);
+        self::getInstance()->log($line, self::NOTICE);
     }
-
-    public static function warn($line)
+    
+    public static function warn($line, $filename = null)
     {
         self::getInstance()->log($line, self::WARN);
     }
 
     public static function error($line, $filename = null)
     {
-        self::setFileName($filename);
         self::getInstance()->log($line, self::ERROR);
-    }
-
-    public static function fatal($line)
-    {
-        self::getInstance()->log($line, self::FATAL);
     }
 
     protected function log($line, $level)

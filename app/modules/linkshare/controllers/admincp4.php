@@ -42,11 +42,9 @@ class Admincp4 extends Admincp_Controller
 
         $string = "Test error";
 
-        Log::error($string,'advertisers');
-        
-        $string = "Test";
+        //Log::error($string,'advertisers');
+        Log::checkFolder($string,'advertisers');
 
-        Log::warn($string);
     }
 
 /**
