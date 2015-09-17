@@ -27,12 +27,12 @@ use app\exceptions\LogFileCouldNotWriteException;
 
 class Log
 {
-    const DEBUG = 1; // ...
-    const INFO = 2; // ...
-    const NOTICE = 3; // ...
-    const WARN = 4; // ...
-    const ERROR = 5; // Fatality
-    const OFF = 6; // Nothing at all.
+    const DEBUG = 1; // Debug: debug messages
+    const INFO = 2; // Informational: informational messages
+    const NOTICE = 3; // Notice: normal but significant condition
+    const WARN = 4; // Warning: warning conditions
+    const ERROR = 5; // Error: error conditions
+    const OFF = 6; // Logs OFF
 
     private static $loggerInstance;
 
@@ -52,9 +52,11 @@ class Log
     private $newLines = array();
     private $fileHandle;
     private $delimiter = ',';
-    
+
     //private $filepath = FCPATH . APPPATH . 'logs/';
+
     private $filename = 'general';
+    private $filename_fullpath = '';
     private $ext = 'csv';
 
     private function __construct()
@@ -70,11 +72,11 @@ class Log
     private function checkFolder()
     {
         $current_year = FCPATH . APPPATH . 'logs/' . date("Y");
-        $current_month = FCPATH . APPPATH . 'logs/' . date("Y").'/'.date('m');
+        $current_month = FCPATH . APPPATH . 'logs/' . date("Y") . '/' . date('m');
 
         if(!is_dir($current_year) || !is_dir($current_month)){
             
-            throw new Exception("Folder for current month doesn't exist! Make new folder.");
+            throw new Exception("Folder for current month doesn't exist! Making new folder.");
             
             mkdir($current_month, 0777, true);
             
@@ -84,19 +86,21 @@ class Log
     private function checkPermissions()
     {
         if (file_exists($this->logFile) && !is_writable($this->logFile)) {
-            throw new Exception(
-                "The file exists, but could not be opened for writing." .
-                " Check that appropriate permissions have been set."
-            );
+            throw new Exception("The file exists, but could not be opened for writing."." Check that appropriate permissions have been set.");
         }
     }
 
     public function setFileName($filename = null)
     {
+        $current_month = FCPATH . APPPATH . 'logs/' . date("Y") . '/' . date('m') . '/';
+        
         if (is_null($filename)) {
             return;
         }
-        $this->filename = $this->filepath . $filename . '-' . date("D") . '.' . $this->ext;
+
+        $filename_fullpath = $current_month . $filename . '-' . date("d-m-Y") . '.' . 'csv';
+        
+        return $filename_fullpath;
     }
     
     public static function getInstance()
@@ -110,11 +114,13 @@ class Log
     // LEVEL OF LOGS
     public static function debug($line, $filename = null)
     {
+        self::setFileName($filename);
         self::getInstance()->log($line, self::DEBUG);
     }
     
     public static function info($line, $filename = null)
     {
+        self::setFileName($filename);
         self::getInstance()->log($line, self::INFO);
     }
 
@@ -126,33 +132,48 @@ class Log
     
     public static function warn($line, $filename = null)
     {
+        self::setFileName($filename);
         self::getInstance()->log($line, self::WARN);
     }
 
     public static function error($line, $filename = null)
     {
+        echo $filename;
+        echo "<br>|";
+        //print_r($this->ext);
+        echo "<br>|";
+        
+        $filename_fullpath = self::setFileName($filename);
+        print_r($filename_fullpath);
         self::getInstance()->log($line, self::ERROR);
     }
 
     protected function log($line, $level)
     {
-        //$fp = fopen($this->filename, 'w');
-        try {
-            $this->openFile();
-        } catch (Exception $ex) {
-            // scrii in db !!!
+        echo "dawda";
+        die();
+        // Check if logs are not OFF mode
+        if ($level != self::OFF) {
+            self::getInstance()->newLines[] = self::getInstance()->getLogLine($level, $line);
         }
+                print_r($newLines);
+        //$fp = fopen($this->filename, 'w');
+//        try {
+//            $this->openFile();
+//        } catch (Exception $ex) {
+            // scrii in db !!!
+//        }
         
                 
-        if (fputcsv($this->fileHandle, $line, $this->delimiter) === false) {
+        //if (fputcsv($this->fileHandle, $line, $this->delimiter) === false) {
 //            throw new LogFileCouldNotWriteException(
 //                "The file could not be written to." .
 //                " Check that appropriate permissions have been set."
 //            );
             // scrii in db
-        }
+//        }
                 
-        $this->closeFile();
+        //$this->closeFile();
     }
    
     /**
@@ -218,17 +239,6 @@ class Log
     protected function getLogLine($level, $message)
     {
 
-        $arr = array(
-            'date' => date($this->dateFormat),
-            'loglevel' => $this->getLevelName($level),
-            'message' => $message
-        );
-
-        return $arr;
-    }
-
-    protected function getLevelName($level)
-    {
         $levelNames = array(
             self::DEBUG => 'DEBUG',
             self::INFO => 'INFO',
@@ -236,6 +246,14 @@ class Log
             self::WARN => 'WARN',            
             self::ERROR => 'ERROR'            
         );
-        return isset($levelNames[$level]) ? $levelNames[$level] : 'LOG';
+        
+        $arr = array(
+            'date' => date($this->dateFormat),
+            'loglevel' => $levelNames[$level],
+            'message' => $message
+        );
+        
+        return $arr;
     }
+
 }
