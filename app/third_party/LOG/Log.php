@@ -22,8 +22,8 @@
 
 namespace app\third_party\LOG;
 
-use app\exceptions\LogFileCouldNotBeOpenedException;
-use app\exceptions\LogFileCouldNotWriteException;
+//use app\exceptions\LogFileCouldNotBeOpenedException;
+//use app\exceptions\LogFileCouldNotWriteException;
 
 class Log
 {
@@ -47,46 +47,44 @@ class Log
      * @var string  
      */
     public $logFormat = ":date :loglevel :log_message\n";
-    private $logFile;
+    private static $logFile;
     private $level = self::INFO;
     private $newLines = array();
     private $fileHandle;
     private $delimiter = ',';
 
-    //private $filepath = FCPATH . APPPATH . 'logs/';
+    private static $filepath;
 
     private $filename = 'general';
     private $filename_fullpath = '';
-    private $ext = 'csv';
+    private static $ext;
 
     private function __construct()
     {
-        $this->logFile = $filepath;
+        //$this->logFile = $filepath;
+        
         // $this->level = $logLevel;
-
-        $this->checkFolder();
-        $this->checkPermissions();
+        
         return;
     }
 
-    private function checkFolder()
+    private static function checkFolder()
     {
         $current_year = FCPATH . APPPATH . 'logs/' . date("Y");
         $current_month = FCPATH . APPPATH . 'logs/' . date("Y") . '/' . date('m');
 
         if(!is_dir($current_year) || !is_dir($current_month)){
-            
-            throw new Exception("Folder for current month doesn't exist! Making new folder.");
-            
-            mkdir($current_month, 0777, true);
-            
-        }
+            mkdir($current_month, 0777, true);            
+        } else {
+            // SCRII IN DB
+            //throw new \Exception("Folder for current month doesn't exist! Making new folder.");
+        }                
     }
     
-    private function checkPermissions()
+    private static function checkPermissions()
     {
-        if (file_exists($this->logFile) && !is_writable($this->logFile)) {
-            throw new Exception("The file exists, but could not be opened for writing."." Check that appropriate permissions have been set.");
+        if (file_exists(self::$logFile) && !is_writable(self::$logFile)) {
+            throw new \Exception("The file exists, but could not be opened for writing."." Check that appropriate permissions have been set.");
         }
     }
 
@@ -106,9 +104,18 @@ class Log
     public static function getInstance()
     {
         if (null == self::$loggerInstance) {
-            self::$loggerInstance = new self();
+            self::$loggerInstance = new self();            
         }
+        
         return self::$loggerInstance;
+    }
+    
+    public static function init()
+    {
+        self::$ext = 'csv';
+        self::$filepath = FCPATH . APPPATH . 'logs/';
+        self::checkFolder();
+        self::checkPermissions();
     }
 
     // LEVEL OF LOGS
@@ -138,10 +145,12 @@ class Log
 
     public static function error($line, $filename = null)
     {
+        self::init();
+        
         echo $filename;
-        echo "<br>|";
-        //print_r($this->ext);
-        echo "<br>|";
+        echo "<br>|xxxx";
+        print_r(self::$filepath);
+        echo "<br>|yyyyy";
         
         $filename_fullpath = self::setFileName($filename);
         print_r($filename_fullpath);
@@ -150,7 +159,7 @@ class Log
 
     protected function log($line, $level)
     {
-        echo "dawda";
+        echo "Log function";
         die();
         // Check if logs are not OFF mode
         if ($level != self::OFF) {
