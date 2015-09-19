@@ -47,10 +47,8 @@ class Log
      * @var string  
      */
     public $logFormat = ":date :loglevel :log_message\n";
-    private static $logFile;
-    private $level = self::INFO;
     private $newLines = array();
-    private $fileHandle;
+    private static $fileHandle;
     private $delimiter = ',';
 
     private static $filepath;
@@ -59,19 +57,12 @@ class Log
     private $filename_fullpath = '';
     private static $ext;
 
-    private function __construct()
-    {
-        //$this->logFile = $filepath;
-        
-        // $this->level = $logLevel;
-        
-        return;
-    }
 
     private static function checkFolder()
     {
-        $current_year = FCPATH . APPPATH . 'logs/' . date("Y");
-        $current_month = FCPATH . APPPATH . 'logs/' . date("Y") . '/' . date('m');
+
+        $current_year = self::$filepath . date("Y");
+        $current_month = self::$filepath . date("Y") . '/' . date('m');
 
         if(!is_dir($current_year) || !is_dir($current_month)){
             mkdir($current_month, 0777, true);            
@@ -81,22 +72,26 @@ class Log
         }                
     }
     
-    private static function checkPermissions()
+    private static function checkPermissions($logFile)
     {
-        if (file_exists(self::$logFile) && !is_writable(self::$logFile)) {
-            throw new \Exception("The file exists, but could not be opened for writing."." Check that appropriate permissions have been set.");
+        if (file_exists($logFile) && !is_writable($logFile)) {
+            return false;
+        }else {
+            return true;
         }
     }
 
     public function setFileName($filename = null)
     {
-        $current_month = FCPATH . APPPATH . 'logs/' . date("Y") . '/' . date('m') . '/';
+        self::init();
+        
+        $current_month = self::$filepath . date("Y") . '/' . date('m') . '/';
         
         if (is_null($filename)) {
             return;
         }
 
-        $filename_fullpath = $current_month . $filename . '-' . date("d-m-Y") . '.' . 'csv';
+        $filename_fullpath = $current_month . $filename . '-' . date("d-m-Y") . '.' . self::$ext;
         
         return $filename_fullpath;
     }
@@ -115,128 +110,125 @@ class Log
         self::$ext = 'csv';
         self::$filepath = FCPATH . APPPATH . 'logs/';
         self::checkFolder();
-        self::checkPermissions();
     }
 
     // LEVEL OF LOGS
     public static function debug($line, $filename = null)
     {
-        self::setFileName($filename);
-        self::getInstance()->log($line, self::DEBUG);
+        self::getInstance()->log($line, $filename, self::DEBUG);
     }
     
     public static function info($line, $filename = null)
     {
-        self::setFileName($filename);
-        self::getInstance()->log($line, self::INFO);
+        self::getInstance()->log($line, $filename, self::INFO);
     }
 
     public static function notice($line, $filename = null)
     {
-        self::setFileName($filename);
-        self::getInstance()->log($line, self::NOTICE);
+        self::getInstance()->log($line, $filename, self::NOTICE);
     }
     
     public static function warn($line, $filename = null)
     {
-        self::setFileName($filename);
-        self::getInstance()->log($line, self::WARN);
+        self::getInstance()->log($line, $filename, self::WARN);
     }
 
     public static function error($line, $filename = null)
     {
-        self::init();
-        
-        echo $filename;
-        echo "<br>|xxxx";
-        print_r(self::$filepath);
-        echo "<br>|yyyyy";
-        
-        $filename_fullpath = self::setFileName($filename);
-        print_r($filename_fullpath);
-        self::getInstance()->log($line, self::ERROR);
+        self::getInstance()->log($line, $filename, self::ERROR);
+    }
+    
+    public static function off($line, $filename = null)
+    {
+        self::getInstance()->log($line, $filename, self::OFF);
     }
 
-    protected function log($line, $level)
+    /**
+     * Log method
+     * 
+     * @return boolean  
+     */
+    
+    protected function log($line, $filename, $level)
     {
-        echo "Log function";
-        die();
+        $filename_fullpath = self::setFileName($filename);
+        self::getInstance()->newLines[] = self::getInstance()->getLogLine($level, $line);
+        
         // Check if logs are not OFF mode
         if ($level != self::OFF) {
-            self::getInstance()->newLines[] = self::getInstance()->getLogLine($level, $line);
+            
+            // Check if logs file opens
+            try {
+                self::openFile($filename_fullpath);
+            } catch (Exception $ex) {
+                //scriu in db !!!
+            }
+            
+            // Check if logs file exists and can be writable
+            try {
+                self::checkPermissions($filename_fullpath);
+            } catch (Exception $ex) {
+                //scriu in db !!!
+            }
+            
+            // Save content in log file
+            try {
+                self::save();
+            } catch (Exception $ex) {
+                //scriu in db !!!
+            }
+    
+//            echo "<pre>";
+//            print_r(self::getInstance()->newLines);
+//            echo "</pre>";
+//            print_r($filename_fullpath);
+            
+        }else {
+            echo "off";
         }
-                print_r($newLines);
-        //$fp = fopen($this->filename, 'w');
-//        try {
-//            $this->openFile();
-//        } catch (Exception $ex) {
-            // scrii in db !!!
-//        }
-        
-                
-        //if (fputcsv($this->fileHandle, $line, $this->delimiter) === false) {
-//            throw new LogFileCouldNotWriteException(
-//                "The file could not be written to." .
-//                " Check that appropriate permissions have been set."
-//            );
-            // scrii in db
-//        }
-                
-        //$this->closeFile();
     }
    
     /**
-     * Opens the file and gains exclusive lock 
+     * Opens the file for writing 
      * 
-     * @throws LogFileCouldNotBeOpenedException
      * @return boolean
      */
-    private function openFile()
+    private function openFile($filename_fullpath)
     {
-        if ($this->fileHandle = fopen($this->logFile, "a")) {
-            // Windows does not support flock's build in block mechanism
-            if (stripos(PHP_OS, 'win') !== false) {
-                do {
-                    $canWrite = flock($this->fileHandle, LOCK_EX);
-                    // If lock not obtained sleep for 0.5 millisecond, to avoid collision and CPU load
-                    if (!$canWrite) {
-                        usleep(500);
-                    }
-                } while (!$canWrite && ((microtime() - $startTime) < 100 * 1000));
-            } else {
-                $wouldblock = true;
-                $canWrite = flock($this->fileHandle, LOCK_EX, $wouldblock);
-            }
-
-            return $canWrite;
+        self::$fileHandle = fopen($filename_fullpath, 'a');
+        
+        if (self::$fileHandle) {
+            return true;
         } else {
-            throw new LogFileCouldNotBeOpenedException("File could not be opened:" . $this->logFile);
+            return false;
         }
     }
 
     private function closeFile()
     {
-        fflush($this->fileHandle);
-        flock($this->fileHandle, LOCK_UN);
-        fclose($this->fileHandle);
+        fflush(self::$fileHandle);
+        flock(self::$fileHandle, LOCK_UN);
+        fclose(self::$fileHandle);
     }
 
-    /**
+/**
      * Saves new log messages to the log file
      * and clears local cache. 
      * 
      * @throws LogFileCouldNotWriteException
      */
     public function save()
-    {        
-        if ($this->openFile()) {
-            foreach ($this->newLines as $arrNewLine) {
-                if (fputcsv($this->fileHandle, $arrNewLine) === false) {
-                    throw new LogFileCouldNotWriteException(
-                        "The file could not be written to." .
-                        " Check that appropriate permissions have been set."
-                    );
+    {
+        if (empty(self::getInstance()->newLines)) {
+            return false;
+        }
+        
+        if (self::$fileHandle) {
+            foreach (self::getInstance()->newLines as $arrNewLine) {
+                if (fputcsv(self::$fileHandle, $arrNewLine) === false) {
+                    //scriu in db !!!
                 }
+                //print_r($arrNewLine);
             }
             $this->newLines = array();
             $this->closeFile();
