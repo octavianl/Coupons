@@ -35,6 +35,8 @@ class Log
     const OFF = 6; // Logs OFF
 
     private static $loggerInstance;
+    private static $logModel;
+    
 
     /**
      * Date string. Default: "Y-m-d H:i:s"
@@ -46,7 +48,7 @@ class Log
      * The format of the log line. Defaults to ":date :loglevel :log_message\n"
      * @var string  
      */
-    public $logFormat = ":date :loglevel :log_message\n";
+    public static $logHeader = array( 'Date', 'Level' , 'File', 'Line', 'Class', 'Method', 'Message');
     private $newLines = array();
     private static $fileHandle;
     private $delimiter = ',';
@@ -110,6 +112,8 @@ class Log
         self::$ext = 'csv';
         self::$filepath = FCPATH . APPPATH . 'logs/';
         self::checkFolder();
+        
+        //self::$logModel = new LogModel(); 
     }
 
     // LEVEL OF LOGS
@@ -146,13 +150,14 @@ class Log
     /**
      * Log method
      * 
+     * @param $line array with variables from log line
      * @return boolean  
      */
     
     protected function log($line, $filename, $level)
     {
         $filename_fullpath = self::setFileName($filename);
-        self::getInstance()->newLines[] = self::getInstance()->getLogLine($level, $line);
+        self::getInstance()->newLines = array_merge(self::getInstance()->getLogLine($level), $line);
         
         // Check if logs are not OFF mode
         if ($level != self::OFF) {
@@ -161,7 +166,14 @@ class Log
             try {
                 self::openFile($filename_fullpath);
             } catch (Exception $ex) {
-                //scriu in db !!!
+                
+//                $insert_fields = array(
+//                    'log_message'   => "File can't be opened",
+//                    'log_errorline' => __LINE__,
+//                    'log_filename'  => $filename_fullpath,
+//                );
+//                self::$logModel->logError($insert_fields);
+                
             }
             
             // Check if logs file exists and can be writable
@@ -195,7 +207,12 @@ class Log
      */
     private function openFile($filename_fullpath)
     {
-        self::$fileHandle = fopen($filename_fullpath, 'a');
+        if (!file_exists($filename_fullpath)) {
+            self::$fileHandle = fopen($filename_fullpath, 'w');
+            fputcsv(self::$fileHandle, self::$logHeader); 
+        }else{
+            self::$fileHandle = fopen($filename_fullpath, 'a');
+        }
         
         if (self::$fileHandle) {
             return true;
@@ -224,12 +241,10 @@ class Log
         }
         
         if (self::$fileHandle) {
-            foreach (self::getInstance()->newLines as $arrNewLine) {
-                if (fputcsv(self::$fileHandle, $arrNewLine) === false) {
-                    //scriu in db !!!
-                }
-                //print_r($arrNewLine);
+            if (fputcsv(self::$fileHandle, self::getInstance()->newLines) === false) {
+                //scriu in db !!!
             }
+            //print_r($arrNewLine);
             $this->newLines = array();
             $this->closeFile();
             return true;
@@ -237,7 +252,7 @@ class Log
         return false;
     }
 
-    protected function getLogLine($level, $message)
+    protected function getLogLine($level)
     {
 
         $levelNames = array(
@@ -249,12 +264,37 @@ class Log
         );
         
         $arr = array(
-            'date' => date($this->dateFormat),
-            'loglevel' => $levelNames[$level],
-            'message' => $message
+            date($this->dateFormat),
+            $levelNames[$level]
         );
         
         return $arr;
     }
 
 }
+
+//class LogModel extends CI_Model {
+//    
+//    private $CI;
+//
+//    function __construct() {
+//        parent::__construct();
+//
+//        $this->CI = & get_instance();
+//    }
+//    
+//    /**
+//     * Add New Log Error
+//     *
+//     * @param array $insert_fields	
+//     *
+//     * @return int $insert_id
+//     */
+//    function logError($insert_fields) {
+//
+//        $this->db->insert('linkshare_logs', $insert_fields);
+//        $insert_id = $this->db->insert_id();
+//
+//        return $insert_id;
+//    }
+//}

@@ -44,7 +44,7 @@ class Admincp4 extends Admincp_Controller
         
         $string = "Test error" . " || Class name: " . __CLASS__ . " | Method name: " . __METHOD__ . " | error line: " . __LINE__ . " | from file: " . __FILE__;
 
-        Log::debug($string,'advertisers');
+        Log::notice( array(__FILE__, __LINE__, __CLASS__, __METHOD__, 'Test error'), 'categories');
 
     }
 
