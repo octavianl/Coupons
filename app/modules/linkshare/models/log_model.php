@@ -32,46 +32,73 @@ class Log_model extends CI_Model
     function getLogs($filters = array())
     {
         //Directory read
-        $filedir = FCPATH.APPPATH.'logs/'; //'logs/logs.csv'
+        $filedir = FCPATH.APPPATH.'logs/'. $filters['year'] . '/' . $filters['month'] . '/'; //'logs/logs.csv'
 
         if ($dirHandle = opendir($filedir)) {
-        while (false !== ($filename = readdir($dirHandle))) {
-                if (substr($filename, -4) == '.csv') {
+        //while (false !== ($filename = readdir($dirHandle))) {
+            $filename = $filters['zone'] . '-' . $filters['day'] . '-' . $filters['month'] . '-' . $filters['year'] . '.csv';         
+            $filepath = $filedir.$filename;
+            
+                if (file_exists($filepath)) {
 
                         //File read
-                        $filepath = $filedir.$filename;
-                        $row = 1;
-                        if (($fileHandle = fopen($filepath, "r")) !== FALSE) {
+                        $fileHandle = fopen($filepath, "r");
+                        if ( $fileHandle != FALSE ) {
+                                    
+                                    $row = 0;
                                     while (($data = fgetcsv($fileHandle, 1000, ",")) !== FALSE) {
-                                        $num = count($data);
-                                        $row++;
+                                        if($row == 0) {
+                                            $row++;
+                                        }else{
+                                            $num = count($data);
+                                            
+                                            $columns[] = array(
+                                                array(
+                                                    'RowNo' => $row,
+                                                    'width' => '5%'),
+                                                array(
+                                                    'DateTime' => $data[0],
+                                                    'width' => '10%'),
+                                                array(
+                                                    'LogLevel' => $data[1],
+                                                    'width' => '5%'),
+                                                array(
+                                                    'FileName' => $data[2],
+                                                    'width' => '20%'
+                                                ),
+                                                array(
+                                                    'Line' => $data[3],
+                                                    'width' => '5%'
+                                                ),
+                                                array(
+                                                    'Class' => $data[4],
+                                                    'width' => '5%'
+                                                ),
+                                                array(
+                                                    'Method' => $data[5],
+                                                    'width' => '10%'
+                                                ),
+                                                array(
+                                                    'Message' => $data[6],
+                                                    'width' => '40%'
+                                                )
 
-                                        $columns[] = array(
-                                            array(
-                                                'RowNo' => $row,
-                                                'width' => '20%'),
-                                            array(
-                                                'DateTime' => $data[0],
-                                                'width' => '30%'),
-                                            array(
-                                                'LogLevel' => $data[1],
-                                                'width' => '20%'),
-                                            array(
-                                                'Message' => $data[2],
-                                                'width' => '30%'
-                                            )
-                                        );
-
-                        }
+                                            );
+                                            $row++;
+                                        }            
+                                    }
                         fclose($fileHandle);
+                    }else {
+                        $columns = array ();
                     }
 
+                }else {
+                    $columns = array ();
                 }
-            }
+            //}
             closedir($dirHandle);
         }
         
-
         $output = array_slice($columns, $filters['offset'],$filters['limit']);
         
         return $output;

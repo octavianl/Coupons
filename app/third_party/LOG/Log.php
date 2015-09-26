@@ -19,6 +19,11 @@ class Log {
     const NOTICE = 3; // Notice: normal but significant condition
     const WARN = 4; // Warning: warning conditions
     const ERROR = 5; // Error: error conditions
+    
+    const CATEGORIES = 'categories'; // Zone categories
+    const ADVERTISERS = 'advertisers'; // Zone categories
+    const PRODUCTS = 'products'; // Zone categories
+    const EXPORT = 'export'; // Zone categories
 
     private static $loggerInstance;
 
