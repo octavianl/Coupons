@@ -714,8 +714,20 @@ class Admincp2 extends Admincp_Controller {
             $this->input->set_cookie("mergedCategories", $value, 2592000);
         }        
     }
+    
+    /**
+     * Reset join merge categories cookies
+     * 
+     * @return void
+     */
+    public function joinMergeReset()
+    {
+        $this->load->helper('cookie');
+        delete_cookie('mergedCategories');
+        delete_cookie('mergingCategory');        
+    }
 
-    public function joinCreativeCategory() 
+    public function joinCreativeCategory($action = 'insert', $mergedCreativeCategoryId = 0) 
     {
         $this->admin_navigation->module_link('View Merged Categories', site_url('admincp2/linkshare/listMergedCategories/'));
 
@@ -772,60 +784,129 @@ class Admincp2 extends Admincp_Controller {
         if (isset($_GET['offset'])) {
             $filters['offset'] = $_GET['offset'];
         }
+        
+        // we edit an already merged category
+        if ($action == 'edit') {
+            $mergedCategory = $this->category_creative_model->getMergedCategoryByID($mergedCreativeCategoryId);
+            $site = $this->site_model->getSite($mergedCategory[0]['id_site']);
+            // set cookie site
+            $this->input->set_cookie("siteID", $site['SID'], 2592000);
+            // set category merged name
+            $this->input->set_cookie("mergingCategory", $mergedCategory[0]['name'] . ',' . $site['SID'] . ',edit', 2592000);
+            // set merged creative categories checkboxes (set cookie corresponding to checkboxes)
+            $linkshareCategoriesJoined = $this->category_creative_model->getJoinsCategory($mergedCreativeCategoryId);
+            
+            $checkboxes = array();
+            foreach ($linkshareCategoriesJoined as $linkshareCategorieJoined) {
+              $temp = $this->category_creative_model->getCategoryCreativeByCatId($linkshareCategorieJoined['cat_id']);
+              $checkboxes[] = $temp['id'];
+            }
+            // set checkboxes in cookie
+            $this->input->set_cookie("mergedCategories",implode(',', $checkboxes), 2592000);
+            
+            // redirect with new cookies set
+            redirect(site_url('admincp2/linkshare/joinCreativeCategory'));
+        }
+        
+        // begin when finish common to both insert and edit actions        
+        if ($this->input->post('saving') == 'finish') {
+            $mergedCategoryCookie = explode(',', $this->input->cookie('mergingCategory'));
+            $action = $mergedCategoryCookie[2];
+        }    
+        // insert action
+        if ($this->input->post('saving') == 'finish' && $action == 'insert') {
+            $id_merged_category = $this->category_creative_model->newMergedCategory($mergedCategoryCookie[0], $siteRow['id']);
+            $this->category_creative_model->newJoinCategory($id_merged_category, $this->input->cookie('mergedCategories'));
+            
+            $this->joinMergeReset();
+        }
+        // edit action
+        if ($this->input->post('saving') == 'finish' && $action == 'edit') {
+            $site = $this->site_model->getSiteBySID($mergedCategoryCookie[1]);            
+            $mergedCategory = $this->category_creative_model->getMergedCategory($site['id'], $mergedCategoryCookie[0]);
+            
+            $existingCategories = $this->category_creative_model->getJoinsCategory($mergedCategory[0]['ID']);
+            
+            foreach ($existingCategories as $existingCategory) {
+                $tempCreativeCategory = $this->category_creative_model->getCreativeForMerge(
+                    array(
+                        'id_site' => $site['id'],
+                        'cat_creativ_id' => $existingCategory['cat_id'],
+                        'mid' => $existingCategory['mid']
+                    )
+                );
+                                
+                $existingCategoriesIds[] = $tempCreativeCategory[0]['id'];
+            }
+            
+            $cookieCategoriesIds = explode(',', $this->input->cookie('mergedCategories'));
+
+            $categoriesIdsToDelete = array_diff($existingCategoriesIds, $cookieCategoriesIds);
+            $categoriesIdsToInsert = array_diff($cookieCategoriesIds, $existingCategoriesIds);
+
+            /*print '<pre>';
+            print_r($site);
+            print_r($mergedCategory);
+            print_r($existingCategories);
+            print_r($existingCategoriesIds);
+            print_r($cookieCategoriesIds);
+            print_r($categoriesIdsToDelete);
+            print_r($categoriesIdsToInsert);*/
+            
+            foreach ($categoriesIdsToDelete as $categoryIdToDelete) {
+                $categoryCreativeToDelete = $this->category_creative_model->getCategory($categoryIdToDelete);
+                //print '<pre>$categoryCreativeToDelete';
+                //print_r($categoryCreativeToDelete);
+                
+                $this->category_creative_model->deleteJoinCategory($categoryIdToDelete, $mergedCategory[0]['ID'], $categoryCreativeToDelete['mid']);                
+            }
+            
+            $this->category_creative_model->newJoinCategory($mergedCategory[0]['ID'], implode(',', $categoriesIdsToInsert));
+            
+            $this->joinMergeReset();
+        }                
 
         if ($this->input->post('saving') == 'ok') {
-            $this->input->set_cookie("mergingCategory", $this->input->post('merged_category'), 2592000);
+            if (!$this->input->cookie('siteID')) {
+                $this->notices->SetError('You must first choose a site');
+                header("Refresh:0");
+                die;
+            }
+            
+            // empty cookies as we may be editing a category for instance, so we give it up
+            $this->joinMergeReset();
+            
+            $this->input->set_cookie("mergingCategory", $this->input->post('merged_category') . ',' . $this->input->cookie('siteID') . ',' . 'insert', 2592000);
             header("Refresh:0");
-//            if (isset($_POST['merged_category']) && !empty($filters_decode['check_category'])) {
-//                $checked_values = array();
-//                $checked_values = explode(',', $filters_decode['check_category']);
-//                if (!empty($_POST['check_category'])) {
-//                    foreach ($_POST['check_category'] as $cat) {
-//                        if ($cat) {
-//                            //curent checkboxes
-//                            $checked_values[] = $cat;
-//                        }
-//                    }
-//                }
-//                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category'],$siteRow['id']);
-//                $id_join_category = $this->category_creative_model->newJoinCategory($id_merged_category, $checked_values);
-//
-//                $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
-//                $this->notices->SetNotice($message);
-//                redirect(site_url('admincp2/linkshare/joinCreativeCategory/1'));
-//            } elseif (isset($_POST['merged_category']) && !empty($_POST['check_category'])) {
-//                $id_merged_category = $this->category_creative_model->newMergedCategory($_POST['merged_category'],$siteRow['id']);
-//                $this->category_creative_model->newJoinCategory($id_merged_category, $_POST['check_category']);
-//
-//                $message = "New Merged Category (" . $_POST['merged_category'] . ") added successfully.";
-//                $this->notices->SetNotice($message);
-//                redirect(site_url('admincp2/linkshare/joinCreativeCategory'));
-//            } else {
-//                $this->notices->SetNotice('Check if any checkboxes are selected!');
-//                redirect(site_url('admincp2/linkshare/joinCreativeCategory'));
-//            }
+            die;
         }
-
-//        $filters['nume'] = $filters_decode['nume'];
-//        
-//        $filters['mid'] = $filters_decode['mid'];
-
+        
+        $mergingCategoryTemp = explode(',', $this->input->cookie('mergingCategory'));
+        
+        // cookie for another channel
+        if ($mergingCategoryTemp[1] != $this->input->cookie('siteID')) {
+            if ($this->input->cookie('mergingCategory')) {
+                $this->joinMergeReset();
+                header("Refresh:0");
+                die;
+            }
+        }
+        
         $this->dataset->columns($columns);
         $this->dataset->datasource('category_creative_model', 'getCreativeForMerge', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/joinCreativeCategory/'));
         
-        if (isset($_GET['cat_creativ_id']))
+        if (isset($_GET['cat_creativ_id'])) {
             $filters['cat_creativ_id'] = $_GET['cat_creativ_id'];
+        }
 
-        if (isset($_GET['nume']))
+        if (isset($_GET['nume'])) {
             $filters['nume'] = $_GET['nume'];
+        }
 
-        if (isset($_GET['mid']))
+        if (isset($_GET['mid'])) {
             $filters['mid'] = $_GET['mid'];
-        
-
-        //$this->load->library('asciihex');
-        //$this->load->model('forms/form_model');
+        }
 
         // total rows
         $this->db->where('id_site', $siteRow['id']);
@@ -834,30 +915,29 @@ class Admincp2 extends Admincp_Controller {
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
-
-
-        $data = array(            
+        
+        $data = array(
             'cat_creativ_id' => $filters['cat_creativ_id'],
             'name_search' => $filters['nume'],
             'mid_search' => $filters['mid'],
             'name_merged' => $filters['merged_category'],
             'site_name' => $siteRow['name'],
-            'mergingCategory' => $this->input->cookie('mergingCategory')
+            'mergingCategory' => $mergingCategoryTemp[0],
+            'mergedCategories' => explode(',', $this->input->cookie('mergedCategories'))
         );
 
         $this->load->view('joinCreativeCategory', $data);
     }
-
+    
     public function listMergedCategories()
     {
-        
         $this->load->model(array('category_creative_model','site_model'));
-        
+
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
         $this->admin_navigation->module_link('Export CSV', site_url('admincp3/linkshare/exportCSV/???'));
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
-        
+
         $this->load->library('dataset');
         $this->load->model(array('category_creative_model','site_model'));
 
@@ -868,14 +948,14 @@ class Admincp2 extends Admincp_Controller {
                 'name' => 'Merged Category Name',
                 'width' => '20%'),
             array(
-                'name' => 'Total Creative Categories merged',
-                'width' => '20%'),
+                'name' => 'Total Creat Cat merged',
+                'width' => '10%'),
             array(
                 'name' => 'Merged categories',
-                'width' => '30%'),
+                'width' => '50%'),
             array(
-                'name' => 'Total products merged',
-                'width' => '20%'),
+                'name' => 'Total prod merged',
+                'width' => '10%'),
             array(
                 'name' => 'Actions',
                 'width' => '10%'
@@ -903,7 +983,7 @@ class Admincp2 extends Admincp_Controller {
             'site_name' => $siteRow['name']
         );
         
-        $this->load->view('listMergedCategory',$data);
+        $this->load->view('listMergedCategory', $data);
     }
 
     public function editMergedCategory($id) {
