@@ -1,5 +1,48 @@
 <?=$this->load->view(branded_view('cp/header'));?>
   <script>
+    var globalVars = {unloaded:false};
+$(window).bind('beforeunload', function(){
+    globalVars.unloaded = true;
+});
+
+$.ajax({               
+        error: function( jqXHR, textStatus, errorThrown ){
+            if (globalVars.unloaded) {
+                return;
+            }            
+        }
+});
+ 
+    
+    $(document).on('click', '.pagination .number a, .pagination .last a, .pagination .first a, .pagination .next a, .pagination .previous a', function(event){        
+
+        var datepicker = $('input[name="datepicker"]').val();
+        var zone = $('select[name="zone"]').val();
+
+        console.log (datepicker + ' ' + zone);
+
+        $.ajax({
+                type: 'post',
+                url: '/admincp4/linkshare/updateFilters/',
+                data: 'datepicker='+datepicker+"&zone="+zone,
+                dataType:'html',
+                    success: function(data, textStatus, XMLHttpRequest) {
+//                        console.log('filters '+data);
+                        $('input[name="filters"]').val(data);
+                        document.forms['LogCalendar'].submit();
+                     },
+                     error: function( jqXHR, textStatus, errorThrown ){
+                        var serverNotReached = jqXHR.readyState == 0 || jqXHR.status == 0; 
+                        console.log('Text status '+jqXHR.status);
+                        console.log('Text status '+textStatus);
+                        console.log('Text thrown '+errorThrown);
+                     }
+                });
+
+     });
+
+      
+      
   $(function() {
     $( "#datepicker" ).datepicker({
       showOtherMonths: true,
@@ -8,7 +51,7 @@
   });
   </script>
 <h1><?=$form_title;?></h1>
-    <form method="GET" action="admincp4/linkshare/logsPanel/">
+<form method="GET" action="admincp4/linkshare/logsPanel/" name="LogCalendar">
         <h4 style="display:inline-block">Select date</h4>
         <input type="text" value="<?php if(isset($_GET['datepicker'])){ echo $_GET['datepicker']; } ?>" id="datepicker" name="datepicker">
         <h4 style="display:inline-block">Select type</h4>

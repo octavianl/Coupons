@@ -48,6 +48,32 @@ class Admincp4 extends Admincp_Controller
 
     }
 
+    function updateFilters()
+    {
+
+        
+        $this->load->library('asciihex');
+        
+        $filters = array();
+
+        if (!empty($_POST['datepicker']))
+        {
+            $filters['datepicker'] = $_POST['datepicker'];
+        }
+        
+        if (!empty($_POST['zone']))
+        {
+            $filters['zone'] = $_POST['zone'];
+        }
+        
+        
+        //print_r($filters);
+        
+        $filters = $this->CI->asciihex->AsciiToHex(base64_encode(serialize($filters)));
+
+        echo $filters;
+    }
+    
 /**
  * Logs panel
  */
@@ -64,7 +90,8 @@ class Admincp4 extends Admincp_Controller
                 'width' => '5%'),
             array(
                 'name' => 'Date',
-                'width' => '10%'),
+                'width' => '10%',
+                ),
             array(
                 'name' => 'Level',
                 'width' => '5%'),
@@ -89,12 +116,41 @@ class Admincp4 extends Admincp_Controller
                 'width' => '40%'
             )
         );
+
+        $filters = array();
+        
+        if (isset($_POST['filters']))
+        {
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
+        }
+  
+        if (isset($_POST['datepicker']))
+            $filters['datepicker'] = $_POST['datepicker'];
+        
+        if (isset($_POST['zone']))
+            $filters['zone'] = $_POST['zone'];
+        
+        if (isset($filters_decode) && !empty($filters_decode))
+        {
+            foreach ($filters_decode as $key => $val)
+            {
+                $filters[$key] = $val;
+            }
+        }
+
+        foreach ($filters as $key => $val)
+        {
+            if (in_array($val, array('datepicker', 'zone')))
+            {
+                unset($filters[$key]);
+            }
+        }
+
         
         //Prepare data for filters
         $raw_data = $this->input->get('datepicker', TRUE);
         $data_array = explode('/', $raw_data);
         
-        $filters = array();
         $filters['limit'] = 5;
         $filters['offset'] = $this->input->get('offset', TRUE);
         
@@ -103,6 +159,7 @@ class Admincp4 extends Admincp_Controller
         $filters['year'] = $data_array[2];
         $filters['zone'] = $this->input->get('zone', TRUE);
         
+
         echo "<pre>";
         print_r($filters);
         echo "</pre>";

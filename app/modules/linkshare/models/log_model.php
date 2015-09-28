@@ -31,6 +31,7 @@ class Log_model extends CI_Model
      */
     function getLogs($filters = array())
     {
+       
         //Directory read
         $filedir = FCPATH.APPPATH.'logs/'. $filters['year'] . '/' . $filters['month'] . '/'; //'logs/logs.csv'
 
@@ -103,7 +104,6 @@ class Log_model extends CI_Model
         
         return $output;
         
-
     }
 
 
