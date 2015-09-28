@@ -785,6 +785,12 @@ class Admincp2 extends Admincp_Controller {
             $filters['offset'] = $_GET['offset'];
         }
         
+        if ($action == 'killCookies') {
+            $this->joinMergeReset();
+            redirect(site_url('admincp2/linkshare/joinCreativeCategory'));            
+            die;
+        }
+        
         // we edit an already merged category
         if ($action == 'edit') {
             $mergedCategory = $this->category_creative_model->getMergedCategoryByID($mergedCreativeCategoryId);
@@ -821,7 +827,7 @@ class Admincp2 extends Admincp_Controller {
             $this->joinMergeReset();
         }
         // edit action
-        if ($this->input->post('saving') == 'finish' && $action == 'edit') {
+        if ($this->input->post('saving') == 'finish' && $action == 'edit') {            
             $site = $this->site_model->getSiteBySID($mergedCategoryCookie[1]);            
             $mergedCategory = $this->category_creative_model->getMergedCategory($site['id'], $mergedCategoryCookie[0]);
             

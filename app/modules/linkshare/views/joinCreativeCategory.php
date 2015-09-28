@@ -85,7 +85,7 @@ jQuery(document).ready(function(){
             success: function(data, textStatus, XMLHttpRequest) {
             },
             complete : function(jqXHR, textStatus) {
-              window.location.replace(window.location.href);
+              window.location.replace(window.location.href + '/killCookies');
            }
         });
     });
