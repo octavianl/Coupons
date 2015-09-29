@@ -66,6 +66,15 @@ class Admincp4 extends Admincp_Controller
             $filters['zone'] = $_POST['zone'];
         }
         
+        if (!empty($_POST['offset']))
+        {
+            $filters['offset'] = $_POST['offset'];
+        }
+        
+        if (!empty($_POST['limit']))
+        {
+            $filters['limit'] = $_POST['limit'];
+        }
         
         //print_r($filters);
         
@@ -117,19 +126,15 @@ class Admincp4 extends Admincp_Controller
             )
         );
 
-        $filters = array();
-        
-        if (isset($_POST['filters']))
+        $filters = $filters_decode = array();
+        $fromFilterz = null;
+       
+        if (isset($_POST['filterz']))
         {
-            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filters'])));
-        }
-  
-        if (isset($_POST['datepicker']))
-            $filters['datepicker'] = $_POST['datepicker'];
-        
-        if (isset($_POST['zone']))
-            $filters['zone'] = $_POST['zone'];
-        
+            $filters_decode = unserialize(base64_decode($this->asciihex->HexToAscii($_POST['filterz'])));
+            $fromFilterz = 'post';
+        }                
+               
         if (isset($filters_decode) && !empty($filters_decode))
         {
             foreach ($filters_decode as $key => $val)
@@ -137,34 +142,58 @@ class Admincp4 extends Admincp_Controller
                 $filters[$key] = $val;
             }
         }
-
-        foreach ($filters as $key => $val)
-        {
-            if (in_array($val, array('datepicker', 'zone')))
-            {
-                unset($filters[$key]);
-            }
-        }
-
         
         //Prepare data for filters
-        $raw_data = $this->input->get('datepicker', TRUE);
+        if (isset($filters['datepicker'])) {
+            $raw_data = $filters['datepicker'];
+        } else {
+            $raw_data = $this->input->post('datepicker', TRUE);
+        }
+        
+        if (isset($_GET['datepicker'])) {
+           $raw_data = $this->input->get('datepicker', TRUE); 
+        }
+       
         $data_array = explode('/', $raw_data);
         
-        $filters['limit'] = 5;
-        $filters['offset'] = $this->input->get('offset', TRUE);
+        if (!isset($filters['limit'])) {
+            $filters['limit'] = 5;
+        }
+        
+        if (isset($_GET['limit'])) {
+           $filters['limit'] = $_GET['limit'];
+        }
+        
+        if (!isset($filters['offset'])) {
+            $filters['offset'] = 0;
+        }
+        
+        if (isset($_GET['offset'])) {
+           $filters['offset'] = $_GET['offset'];
+        }
         
         $filters['day'] = $data_array[1];
         $filters['month'] = $data_array[0];
         $filters['year'] = $data_array[2];
-        $filters['zone'] = $this->input->get('zone', TRUE);
         
-
-        echo "<pre>";
+        if (isset($filters['zone'])) {
+        } else {
+            $filters['zone'] = $this->input->post('zone', TRUE);
+        }                
+        
+        if (isset($_GET['zone'])) {
+           $filters['zone'] = $this->input->get('zone', TRUE); 
+        }
+        
+        echo "<pre>FILTERS";
         print_r($filters);
         echo "</pre>";
         //die;
         
+        if (isset($fromFilterz)) {
+            $newUrl = site_url('admincp4/linkshare/logsPanel?sort_dir=&sort_column=&limit=' . $filters['limit'] .'&offset=' . $filters['offset'] . '&zone=' . $filters['zone'] . '&datepicker=' . $filters['datepicker']);
+            redirect($newUrl);
+        }
         
         $this->dataset->columns($columns);
         $this->dataset->datasource('log_model', 'getLogs', $filters);
@@ -172,14 +201,15 @@ class Admincp4 extends Admincp_Controller
         $this->dataset->base_url(site_url('admincp4/linkshare/logsPanel'));
         $this->dataset->rows_per_page($filters['limit']);
         
-        $allZones = array('advertisers', 'categories', 'products', 'export');        
+        $allZones = array('advertisers', 'categories', 'products', 'export');
+        
         $data = array(
             'form_title' => 'Log Panel',
-            'allZones'       => $allZones
+            'allZones'   => $allZones
         );
+        
         $this->dataset->initialize();
         $this->load->view('logsPanel',$data);
-
     }
     
 }
