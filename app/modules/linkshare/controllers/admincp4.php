@@ -127,6 +127,7 @@ class Admincp4 extends Admincp_Controller
         );
 
         $filters = $filters_decode = array();
+        // variable to check if we come from a post request
         $fromFilterz = null;
        
         if (isset($_POST['filterz']))
@@ -150,6 +151,7 @@ class Admincp4 extends Admincp_Controller
             $raw_data = $this->input->post('datepicker', TRUE);
         }
         
+        // in case of redirect get datepicker from GET
         if (isset($_GET['datepicker'])) {
            $raw_data = $this->input->get('datepicker', TRUE); 
         }
@@ -160,6 +162,7 @@ class Admincp4 extends Admincp_Controller
             $filters['limit'] = 5;
         }
         
+        // in case of redirect get limit from GET
         if (isset($_GET['limit'])) {
            $filters['limit'] = $_GET['limit'];
         }
@@ -168,6 +171,7 @@ class Admincp4 extends Admincp_Controller
             $filters['offset'] = 0;
         }
         
+        // in case of redirect get offset from GET
         if (isset($_GET['offset'])) {
            $filters['offset'] = $_GET['offset'];
         }
@@ -181,15 +185,17 @@ class Admincp4 extends Admincp_Controller
             $filters['zone'] = $this->input->post('zone', TRUE);
         }                
         
+        // in case of redirect get zone from GET
         if (isset($_GET['zone'])) {
            $filters['zone'] = $this->input->get('zone', TRUE); 
         }
         
-        echo "<pre>FILTERS";
-        print_r($filters);
-        echo "</pre>";
+        //echo "<pre>FILTERS";
+        //print_r($filters);
+        //echo "</pre>";
         //die;
         
+        // redirect for viewing pagination links css correctly
         if (isset($fromFilterz)) {
             $newUrl = site_url('admincp4/linkshare/logsPanel?sort_dir=&sort_column=&limit=' . $filters['limit'] .'&offset=' . $filters['offset'] . '&zone=' . $filters['zone'] . '&datepicker=' . $filters['datepicker']);
             redirect($newUrl);

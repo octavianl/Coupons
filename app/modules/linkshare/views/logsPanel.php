@@ -55,14 +55,31 @@
   </script>
 <h1><?=$form_title;?></h1>
 <form method="POST" action="admincp4/linkshare/logsPanel/" name="LogCalendar">
+        <?php
+            if (isset($_POST['datepicker'])) {
+                $datepicker = $_POST['datepicker'];
+            }
+            
+            if (isset($_GET['datepicker'])) {
+                $datepicker = $_GET['datepicker'];
+            }
+            
+            if (isset($_POST['zone'])) {
+                $zoneRequest = $_POST['zone'];
+            }
+            
+            if (isset($_GET['zone'])) {
+                $zoneRequest = $_GET['zone'];
+            }
+        ?>
         <h4 style="display:inline-block">Select date</h4>
-        <input type="text" value="<?php if(isset($_POST['datepicker'])){ echo $_POST['datepicker']; } ?>" id="datepicker" name="datepicker">
+        <input type="text" value="<?php echo $datepicker; ?>" id="datepicker" name="datepicker">
         <h4 style="display:inline-block">Select type</h4>
         <select name="zone" style="display:inline-block">
             <?php
                 foreach ($allZones as $zone){
                 ?>
-                    <option value="<?=$zone?>" <?php if(isset($_POST['zone']) && $_POST['zone']==$zone){ echo 'selected';} ?> ><?=$zone?></option>
+                    <option value="<?=$zone?>" <?php if($zoneRequest == $zone){ echo 'selected';} ?> ><?=$zone?></option>
                 <?php
                     }
             ?>
