@@ -159,7 +159,7 @@ class Admincp4 extends Admincp_Controller
         $data_array = explode('/', $raw_data);
         
         if (!isset($filters['limit'])) {
-            $filters['limit'] = 5;
+            $filters['limit'] = 500; // number of log lines per page
         }
         
         // in case of redirect get limit from GET

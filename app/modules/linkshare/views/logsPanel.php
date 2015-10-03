@@ -42,7 +42,7 @@
             
         });
         
-        $("#datepicker").unbind("click").bind("click", function (event) {
+        $(function() {
             $( "#datepicker" ).datepicker({
               showOtherMonths: true,
               selectOtherMonths: true
