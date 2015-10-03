@@ -47,7 +47,7 @@ class Log {
     private static $ext;
 
     private static function checkFolder() {
-
+        chdir('app/log');
         $current_year = self::$filepath . date("Y");
         $current_month = self::$filepath . date("Y") . '/' . date('m');
 
