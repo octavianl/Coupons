@@ -994,26 +994,28 @@ class Admincp2 extends Admincp_Controller {
 
     public function editMergedCategory($id) {
         $this->load->model('category_creative_model');
+        $this->admin_navigation->module_link('Back to merged categories list', site_url('admincp2/linkshare/listMergedCategories/'));
+        
         $fields['name'] = $this->input->post('category_name');
+        $fields['description'] = $this->input->post('category_description');
+        $fields['meta_title'] = $this->input->post('category_meta_title');
+        $fields['meta_keywords'] = $this->input->post('category_meta_keywords');
+        $fields['meta_description'] = $this->input->post('category_meta_description');
+        $fields['url_rewritten'] = $this->input->post('category_url_rewritten');
 
-        $category_name = $this->category_creative_model->getMergedCategoryByID($id);
-
-//        echo "<pre>";
-//        print_r($category_name);
-//        echo "</pre>";
-//        die;
-
-        if (!empty($fields['name']) && isset($fields['name'])) {
-
+        if (count(array_filter($fields)) == count($fields)) {
             $this->category_creative_model->updateMergedCategory($fields, $id);
             $this->notices->SetNotice('Category updated successfully.');
 
             redirect('admincp2/linkshare/listMergedCategories/');
             return true;
-        }
-
+        }        
+        
+        $category = $this->category_creative_model->getMergedCategoryByID($id);
+        if(count(array_filter($category)) != count($category)){ $this->notices->SetError('Please fill all fields!'); }
+ 
         $data = array(
-            'merged_category_name' => $category_name[0]['name'],
+            'category' => $category,
             'form_action' => site_url('admincp2/linkshare/editMergedCategory/' . $id),
         );
 

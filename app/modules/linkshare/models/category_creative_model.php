@@ -581,7 +581,11 @@ class Category_creative_model extends CI_Model {
         $this->db->where('ID', $id);
         $result = $this->db->get('linkshare_categories_merged');
 
-        return $result->result_array();
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
+
+        return $row;
     }
 
     /**
