@@ -2215,11 +2215,11 @@ class Admincp2 extends Admincp_Controller
         $this->load->library('admin_form'); 
         $form = new Admin_form;
 
-        $this->load->model(array('site_model','advertiser_model'));
+        $this->load->model(array('site_model', 'advertiser_model', 'advertiser_temp_model'));
         
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
-        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        $temp = $this->advertiser_temp_model->getTempAdvertisers($siteID['id']);
         $current = array_merge($this->advertiser_model->getAdvertisers(array('id_status' => 1,'id_site'=>$siteRow['id'])));
 
         foreach ($current as $val){

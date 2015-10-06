@@ -758,9 +758,7 @@ class Admincp extends Admincp_Controller {
         ini_set('display_errors', 1);
 
         $this->load->library('admin_form');
-        $this->load->model('site_model');
-        $this->load->model('status_model');
-        $this->load->model('advertiser_model');
+        $this->load->model(array('site_model', 'status_model', 'advertiser_model', 'advertiser_temp_model'));        
         //$scope = $this->input->cookie('siteID');
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();
@@ -783,7 +781,7 @@ class Admincp extends Admincp_Controller {
 
         $config = new LinkshareConfig();
         $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
-        $this->advertiser_model->deleteTempAdvertiser();
+        $this->advertiser_temp_model->deleteTempAdvertiser();
 
         if ($allApproved == 1) {
             $linkshareConstants = array(
@@ -817,7 +815,7 @@ class Admincp extends Admincp_Controller {
                         $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
                         $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
 
-                        $this->advertiser_model->newTempAdvertiser($mids[$i]);
+                        $this->advertiser_temp_model->newTempAdvertiser($mids[$i]);
 
                         $i++;
                     }
@@ -849,7 +847,7 @@ class Admincp extends Admincp_Controller {
                     $mids[$i]['offer_id'] = mysql_real_escape_string($child->offer->offerId);
                     $mids[$i]['offer_name'] = mysql_real_escape_string($child->offer->offerName);
 
-                    $this->advertiser_model->newTempAdvertiser($mids[$i]);
+                    $this->advertiser_temp_model->newTempAdvertiser($mids[$i]);
 
                     $i++;
                 }
@@ -863,10 +861,10 @@ class Admincp extends Admincp_Controller {
         ini_set('display_errors', 1);
 
         $this->load->library('admin_form');
-        $this->load->model(array('site_model', 'status_model', 'advertiser_model'));
+        $this->load->model(array('site_model', 'status_model', 'advertiser_model', 'advertiser_temp_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $allStatus = $this->status_model->getStatuses();
-        $selectStatus = $this->advertiser_model->getTempStatusName();
+        $selectStatus = $this->advertiser_temp_model->getTempStatusName();
 
         $this->admin_navigation->module_link('Clear Temp', site_url('admincp/linkshare/clearTempAdv/'));
         $this->admin_navigation->module_link('Move advertisers', site_url('admincp/linkshare/moveTempAdvertisers/'));
@@ -921,7 +919,7 @@ class Admincp extends Admincp_Controller {
 
         $filters['limit'] = 10;
         $this->dataset->columns($columns);
-        $this->dataset->datasource('advertiser_model', 'getTempAdvertisers', $filters);
+        $this->dataset->datasource('advertiser_temp_model', 'getTempAdvertisers', $filters);
         $this->dataset->base_url(site_url('admincp/linkshare/listTempAdvertisers/'));
         $this->dataset->rows_per_page(10);
 
@@ -939,8 +937,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('listAdvertisersParsed', $data);
     }
     public function clearTempAdv() {
-        $this->load->model('advertiser_model');
-        $this->advertiser_model->deleteTempAdvertiser();
+        $this->load->model('advertiser_temp_model');
+        $this->advertiser_temp_model->deleteTempAdvertiser();
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
@@ -949,11 +947,11 @@ class Admincp extends Admincp_Controller {
         ini_set('display_errors', 1);
 
         $this->load->library('admin_form');
-        $this->load->model('advertiser_model');
-        $this->load->model('site_model');
+        $this->load->model(array('advertiser_model', 'advertiser_temp_model', 'site_model'));
+        
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
-        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        $temp = $this->advertiser_temp_model->getTempAdvertisers($siteID['id']);
         $current = array_merge(
                 $this->advertiser_model->getAdvertisers(array('id_status' => 1, 'id_site' => $siteID['id'])), $this->advertiser_model->getAdvertisers(array('id_status' => 2, 'id_site' => $siteID['id']))
         );
@@ -962,13 +960,13 @@ class Admincp extends Admincp_Controller {
             $existsTempMID = $this->advertiser_model->existsAdvertiser($val['mid'], $siteID['id']);
             if (!empty($existsTempMID)) {
                 // Update advertiser linkshare_advertiser from linkshare_advertiser_temp by mid
-                $tempRow = $this->advertiser_model->getTempAdvertiserByMID($val['mid'], $siteID['id']);
-                $this->advertiser_model->updateAdvertiserFromTemp($tempRow, $val['mid'], $siteID['id']);
-                $this->advertiser_model->deleteTempAdvertiserByMID($val['mid'], $siteID['id']);
+                $tempRow = $this->advertiser_temp_model->getTempAdvertiserByMID($val['mid'], $siteID['id']);
+                $this->advertiser_temp_model->updateAdvertiserFromTemp($tempRow, $val['mid'], $siteID['id']);
+                $this->advertiser_temp_model->deleteTempAdvertiserByMID($val['mid'], $siteID['id']);
             } else {
                 if ($val['live'] == 1) {
                     // Mark live items to be deleted by a later cron
-                    $this->advertiser_model->updateAdvertiserFromTemp(array('deleted' => 1), $val['mid'], $siteID['id']);
+                    $this->advertiser_temp_model->updateAdvertiserFromTemp(array('deleted' => 1), $val['mid'], $siteID['id']);
                 } else {
                     // Delete advertiser from linkshare_advertiser by mid                
                     $this->advertiser_model->deleteAdvertiserByMID($val['mid'], $siteID['id']);
@@ -976,12 +974,12 @@ class Admincp extends Admincp_Controller {
             }
         }
 
-        $temp = $this->advertiser_model->getTempAdvertisers($siteID['id']);
+        $temp = $this->advertiser_temp_model->getTempAdvertisers($siteID['id']);
         foreach ($temp as $val) {
             $this->advertiser_model->newAdvertiser($val);
         }
 
-        $this->advertiser_model->deleteTempAdvertiser();
+        $this->advertiser_temp_model->deleteTempAdvertiser();
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
