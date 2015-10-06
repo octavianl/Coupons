@@ -561,8 +561,7 @@ class Category_creative_model extends CI_Model {
         $this->db->join('linkshare_categories_merged', 'linkshare_categories_joins.id_categ_merged = linkshare_categories_merged.id', 'left');
         $result = $this->db->get('linkshare_categories_joins');
 
-        foreach ($result->result_array() as $row) {
-
+        foreach ($result->result_array() as $row){
             $names[] = $row['name'];
         }
 
