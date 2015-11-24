@@ -48,10 +48,8 @@ class Admincp4 extends Admincp_Controller
 
     }
 
-    function updateFilters()
-    {
-
-        
+    public function updateFilters()
+    {        
         $this->load->library('asciihex');
         
         $filters = array();
