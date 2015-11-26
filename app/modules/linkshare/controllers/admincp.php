@@ -18,9 +18,10 @@ use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
+require_once APPPATH . "third_party/LOG/Log.php";
 
-class Admincp extends Admincp_Controller {
-
+class Admincp extends Admincp_Controller 
+{
     /**
      * Default coupon-land
      * 
@@ -28,7 +29,8 @@ class Admincp extends Admincp_Controller {
      */
     private $siteID = 2531438;
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->admin_navigation->parent_active('linkshare');
@@ -38,16 +40,18 @@ class Admincp extends Admincp_Controller {
         if ($siteID) {
             $this->siteID = $siteID;
         }
-
+        
         error_reporting(E_ALL ^ E_NOTICE);
-        error_reporting(E_WARNING);
+        ini_set('display_errors', 1);
     }
 
-    public function index() {
+    public function index() 
+    {
         redirect('admincp/linkshare/siteAdvertisers');
     }
 
-    public function listSites() {
+    public function listSites() 
+    {
         $this->admin_navigation->module_link('Add channel', site_url('admincp/linkshare/addSite/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -96,7 +100,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('listSites');
     }
 
-    public function chooseSites($id = 0) {
+    public function chooseSites($id = 0) 
+    {
         $this->load->model('site_model');
         $site = $this->site_model->getSite($id);
 
@@ -112,7 +117,8 @@ class Admincp extends Admincp_Controller {
         }
     }
 
-    public function addSite() {
+    public function addSite() 
+    {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -131,7 +137,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addSite', $data);
     }
 
-    public function addSiteValidate($action = 'new', $id = false) {
+    public function addSiteValidate($action = 'new', $id = false) 
+    {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Site name', 'required|trim');
         $this->form_validation->set_rules('sid', 'Site ID', 'required|trim');
@@ -159,22 +166,20 @@ class Admincp extends Admincp_Controller {
         $this->load->model('site_model');
 
         if ($action == 'new') {
-            $type_id = $this->site_model->newSite($fields);
-
+            $this->site_model->newSite($fields);
             $this->notices->SetNotice('Channel added successfuly.');
-
             redirect('admincp/linkshare/listSites/');
         } else {
             $this->site_model->updateSite($fields, $id);
             $this->notices->SetNotice('Site updated successfully.');
-
             redirect('admincp/linkshare/listSites/');
         }
 
         return true;
     }
 
-    public function editSite($id) {
+    public function editSite($id) 
+    {
         $this->load->model('site_model');
         $site = $this->site_model->getSite($id);
 
@@ -200,11 +205,10 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addSite', $data);
     }
 
-    public function deleteSite($id) {
+    public function deleteSite($id) 
+    {
         $this->load->model('site_model');
-
         $this->site_model->deleteSite($id);
-
         $this->notices->SetNotice('Site successfully removed.');
 
         redirect('/admincp/linkshare/listSites');
@@ -212,7 +216,8 @@ class Admincp extends Admincp_Controller {
         return true;
     }
 
-    public function infoSite($id) {
+    public function infoSite($id) 
+    {
         $this->admin_navigation->module_link('See creative categories linkshare', site_url('admincp/linkshare/listCreativeCategory/' . $id));
         $this->admin_navigation->module_link('See advertisers linkshare', site_url('admincp/linkshare/siteAdvertisers/' . $id));
         $this->admin_navigation->module_link('See products linkshare', site_url('admincp/linkshare/site_produse/' . $id));
@@ -230,7 +235,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('infoSite', $data);
     }
 
-    public function listNetworks() {
+    public function listNetworks() 
+    {
         $this->admin_navigation->module_link('Add network', site_url('admincp/linkshare/addNetwork/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -268,7 +274,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('listNetworks');
     }
 
-    public function addNetwork() {
+    public function addNetwork() 
+    {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -286,7 +293,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addNetwork', $data);
     }
 
-    public function addNetworkValidate($action = 'new', $id = false) {
+    public function addNetworkValidate($action = 'new', $id = false) 
+    {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('nid', 'Network id', 'required|trim');
@@ -312,22 +320,20 @@ class Admincp extends Admincp_Controller {
         $fields['nid'] = $this->input->post('nid');
 
         if ($action == 'new') {
-            $type_id = $this->network_model->newNetwork($fields);
-
+            $this->network_model->newNetwork($fields);
             $this->notices->SetNotice('Successfully added network.');
-
             redirect('admincp/linkshare/listNetworks/');
         } else {
             $this->network_model->updateNetwork($fields, $id);
             $this->notices->SetNotice('Successfully updated network.');
-
             redirect('admincp/linkshare/listNetworks/');
         }
 
         return true;
     }
 
-    public function editNetwork($id) {
+    public function editNetwork($id) 
+    {
         $this->load->model('network_model');
         $network = $this->network_model->getNetwork($id);
 
@@ -352,8 +358,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addNetwork', $data);
     }
 
-    public function deleteNetwork($contents, $return_url) {
-
+    public function deleteNetwork($contents, $return_url) 
+    {
         $this->load->library('asciihex');
         $this->load->model('network_model');
 
@@ -373,7 +379,8 @@ class Admincp extends Admincp_Controller {
 
     /* status */
 
-    public function listStatus() {
+    public function listStatus() 
+    {
         $this->admin_navigation->module_link('Add status', site_url('admincp/linkshare/addStatus/'));
         $this->admin_navigation->module_link('Back', site_url('admincp/linkshare/info'));
         $this->load->library('dataset');
@@ -414,7 +421,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('listStatus');
     }
 
-    public function addStatus() {
+    public function addStatus() 
+    {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
@@ -433,7 +441,8 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addStatus', $data);
     }
 
-    public function addStatusValidate($action = 'new', $id = false) {
+    public function addStatusValidate($action = 'new', $id = false) 
+    {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_status', 'SID', 'required|trim');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
@@ -462,22 +471,20 @@ class Admincp extends Admincp_Controller {
         $fields['description'] = $this->input->post('description');
 
         if ($action == 'new') {
-            $type_id = $this->status_model->newStatus($fields);
-
+            $this->status_model->newStatus($fields);
             $this->notices->SetNotice('Status successfully added.');
-
             redirect('admincp/linkshare/listStatus/');
         } else {
             $this->status_model->updateStatus($fields, $id);
             $this->notices->SetNotice('Status successfully updated.');
-
             redirect('admincp/linkshare/listStatus/');
         }
 
         return true;
     }
 
-    public function editStatus($id) {
+    public function editStatus($id) 
+    {
         $this->load->model('status_model');
         $status = $this->status_model->getStatus($id);
 
@@ -503,29 +510,28 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addStatus', $data);
     }
 
-    public function deleteStatus($contents, $return_url) {
-
+    public function deleteStatus($contents, $return_url) 
+    {
         $this->load->library('asciihex');
         $this->load->model('status_model');
 
-        $contents = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
-        $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
+        $contentsDecoded = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
+        $returnUrl = base64_decode($this->asciihex->HexToAscii($return_url));
 
-        foreach ($contents as $content) {
+        foreach ($contentsDecoded as $content) {
             $this->status_model->deleteStatus($content);
         }
 
         $this->notices->SetNotice('Status successfully removed.');
-
-        redirect($return_url);
+        redirect($returnUrl);
 
         return true;
     }
 
-    public function siteAdvertisers() {
-
-        $this->load->model('site_model');
-        $this->load->model('advertiser_model');
+    public function siteAdvertisers() 
+    {
+        $this->load->model(array('site_model', 'advertiser_model'));
+        
         $site = $this->site_model->getSiteBySID($this->siteID);
 
         $this->admin_navigation->module_link('Add advertiser', site_url('admincp/linkshare/addAdvertiser/'));
@@ -596,14 +602,18 @@ class Admincp extends Admincp_Controller {
         $this->dataset->rows_per_page(10);
 
         // total rows
-        if (isset($_GET['offset']))
-            $filters['offset'] = $_GET['offset'];
-        if (isset($_GET['name']))
-            $filters['name'] = $_GET['name'];
-        if (isset($_GET['mid']))
-            $filters['mid'] = $_GET['mid'];
-        if (isset($_GET['id_categories']))
-            $filters['id_categories'] = $_GET['id_categories'];
+        if (strlen($this->input->get('offset'))) {
+            $filters['offset'] = $this->input->get('offset');
+        }
+        if (strlen($this->input->get('name'))) {
+            $filters['name'] = $this->input->get('name');
+        }            
+        if (strlen($this->input->get('mid'))) {
+            $filters['mid'] = $this->input->get('mid');
+        }            
+        if (strlen($this->input->get('id_categories'))) {
+            $filters['id_categories'] = $this->input->get('id_categories');
+        }
 
         $total_rows = $this->advertiser_model->get_num_rows($filters);
         $this->dataset->total_rows($total_rows);
@@ -619,16 +629,14 @@ class Admincp extends Admincp_Controller {
         );
 
         $this->load->view('listAdvertisers', $data);
-
     }
 
-    public function addAdvertiser() {
+    public function addAdvertiser() 
+    {
         $this->load->library('admin_form');
         $form = new Admin_form;
 
-        $status = array('aprobat' => 'aprobat', 'in curs' => 'in curs', 'terminat' => 'terminat', 'respins' => 'respins');
-        $this->load->model('category_model');
-        $categorii = $this->category_model->getCategoryStatus();
+        $this->load->model('category_model');        
 
         $form->fieldset('New Advertiser');
         $form->text('Site ID', 'id_site', '', 'Insert site ID.', true, 'e.g., 1', true);
@@ -652,8 +660,10 @@ class Admincp extends Admincp_Controller {
         $this->load->view('addAdvertiser', $data);
     }
 
-    public function addAdvertiserValidate($action = 'new', $id = false) {
+    public function addAdvertiserValidate($action = 'new', $id = false) 
+    {
         $this->load->library('form_validation');
+        $this->load->model('advertiser_model');
         $this->form_validation->set_rules('name', 'Advertiser name', 'required|trim');
         $this->form_validation->set_rules('mid', 'Advertiser ID', 'required|trim');
 
@@ -682,26 +692,27 @@ class Admincp extends Admincp_Controller {
         $fields['commission'] = $this->input->post('commission');
         $fields['offer_id'] = $this->input->post('offer_id');
         $fields['offer_name'] = $this->input->post('offer_name');
-
-        $this->load->model('advertiser_model');
-
+        
         if ($action == 'new') {
-            $type_id = $this->advertiser_model->newAdvertiser($fields);
+            $this->advertiser_model->newAdvertiser($fields);
 
             $this->notices->SetNotice('Advertiser added successfully.');
-
-            redirect('admincp/linkshare/siteAdvertisers/1');
+            $msg = 'Advertiser added successfully: ' . implode(',', $fields);
+            Log::debug( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $msg), Log::ADVERTISERS);
+            redirect('admincp/linkshare/siteAdvertisers/');
         } else {
             $this->advertiser_model->updateAdvertiser($fields, $id);
             $this->notices->SetNotice('Advertiser updated successfully.');
-
-            redirect('admincp/linkshare/siteAdvertisers/1');
+            $msg = 'Advertiser edited successfully: ' . implode(',', $fields);
+            Log::debug( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $msg), Log::ADVERTISERS);
+            redirect('admincp/linkshare/siteAdvertisers/');
         }
 
         return true;
     }
 
-    public function editAdvertiser($id) {
+    public function editAdvertiser($id) 
+    {
         $this->load->model('advertiser_model');
         $magazin = $this->advertiser_model->getAdvertiser($id);
 
@@ -730,33 +741,33 @@ class Admincp extends Admincp_Controller {
             'form_action' => site_url('admincp/linkshare/addAdvertiserValidate/edit/' . $magazin['id']),
             'action' => 'edit',
         );
-
-        $this->load->view('addAdvertiser', $data);
+        
+        $this->load->view('addAdvertiser', $data);        
     }
 
-    public function deleteAdvertiser($contents, $return_url) {
-
+    public function deleteAdvertiser($contents, $return_url) 
+    {
         $this->load->library('asciihex');
         $this->load->model('advertiser_model');
+        
+        $contentsDecoded = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
+        $returnUrl = base64_decode($this->asciihex->HexToAscii($return_url));
 
-        $contents = unserialize(base64_decode($this->asciihex->HexToAscii($contents)));
-        $return_url = base64_decode($this->asciihex->HexToAscii($return_url));
-
-        foreach ($contents as $content) {
+        foreach ($contentsDecoded as $content) {
+            $advertiser = $this->advertiser_model->getAdvertiser($content);            
+            $msg = 'Advertiser with id ' . $content . ' deleted successfully: ' . implode(',', $advertiser);
+            Log::debug( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $msg), Log::ADVERTISERS);
             $this->advertiser_model->deleteAdvertiser($content);
         }
 
         $this->notices->SetNotice('Advertisers successfully removed.');
-
-        redirect($return_url);
+        redirect($returnUrl);
 
         return true;
     }
 
-    public function parseAdvertisers($allApproved = 0) {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-
+    public function parseAdvertisers($allApproved = 0) 
+    {
         $this->load->library('admin_form');
         $this->load->model(array('site_model', 'status_model', 'advertiser_model', 'advertiser_temp_model'));        
         //$scope = $this->input->cookie('siteID');
@@ -822,7 +833,7 @@ class Admincp extends Admincp_Controller {
                 }
             }
         } else {
-            $request = new CurlApi($linkshareConstants[$_GET['status']]);
+            $request = new CurlApi($linkshareConstants[$this->input->get('status')]);
             $request->setHeaders($config->getMinimalHeaders($accessToken));
             $request->setGetData();
             $request->send();
@@ -856,10 +867,8 @@ class Admincp extends Admincp_Controller {
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
-    public function listTempAdvertisers() {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-
+    public function listTempAdvertisers() 
+    {
         $this->load->library('admin_form');
         $this->load->model(array('site_model', 'status_model', 'advertiser_model', 'advertiser_temp_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
@@ -936,16 +945,18 @@ class Admincp extends Admincp_Controller {
         $this->notices->SetNotice($total_rows . ' parsed advertisers in temporary table.');
         $this->load->view('listAdvertisersParsed', $data);
     }
-    public function clearTempAdv() {
+    
+    public function clearTempAdv() 
+    {
         $this->load->model('advertiser_temp_model');
         $this->advertiser_temp_model->deleteTempAdvertiser();
+        $msg = 'Cleared temporary advertisers table';
+        Log::debug( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $msg), Log::ADVERTISERS);
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
-    public function moveTempAdvertisers() {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-
+    public function moveTempAdvertisers() 
+    {
         $this->load->library('admin_form');
         $this->load->model(array('advertiser_model', 'advertiser_temp_model', 'site_model'));
         
@@ -983,15 +994,18 @@ class Admincp extends Admincp_Controller {
         redirect('admincp/linkshare/listTempAdvertisers/');
     }
 
-    public function getXML() {
+    public function getXML() 
+    {
         $this->load->view('getXML');
     }
 
-    public function info() {
+    public function info() 
+    {
         $this->load->view('info');
     }
 
-    public function getXmlAdvertiser() {
+    public function getXmlAdvertiser() 
+    {
         $CI = & get_instance();
         $this->load->library('admin_form');
         $form = new Admin_form;
@@ -1013,14 +1027,14 @@ class Admincp extends Admincp_Controller {
         );
         $responseObj = array();
 
-        if (isset($_GET['status'])) {
+        if (strlen($this->input->get('status'))) {
             $config = new LinkshareConfig();
 
             $accessToken = $config->setSiteCookieAndGetAccessToken($CI, $this->siteID);
 
             //echo "accessToken = $accessToken" . PHP_EOL;
 
-            $request = new CurlApi($linkshareConstants[$_GET['status']]);
+            $request = new CurlApi($linkshareConstants[$this->input->get('status')]);
             $request->setHeaders($config->getMinimalHeaders($accessToken));
             $request->setGetData();
             $request->send();
@@ -1052,5 +1066,4 @@ class Admincp extends Admincp_Controller {
 
         $this->load->view('xml', $data);
     }
-
 }

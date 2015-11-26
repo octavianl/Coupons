@@ -15,12 +15,12 @@ if (!defined('BASEPATH')) {
  */
 
 error_reporting(E_ALL^E_NOTICE);
-error_reporting(E_WARNING);
 
 use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
+require_once APPPATH . "third_party/LOG/Log.php";
 
 class Admincp4 extends Admincp_Controller
 {
@@ -38,14 +38,12 @@ class Admincp4 extends Admincp_Controller
     }
     
     public function logsTest()
-    {
-
-        include "app/third_party/LOG/Log.php";
+    {        
         
         $string = "Test error" . " || Class name: " . __CLASS__ . " | Method name: " . __METHOD__ . " | error line: " . __LINE__ . " | from file: " . __FILE__;
 
         Log::debug( array(__FILE__, __LINE__, __CLASS__, __METHOD__, 'Test error'), Log::CATEGORIES);
-
+        echo 'ok';
     }
 
     public function updateFilters()
