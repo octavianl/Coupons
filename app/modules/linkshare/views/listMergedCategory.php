@@ -14,7 +14,7 @@
 <h1>List Merged Categories for <?= $site_name ?></h1>
 <div>
     <?= $this->dataset->table_head(); ?>
-    <?		
+    <?php		
     if (!empty($this->dataset->data)) {
     foreach ($this->dataset->data as $row) {
     
@@ -43,7 +43,7 @@
             <a href="<?= site_url('admincp2/linkshare/editMergedCategory/' . $row['category_merged_ID']); ?>">edit category name</a>
         </td>
     </tr>
-    <?
+    <?php
     }
     }
     else {
@@ -51,7 +51,7 @@
     <tr>
         <td colspan="7">NO Merged Categories</td>
     </tr>
-    <? } ?>
+    <?php } ?>
     <?= $this->dataset->table_close(); ?>
 </div>
 <?= $this->load->view(branded_view('cp/footer')); ?>

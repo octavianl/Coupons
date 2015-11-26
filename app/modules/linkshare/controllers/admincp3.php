@@ -718,7 +718,7 @@ class Admincp3 extends Admincp_Controller {
         // Ensure we have time to process it
         set_time_limit(0);
 
-        $temp_file = FCPATH . 'writeable/' . $filters['filename'] . '-' . date("Y-m-d") . '.csv';
+        $temp_file = FCPATH . 'writeable/' . 'category' . '-' . date("Y-m-d") . '.csv';
 
         $this->load->helper('file');
         $this->load->library('array_to_csv');
@@ -734,8 +734,13 @@ class Admincp3 extends Admincp_Controller {
         $csv_file = fopen($temp_file, 'a');
         $need_header = true;    // Do we need the CSV header?
 
-        $query = $this->category_creative_model->get_all_categories();
+        $query = $this->category_joins->getJoinsCategoriesForExport();
 
+        echo "<pre>";
+        print_r($query);
+        echo "</pre>";
+        die();
+        
         foreach ($query as $row) {
             // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
             $main_array[] = array(

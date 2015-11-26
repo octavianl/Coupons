@@ -2,7 +2,7 @@
 <h1>Advertisers list for <?=$siteName?>
 </h1>
 
-<div style="width:1800px;text-align:center;" align="center">
+<div align="center">
 
     <?=$this->dataset->table_head();?>
 	<?php

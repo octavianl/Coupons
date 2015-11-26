@@ -1,6 +1,6 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <h1>Products List</h1>
-<div style="width:1800px;text-align:center;" align="center">
+<div align="center">
 	<?=$this->dataset->table_head();?>
 	<? 
             $url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];

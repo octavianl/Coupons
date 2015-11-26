@@ -1,6 +1,6 @@
 <?=$this->load->view(branded_view('cp/header'));?>
 <h2>Products List for Advertiser: <?=$magazin?> | Mid: <?=$mid?> | Category ID: <?=$category?></h2>
-<div style="width:1800px;text-align:center;" align="center">
+<div align="center">
 	<?=$this->dataset->table_head();?>
 	<? 
             $url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
