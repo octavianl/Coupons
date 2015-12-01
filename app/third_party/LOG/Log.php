@@ -9,7 +9,7 @@
 
 namespace app\third_party\LOG;
 
-include APPPATH . 'third_party/LOG/LogModel.php';
+//include_once APPPATH . 'third_party/LOG/LogModel.php';
 
 
 class Log {

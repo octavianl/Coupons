@@ -10,7 +10,7 @@
  * @link     http://www.weblight.ro/
  *
  */
-class Advertiser_model extends CI_Model 
+class Advertiser_model extends CI_Model
 {
     private $CI;
 
@@ -235,11 +235,11 @@ class Advertiser_model extends CI_Model
     }
     
     /**
-     * Delete Advertisers
+     * Delete Advertiser
      * 	
      * @param int $id	
      *
-     * @return boolean true
+     * @return boolean
      */
     public function deleteAdvertiser($id) 
     {

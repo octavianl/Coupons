@@ -12,7 +12,13 @@
  * @author Webligh
  */
 
-class LogModel extends CI_Model {
+namespace app\third_party\LOG;
+
+//use system\core\CI_Model;
+//include_once 'system/core/Model.php';
+
+class LogModel extends CI_Model 
+{
     
     private $CI;
 
