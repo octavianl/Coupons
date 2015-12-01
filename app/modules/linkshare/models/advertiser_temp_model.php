@@ -119,12 +119,12 @@ class Advertiser_temp_model extends CI_Model
         }
         
         return $id;
-    }    
+    }
     
     /**
      * Get Temp Advertiser By Mid
      *
-     * @param int $mid	
+     * @param int $mid Merchandiser identifier
      *
      * @return array
      */
@@ -144,9 +144,9 @@ class Advertiser_temp_model extends CI_Model
     /**
      * Create New Temp Advertisers
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields Fields to insert
      *
-     * @return int $insert_id
+     * @return int $insert_id The new temporary advertiser identifier
      */
     public function newTempAdvertiser($insert_fields) 
     {
@@ -160,9 +160,9 @@ class Advertiser_temp_model extends CI_Model
     /**
      * Update Advertisers from Temp
      * 
-     * @param array $update_fields
-     * @param int $mid merchandiser id
-     * @param int $id_site site id
+     * @param array $update_fields The fields to update
+     * @param int   $mid           Merchandiser identifier
+     * @param int   $id_site       Site identifier
      *
      * @return boolean true
      */
@@ -185,8 +185,30 @@ class Advertiser_temp_model extends CI_Model
     }
     
     /**
-     * Delete Temporary Advertisers
-     * 		
+     * Check if merchandiser exists
+     * 	
+     * @param int $mid Merchendiser identifier
+     * @param int $sid Site identifier
+     *
+     * @return boolean true
+     */
+    public function existsAdvertiser($mid, $sid) 
+    {
+        $this->db->where('mid', $mid);
+        $this->db->where('id_site', $sid);
+        
+        $result = $this->db->get('linkshare_advertisers_temp');
+
+        $row = array();
+        foreach ($result->result_array() as $row) {
+            return $row;
+        }
+
+        return $row;
+    }
+
+    /**
+     * Delete temporary advertisers table
      *
      * @return boolean true
      */
@@ -200,8 +222,8 @@ class Advertiser_temp_model extends CI_Model
     /**
      * Delete Temp Advertisers By MID	
      * 
-     * @param int $mid merchendiser id
-     * @param int $sid site id
+     * @param int $mid Merchendiser identifier
+     * @param int $sid Site identifier
      *
      * @return boolean true
      */
