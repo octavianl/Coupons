@@ -940,14 +940,10 @@ class Admincp2 extends Admincp_Controller {
         $this->load->model(array('category_creative_model','site_model'));
 
         $this->admin_navigation->module_link('ADD ANOTHER Merged Categories', site_url('admincp2/linkshare/joinCreativeCategory'));
-        $this->admin_navigation->module_link('Export CSV', site_url('admincp3/linkshare/exportCSV/???'));
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $this->load->library('dataset');
-        $this->load->model(array('category_creative_model','site_model'));
-
-        $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $columns = array(
             array(
@@ -957,7 +953,7 @@ class Admincp2 extends Admincp_Controller {
                 'name' => 'Total Creat Cat merged',
                 'width' => '10%'),
             array(
-                'name' => 'Merged categories',
+                'name' => 'Join categories',
                 'width' => '50%'),
             array(
                 'name' => 'Total prod merged',
