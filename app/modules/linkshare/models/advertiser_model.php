@@ -22,7 +22,7 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Get Temp Advertisers
+     * Get advertisers
      * 
      * @param array $filters The filters to search by
      *
@@ -80,7 +80,6 @@ class Advertiser_model extends CI_Model
         $result = $this->db->get('linkshare_advertisers');
 
         foreach ($result->result_array() as $linie) {
-
             $site = $this->site_model->getSite($linie['id_site']);
             $linie['name_site'] = $site['name'];
 
@@ -93,27 +92,19 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Get Advertisers
+     * Get Advertiser
      *
-     * @param int $id
-     * @param boolean $name 	
+     * @param int $id Advertiser id
      *
      * @return array
      */
-    public function getAdvertiser($id, $name = false) 
+    public function getAdvertiser($id) 
     {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_advertisers');
-
-        if ($name)
-            $this->load->model('site_model');
-
+        
         foreach ($result->result_array() as $row) {
-            if ($name) {
-                $site = $this->site_model->getSite($row['id_site']);
-                $row['id_site'] = $site['name'];
-            }
             return $row;
         }
 
@@ -121,11 +112,11 @@ class Advertiser_model extends CI_Model
     }    
     
     /**
-     * Create New Advertisers
+     * Create New Advertiser
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields The advertiser fields	
      *
-     * @return int $insert_id
+     * @return int The new advertiser identifier
      */
     public function newAdvertiser($insert_fields) 
     {
@@ -142,30 +133,12 @@ class Advertiser_model extends CI_Model
 
         return $insert_id;
     }
-    
-    /**
-     * Create New Advertisers
-     *
-     * @param array $mids
-     *
-     * @return int $count
-     */
-    public function newAdvertisers($mids) 
-    {
-        $cate = count($mids);
-        
-        for ($i = 0; $i < $cate; $i++) {
-            $this->db->insert('linkshare_advertisers', $mids[$i]);
-        }
-        
-        return $cate;
-    }
 
     /**
-     * Update Advertisers
+     * Update Advertiser
      *
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields The advertiser fields to update
+     * @param int   $id             The advertiser id
      *
      * @return boolean true
      */
@@ -177,11 +150,13 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Change PCC flag 
+     * Change PCC flag
      * PCC = Parsed Creative Category
+     * 0 - not parsed, 1 - parsed, 2 - xml error
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param int $pcc   The parsed creative category flag
+     * @param int $mid   The merchandiser linskhare id
+     * @param int $retry The number of retries 	
      *
      * @return boolean true
      */
@@ -199,16 +174,16 @@ class Advertiser_model extends CI_Model
     /**
      * Reset PCC flag
      * PCC = Parsed Creative Category
-     * 
-     * @param int $pcc flag of parsed creative category
-     * @param int $site_id site id
+     * 0 - not parsed, 1 - parsed, 2 - xml error
+     *      
+     * @param int $site_id Site id
      *
      * @return boolean true
      */
-    public function resetPCC($pcc, $site_id) 
+    public function resetPCC($site_id) 
     {
         $data = array(
-            'pcc' => $pcc,
+            'pcc' => 0
         );
         $this->db->update('linkshare_advertisers', $data, array('id_site' => $site_id));
 
@@ -216,17 +191,17 @@ class Advertiser_model extends CI_Model
     }
 
     /**
-     * Check PCC flag
+     * Check advertisers where PCC flag is 2 which means parsing error
      * PCC = Parsed Creative Category
-     * 
-     * @param int $pcc
-     * @param int $sid site id
+     * 0 - not parsed, 1 - parsed, 2 - xml error
+     *      
+     * @param int $sid Site id
      *
-     * @return boolean true
+     * @return int The number of advertisers with problems found
      */
-    public function checkPCC($pcc, $sid) 
+    public function checkPCC($sid) 
     {
-        $this->db->where('pcc', $pcc);
+        $this->db->where('pcc', 2);
         $this->db->where('id_site', $sid);
         
         $result = $this->db->get('linkshare_advertisers');
@@ -237,7 +212,7 @@ class Advertiser_model extends CI_Model
     /**
      * Delete Advertiser
      * 	
-     * @param int $id	
+     * @param int $id The advertiser identifier	
      *
      * @return boolean
      */
@@ -247,28 +222,14 @@ class Advertiser_model extends CI_Model
 
         return true;
     }
-
-    /**
-     * Delete Temporary Advertisers
-     * 		
-     *
-     * @return boolean true
-     */
-    public function deleteTempAdvertiser() 
-    {
-        $this->db->truncate('linkshare_advertisers_temp');
-        
-        return true;
-    }
     
     /**
      * Parse Advertiser
      * 	
-     * @param array $params	
+     * @param array $params The params to parse advertisers by	
      *
      * @return boolean true
      */
-
     public function parseAdvertiser($params) 
     {
         if (isset($params[0]['limit'])) {
@@ -283,65 +244,41 @@ class Advertiser_model extends CI_Model
         }  else {
             $offset = 0;
         }
-            
+
         return array_slice($params, $offset, $limit, true);
-    }
-
-    /**
-     * Check Advertiser
-     * 	
-     * @param int $mid merchendiser id	
-     * @param int $sid site id
-     *
-     * @return boolean true
-     */
-    public function existsAdvertiser($mid, $sid) 
-    {
-        $this->db->where('mid', $mid);
-        $this->db->where('id_site', $sid);
-        
-        $result = $this->db->get('linkshare_advertisers_temp');
-
-        $row = array();
-        foreach ($result->result_array() as $row) {
-            return $row;
-        }
-
-        return $row;
     }
 
     /**
      * Delete Advertiser By Status	
      * 
-     * @param int $id_site site id
-     * @param int $id_status the status of Advertisers
+     * @param int $id_site   Site identifier
+     * @param int $id_status The status of advertiser
      *
      * @return boolean true
      */
     public function deleteAdvertiserByStatus($id_site, $id_status) 
     {
-        $this->db->query("DELETE FROM  linkshare_advertisers WHERE id_site='$id_site' AND id_status='$id_status'");
-
+        $this->db->query("DELETE FROM linkshare_advertisers WHERE id_site='$id_site' AND id_status='$id_status'");
         return true;
     }
 
     /**
      * Delete Advertisers By MID	
      * 
-     * @param int $mid merchendiser id
-     * @param int $sid site id	
+     * @param int $mid Merchandiser identifier
+     * @param int $sid Site identifier
      *
      * @return boolean true
      */
-    public function deleteAdvertiserByMID($mid, $sid) 
+    public function deleteAdvertiserByMID($mid, $sid)
     {
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $sid);
         $this->db->delete('linkshare_advertisers');
-        
+
         return true;
     }
-    
+
     /**
      * Get the number of Advertisers	
      * 
@@ -369,7 +306,7 @@ class Advertiser_model extends CI_Model
         }
 
         $result = $this->db->get('linkshare_advertisers');
-        
+
         return $result->num_rows();
     }
 

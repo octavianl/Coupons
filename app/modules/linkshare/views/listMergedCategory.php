@@ -19,10 +19,14 @@
     foreach ($this->dataset->data as $row) {
     
     $edit_link = site_url('admincp2/linkshare/joinCreativeCategory/edit/' . $row['category_merged_ID']);
+    $export_joins_link = site_url('admincp3/linkshare/exportJoinsCategoriesCSV/' . $row['category_merged_ID']);
+    $export_joins_products_link = site_url('admincp3/linkshare/exportJoinsProductsCSV/' . $row['category_merged_ID']);
     ?>
     <tr>			
         <td><input type="checkbox" name="check_<?= $row['category_merged_ID']; ?>" value="1" class="action_items" /></td>
-        <td><a href="<?php echo $edit_link; ?>"><?= $row['category_merged_name']; ?></a></td>
+        <td><a href="<?php echo $edit_link; ?>"><?= $row['category_merged_name']; ?></a><br><br>
+        <a href="<?php echo $export_joins_link; ?>">EXPORT JOINS</a><br>
+        <a href="<?php echo $export_joins_products_link; ?>">EXPORT JOINS PRODUCTS</a></td>
         <td><?= $row['count_merged']; ?></td>
         <td>
             <?php            

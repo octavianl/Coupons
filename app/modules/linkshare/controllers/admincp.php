@@ -968,7 +968,7 @@ class Admincp extends Admincp_Controller
         );
 
         foreach ($current as $val) {
-            $existsTempMID = $this->advertiser_model->existsAdvertiser($val['mid'], $siteID['id']);
+            $existsTempMID = $this->advertiser_temp_model->existsAdvertiser($val['mid'], $siteID['id']);
             if (!empty($existsTempMID)) {
                 // Update advertiser linkshare_advertiser from linkshare_advertiser_temp by mid
                 $tempRow = $this->advertiser_temp_model->getTempAdvertiserByMID($val['mid'], $siteID['id']);
