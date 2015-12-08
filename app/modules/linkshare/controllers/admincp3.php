@@ -719,25 +719,18 @@ class Admincp3 extends Admincp_Controller {
         $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
         $query = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
 
-        // Since we might be dealing with very large data
-        // Ensure we have time to process it
-        set_time_limit(0);
-
-        $temp_file = FCPATH . 'writeable/' . 'merged_category' . '-'.  urlencode($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
+        $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
+        $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
 
         $this->load->helper('file');
         $this->load->library('array_to_csv');
-
-        // If the file already exists, we need
-        // to get rid of it since this is a new download.
-        $f = @fopen($temp_file, 'r+');
-        if ($f !== false) {
-            ftruncate($f, 0);
-            fclose($f);
+        $need_header = true;
+        
+        if (!file_exists($filename) && $this->checkFolder($filepath)) {
+            $csv_file = fopen($filename, 'w');
+        } else {
+            $csv_file = fopen($filename, 'a');
         }
-
-        $csv_file = fopen($temp_file, 'a');
-        $need_header = true;    // Do we need the CSV header?
         
         foreach ($query as $row) {
            
@@ -761,20 +754,135 @@ class Admincp3 extends Admincp_Controller {
         $this->array_to_csv->input($main_array);
         $data = $this->array_to_csv->output($need_header, true);
         fwrite($csv_file, $data);
-
-        // Make sure we're not output buffering anymore so we don't
-        // run out of memory due to buffering.
-        if (ob_get_level() > 0) {
-            ob_end_flush();
-        }
-        //ob_implicit_flush(true);
-
-        header("Content-type: application/vnd.ms-excel");
-        header("Content-disposition: attachment; filename=merged-category-" . $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . ".csv");
-        readfile($temp_file);
-        die();
+        fclose($csv_file);
     }
 
+    function exportJoinsProductsCSV($mergedCategoryId) {
+
+        $this->load->model(array('site_model', 'category_creative_model', 'category_joins', 'product_model'));
+
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        
+        $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
+        $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
+        
+        foreach ($joinsCategories as $joins){     
+            $filters['id_site'] = $siteRow['id'];
+            $filters['cat_creative_id'] = $joins['cat_id'];
+            $filters['mid'] = $joins['mid'];
+            
+            $categoryProducts = $this->product_model->getProductsByMid($filters);
+
+            // Since we might be dealing with very large data
+            // Ensure we have time to process it
+            set_time_limit(0);
+
+            $filepath = FCPATH . 'writeable/' . 'merged_category' . '-'.  urlencode($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
+
+            $this->load->helper('file');
+            $this->load->library('array_to_csv');
+
+            // If the file already exists, we need
+            // to get rid of it since this is a new download.
+            $f = @fopen($filepath, 'r+');
+            if ($f !== false) {
+                ftruncate($f, 0);
+                fclose($f);
+            }
+
+            $csv_file = fopen($filepath, 'a');
+            $need_header = true;    // Do we need the CSV header?
+
+            foreach ($categoryProducts as $row) {  
+                // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
+                $main_array[] = array(
+                    'ID' => '',
+                    'Active (0/1)' => 1, // (0/1)
+                    'Name' => $row['productname'],
+                    'Categories (x,y,z...)' => $row['cat_id'], // (x,y,z...)
+                    'Price tax excluded or Price tax included' => '',
+                    'Tax rules ID' => '',
+                    'Wholesale price' => '',
+                    'On sale (0/1)' => 0, // (0/1)
+                    'Discount amount' => '',
+                    'Discount percent' => '',
+                    'Discount from (yyyy-mm-dd)' => '',
+                    'Discount to (yyyy-mm-dd)' => '',
+                    'Reference #' => '', // #
+                    'Supplier reference #' => '', //#
+                    'Supplier' => '',
+                    'Manufacturer' => '',
+                    'EAN13' => '',
+                    'UPC' => '',
+                    'Ecotax' => '',
+                    'Width' => '',
+                    'Height' => '',
+                    'Depth' => '',
+                    'Weight' => '',
+                    'Quantity' => '',
+                    'Minimal quantity' => '',
+                    'Visibility' => '',
+                    'Additional shipping cost' => '',
+                    'Unit for the unit price' => '',
+                    'Unit price' => '',
+                    'Short description' => '',
+                    'Description' => '',
+                    'Tags (x,y,z...)' => '', // (x,y,z...)
+                    'Meta title' => '',
+                    'Meta keywords' => '',
+                    'Meta description' => '',
+                    'URL rewritten' => '',
+                    'Text when in stock' => '',
+                    'Text when backorder allowed' => '',
+                    'Available for order (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Product availability date' => '',
+                    'Product creation date' => '',
+                    'Show price (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Image URLs (x,y,z...)' => '', // (x,y,z...)
+                    'Delete existing images (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Feature (Name:Value:Position:Customized)' => '', // (Name:Value:Position:Customized)
+                    'Available online only (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Condition' => '',
+                    'Customizable (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Uploadable files (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Text fields (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Action when out of stock' => '',
+                    'ID / Name of shop' => '',
+                    'Advanced Stock Management' => '', 
+                    'Depends on stock' => '',
+                    'Warehouse' => ''
+                );
+            }
+            $this->array_to_csv->input($main_array);
+            $data = $this->array_to_csv->output($need_header, true);
+            fwrite($csv_file, $data);
+
+            // Make sure we're not output buffering anymore so we don't
+            // run out of memory due to buffering.
+            if (ob_get_level() > 0) {
+                ob_end_flush();
+            }
+            //ob_implicit_flush(true);
+
+            header("Content-type: application/vnd.ms-excel");
+            header("Content-disposition: attachment; filename=merged-category-" . $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . ".csv");
+            readfile($filepath);
+        }
+        die();
+    }
+    
+    private function checkFolder($filepath) {
+//        chdir($filepath);      
+        if (!is_dir($filepath)) {
+            if (!mkdir($filepath, 0777, true)){
+                $this->notices->SetError("Failed to create folder" . $filepath);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+    
     /**
      * Convert a string to the file/URL safe "slug" form
      *
