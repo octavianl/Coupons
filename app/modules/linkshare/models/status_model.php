@@ -16,7 +16,7 @@ class Status_model extends CI_Model
 
     private $CI;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -28,25 +28,26 @@ class Status_model extends CI_Model
      *
      * @return array
      */
-    function getStatuses()
+    public function getStatuses()
     {
-        $row = array();
+        $rows = array();
+        
         $result = $this->db->get('linkshare_status');
         foreach ($result->result_array() as $linie) {
-            $row[] = $linie;
+            $rows[] = $linie;
         }
 
-        return $row;
+        return $rows;
     }
 
     /**
      * Get status
      *
-     * @param int $id	
+     * @param int $id Status identifier	
      *
      * @return array
      */
-    function getStatus($id)
+    public function getStatus($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -62,14 +63,14 @@ class Status_model extends CI_Model
     /**
      * Get status
      *
-     * @param string $id_status	
+     * @param string $name The status name	
      *
      * @return int
      */
-    function getStatusByName($id_status)
+    public function getStatusByName($name)
     {
         $status = 0;
-        $this->db->where('id_status', $id_status);
+        $this->db->where('id_status', $name);
         $result = $this->db->get('linkshare_status');
 
         foreach ($result->result_array() as $row) {
@@ -82,21 +83,14 @@ class Status_model extends CI_Model
     /**
      * Get Status Name by ID
      *
-     * @param string $id_status	
+     * @param int $id The status identifier	
      *
      * @return int
      */
     function getStatusNameByID($id)
     {
-        $statusName = '';
-        $this->db->where('id', $id);
-        $result = $this->db->get('linkshare_status');
-
-        foreach ($result->result_array() as $row) {
-            $statusName = $row['name'];
-        }
-
-        return $statusName;
+        $status = $this->getStatus($id);
+        return $status['name'];
     }
 
     /**
@@ -136,7 +130,7 @@ class Status_model extends CI_Model
     /**
      * Create New Status
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields Fields to insert	
      *
      * @return int $insert_id
      */
@@ -151,32 +145,27 @@ class Status_model extends CI_Model
     /**
      * Update status
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields Fields to update
+     * @param int   $id            Status identifier	
      *
      * @return boolean true
      */
     function updateStatus($update_fields, $id)
     {
-
         $this->db->update('linkshare_status', $update_fields, array('id' => $id));
-
         return true;
     }
 
     /**
      * Delete Status
      * 	
-     * @param int $id	
+     * @param int $id Status identifier	
      *
      * @return boolean true
      */
     function deleteStatus($id)
     {
-
         $this->db->delete('linkshare_status', array('id' => $id));
-
         return true;
     }
-
 }
