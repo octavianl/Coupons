@@ -41,7 +41,7 @@
 	else {
 	?>
 	<tr>
-		<td colspan="10">No parsed advertisers available.</td>
+		<td colspan="11">No parsed advertisers available.</td>
 	</tr>
 	<? } ?>
 	<?=$this->dataset->table_close();?>
