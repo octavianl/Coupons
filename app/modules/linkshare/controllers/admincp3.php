@@ -765,35 +765,36 @@ class Admincp3 extends Admincp_Controller {
         
         $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
         $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
-        
+//            echo "<pre>";
+//            print_r($joinsCategories);
+//            echo "</pre>";
+
         foreach ($joinsCategories as $joins){     
             $filters['id_site'] = $siteRow['id'];
             $filters['cat_creative_id'] = $joins['cat_id'];
             $filters['mid'] = $joins['mid'];
             
             $categoryProducts = $this->product_model->getProductsByMid($filters);
-
-            // Since we might be dealing with very large data
-            // Ensure we have time to process it
-            set_time_limit(0);
-
-            $filepath = FCPATH . 'writeable/' . 'merged_category' . '-'.  urlencode($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
-
-            $this->load->helper('file');
-            $this->load->library('array_to_csv');
-
-            // If the file already exists, we need
-            // to get rid of it since this is a new download.
-            $f = @fopen($filepath, 'r+');
-            if ($f !== false) {
-                ftruncate($f, 0);
-                fclose($f);
-            }
-
-            $csv_file = fopen($filepath, 'a');
-            $need_header = true;    // Do we need the CSV header?
-
+            
+//                echo "<pre>";
+//                print_r($categoryProducts);
+//                echo "</pre>";
+//                        die();
             foreach ($categoryProducts as $row) {  
+
+                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
+                $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
+
+                $this->load->helper('file');
+                $this->load->library('array_to_csv');
+                $need_header = true;
+
+                if (!file_exists($filename) && $this->checkFolder($filepath)) {
+                    $csv_file = fopen($filename, 'w');
+                } else {
+                    $csv_file = fopen($filename, 'a');
+                }
+
                 // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
                 $main_array[] = array(
                     'ID' => '',
@@ -852,23 +853,14 @@ class Admincp3 extends Admincp_Controller {
                     'Depends on stock' => '',
                     'Warehouse' => ''
                 );
+                
+                $this->array_to_csv->input($main_array);
+                $data = $this->array_to_csv->output($need_header, true);
+                fwrite($csv_file, $data);
+                fclose($csv_file);
+                unset($main_array);
             }
-            $this->array_to_csv->input($main_array);
-            $data = $this->array_to_csv->output($need_header, true);
-            fwrite($csv_file, $data);
-
-            // Make sure we're not output buffering anymore so we don't
-            // run out of memory due to buffering.
-            if (ob_get_level() > 0) {
-                ob_end_flush();
-            }
-            //ob_implicit_flush(true);
-
-            header("Content-type: application/vnd.ms-excel");
-            header("Content-disposition: attachment; filename=merged-category-" . $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . ".csv");
-            readfile($filepath);
         }
-        die();
     }
     
     private function checkFolder($filepath) {
