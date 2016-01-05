@@ -309,5 +309,30 @@ class Advertiser_model extends CI_Model
 
         return $result->num_rows();
     }
+    
+    /**
+     * Update Advertisers from Temp
+     * 
+     * @param array $update_fields The fields to update
+     * @param int   $mid           Merchandiser identifier
+     * @param int   $id_site       Site identifier
+     *
+     * @return boolean true
+     */
+    public function updateAdvertiserFromTemp($update_fields, $mid, $id_site) 
+    {
+        if (array_key_exists('id', $update_fields)) {
+            unset($update_fields['id']);
+        }
 
+        if (array_key_exists('id_site', $update_fields)) {
+            unset($update_fields['id_site']);
+        }
+        if (array_key_exists('live', $update_fields)) {
+            unset($update_fields['live']);
+        }
+
+        $this->db->update('linkshare_advertisers', $update_fields, array('mid' => $mid, 'id_site' => $id_site));
+        return true;
+    }
 }

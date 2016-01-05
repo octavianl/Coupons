@@ -16,10 +16,9 @@ class Site_model extends CI_Model
 
     private $CI;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
-
         $this->CI = & get_instance();
     }
 
@@ -28,25 +27,25 @@ class Site_model extends CI_Model
      *
      * @return array
      */
-    function getSites()
+    public function getSites()
     {
-        $row = array();
+        $rows = array();
         $result = $this->db->get('linkshare_site');
         foreach ($result->result_array() as $linie) {
-            $row[] = $linie;
+            $rows[] = $linie;
         }
 
-        return $row;
+        return $rows;
     }
 
     /**
      * Get Site
      *
-     * @param int $id	
+     * @param int $id Site autoincrement id	
      *
      * @return array
      */
-    function getSite($id)
+    public function getSite($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -62,11 +61,11 @@ class Site_model extends CI_Model
     /**
      * Get Site by Token
      *
-     * @param string $token	
+     * @param string $token The site token	
      *
      * @return string
      */
-    function getSiteByToken($token)
+    public function getSiteByToken($token)
     {
         $row = array();
         $this->db->where('token', $token);
@@ -82,11 +81,11 @@ class Site_model extends CI_Model
     /**
      * Get Site by SID
      *
-     * @param int $sid 
+     * @param int $sid Site linkshare identifier 
      *
      * @return string
      */
-    function getSiteBySID($sid)
+    public function getSiteBySID($sid)
     {
         $row = array();
         $this->db->where('SID', $sid);
@@ -102,47 +101,40 @@ class Site_model extends CI_Model
     /**
      * Create New Site
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields The fields to insert	
      *
-     * @return int $insert_id
+     * @return int
      */
-    function newSite($insert_fields)
+    public function newSite($insert_fields)
     {
         $this->db->insert('linkshare_site', $insert_fields);
-        $insert_id = $this->db->insert_id();
-
-        return $insert_id;
+        return $this->db->insert_id();
     }
 
     /**
      * Update Site
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields The fields to update
+     * @param int $id
      *
      * @return boolean true
      */
-    function updateSite($update_fields, $id)
+    public function updateSite($update_fields, $id)
     {
-
         $this->db->update('linkshare_site', $update_fields, array('id' => $id));
-
         return true;
     }
 
     /**
      * Delete Site
      * 	
-     * @param int $id	
+     * @param int $id Site id	
      *
      * @return boolean true
      */
-    function deleteSite($id)
+    public function deleteSite($id)
     {
-
         $this->db->delete('linkshare_site', array('id' => $id));
-
         return true;
     }
-
 }
