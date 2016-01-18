@@ -724,7 +724,7 @@ class Admincp3 extends Admincp_Controller {
 
         $this->load->helper('file');
         $this->load->library('array_to_csv');
-        $need_header = true;
+        $need_header = false;
         
         if (!file_exists($filename) && $this->checkFolder($filepath)) {
             $csv_file = fopen($filename, 'w');
@@ -736,19 +736,19 @@ class Admincp3 extends Admincp_Controller {
            
             // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
             $main_array[] = array(
-                'id' => $row['cat_id'],
-                'active' => 1,
-                'name' => $row['name'],
-                'parent' => 0,
-                'root' => 1,
-                'description' => $row['name'],
-                'meta_title' => $row['name'],
-                'meta_keywords' => $row['name'],
-                'meta_description' => $row['name'],
-                'url_rewritten' => '',
-                'image_url' => '',
-                'shop_name' => $row['mid'],
-                'products_number' => $row['nr_products']
+                'ID' => $row['cat_id'],
+                'Active (0/1)' => 1,
+                'Name *' => $row['name'],
+                'Parent category' => 1,
+                'Root category (0/1)' => 1,
+                'Description' => $row['name'],
+                'Meta title' => $row['name'],
+                'Meta keywords' => $row['name'],
+                'Meta description' => $row['name'],
+                'URL rewritten' => '',
+                'Image URL' => ''
+//                'shop_name' => $row['mid'],
+//                'products_number' => $row['nr_products']
             );
         }
         $this->array_to_csv->input($main_array);
@@ -765,9 +765,6 @@ class Admincp3 extends Admincp_Controller {
         
         $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
         $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
-//            echo "<pre>";
-//            print_r($joinsCategories);
-//            echo "</pre>";
 
         foreach ($joinsCategories as $joins){     
             $filters['id_site'] = $siteRow['id'];
@@ -776,18 +773,14 @@ class Admincp3 extends Admincp_Controller {
             
             $categoryProducts = $this->product_model->getProductsByMid($filters);
             
-//                echo "<pre>";
-//                print_r($categoryProducts);
-//                echo "</pre>";
-//                        die();
             foreach ($categoryProducts as $row) {  
 
-                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
+                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
                 $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
 
                 $this->load->helper('file');
                 $this->load->library('array_to_csv');
-                $need_header = true;
+                $need_header = false;
 
                 if (!file_exists($filename) && $this->checkFolder($filepath)) {
                     $csv_file = fopen($filename, 'w');
