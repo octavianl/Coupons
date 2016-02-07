@@ -760,6 +760,8 @@ class Admincp3 extends Admincp_Controller {
     function exportJoinsProductsCSV($mergedCategoryId) {
 
         $this->load->model(array('site_model', 'category_creative_model', 'category_joins', 'product_model'));
+        $this->load->library('array_to_csv');
+        $this->load->helper('file');
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         
@@ -778,8 +780,6 @@ class Admincp3 extends Admincp_Controller {
                 $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
                 $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
 
-                $this->load->helper('file');
-                $this->load->library('array_to_csv');
                 $need_header = false;
 
                 if (!file_exists($filename) && $this->checkFolder($filepath)) {
@@ -793,12 +793,13 @@ class Admincp3 extends Admincp_Controller {
                     'ID' => '',
                     'Active (0/1)' => 1, // (0/1)
                     'Name' => $row['productname'],
+                    'extern_link' => $row['click_url'],
                     'Categories (x,y,z...)' => $row['cat_id'], // (x,y,z...)
                     'Price tax excluded or Price tax included' => '',
                     'Tax rules ID' => '',
-                    'Wholesale price' => '',
+                    'Wholesale price' => str_replace('.',',',$row['price']),
                     'On sale (0/1)' => 0, // (0/1)
-                    'Discount amount' => '',
+                    'Discount amount' => $row['price_save'],
                     'Discount percent' => '',
                     'Discount from (yyyy-mm-dd)' => '',
                     'Discount to (yyyy-mm-dd)' => '',
@@ -813,14 +814,14 @@ class Admincp3 extends Admincp_Controller {
                     'Height' => '',
                     'Depth' => '',
                     'Weight' => '',
-                    'Quantity' => '',
+                    'Quantity' => 100,
                     'Minimal quantity' => '',
                     'Visibility' => '',
                     'Additional shipping cost' => '',
-                    'Unit for the unit price' => '',
-                    'Unit price' => '',
-                    'Short description' => '',
-                    'Description' => '',
+                    'Unit for the unit price' => 1,
+                    'Unit price' => str_replace('.',',',$row['price']),
+                    'Short description' => $row['description_short'],
+                    'Description' => $row['description_long'],
                     'Tags (x,y,z...)' => '', // (x,y,z...)
                     'Meta title' => '',
                     'Meta keywords' => '',
@@ -831,9 +832,9 @@ class Admincp3 extends Admincp_Controller {
                     'Available for order (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
                     'Product availability date' => '',
                     'Product creation date' => '',
-                    'Show price (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
-                    'Image URLs (x,y,z...)' => '', // (x,y,z...)
-                    'Delete existing images (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Show price (0 = No, 1 = Yes)' => 1, // (0 = No, 1 = Yes)
+                    'Image URLs (x,y,z...)' => $row['imageurl'], // (x,y,z...)
+                    'Delete existing images (0 = No, 1 = Yes)' => 1, // (0 = No, 1 = Yes)
                     'Feature (Name:Value:Position:Customized)' => '', // (Name:Value:Position:Customized)
                     'Available online only (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
                     'Condition' => '',
