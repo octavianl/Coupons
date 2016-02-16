@@ -10,11 +10,13 @@
  * @link     http://www.weblight.ro/
  *
  */
-class Category_creative_model extends CI_Model {
+class Category_creative_model extends CI_Model 
+{
 
     private $CI;
 
-    function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->CI = & get_instance();
@@ -23,27 +25,38 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Creative Categories
      *
-     * @param array $filters 
+     * @param array $filters The filters to search by
      *
      * @return array
      */
-    function getCategories($filters = array()) {
+    public function getCategories($filters = array()) 
+    {
         $row = array();
+        
+        $this->load->model('product_model');
 
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
         }
-        if (isset($filters['id_site']))
+        
+        if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
-        if (isset($filters['mid']))
+        }
+            
+        if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
-        if (isset($filters['cat_id']))
+        }
+            
+        if (isset($filters['cat_id'])) {
             $this->db->where('cat_id', $filters['cat_id']);
-        if (isset($filters['mid']))
+        }
+
+        if (isset($filters['mid'])) {
             $this->db->order_by('cat_id');
-        else
+        } else {
             $this->db->order_by('id');
+        }
 
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
@@ -53,8 +66,10 @@ class Category_creative_model extends CI_Model {
         }
 
         $result = $this->db->get('linkshare_categories_creative');
-        if (isset($filters['name']))
+        
+        if (isset($filters['name'])) {
             $this->load->model('site_model');
+        }
 
         foreach ($result->result_array() as $linie) {
             if (isset($filters['name'])) {
@@ -62,7 +77,7 @@ class Category_creative_model extends CI_Model {
                 $linie['id_site'] = $site['name'];
             }
 
-            $nr_products = $this->getCountProductsByMID($filters['id_site'], $linie['cat_id'], $linie['mid']);
+            $nr_products = $this->product_model->getCountProductsByMID($linie['mid'], $filters['id_site'], array('cat_creative_id' => $linie['cat_id']));
 
             $linie['nr_products'] = $nr_products;
 
@@ -75,15 +90,15 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Count Products By Mid
      *
-     * @param int $id_site
-     * @param int $cat_id
-     * @param int $mid merchandiser id
-     * @param int $flag
+     * @param int $id_site Site id
+     * @param int $cat_id  Category id
+     * @param int $mid     Merchandiser id
+     * @param int $flag    Flag
      *
      * @return array
      */
-    function getCountProductsByMID($id_site, $cat_id, $mid, $flag = 1) {
-
+    public function getCountProductsByMID($id_site, $cat_id, $mid, $flag = 1) 
+    {
         $this->db->where('id_site', $id_site);
         $this->db->where('cat_creative_id', $cat_id);
         $this->db->where('mid', $mid);
@@ -96,27 +111,36 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Temporary Creative Categories
      *
-     * @param array $filters 
+     * @param array $filters The filters to search by
      *
      * @return array
      */
-    function getTempCreativeCategories($filters = array()) {
+    public function getTempCreativeCategories($filters = array()) 
+    {
         $row = array();
 
         if (isset($filters['limit'])) {
             $offset = (isset($filters['offset'])) ? $filters['offset'] : 0;
             $this->db->limit($filters['limit'], $offset);
         }
-        if (isset($filters['id_site']))
+
+        if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
-        if (isset($filters['mid']))
+        }
+            
+        if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
-        if (isset($filters['cat_id']))
+        }
+            
+        if (isset($filters['cat_id'])) {
             $this->db->where('cat_id', $filters['cat_id']);
-        if (isset($filters['mid']))
+        }
+            
+        if (isset($filters['mid'])) {
             $this->db->order_by('cat_id');
-        else
+        } else {
             $this->db->order_by('id');
+        }
 
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
@@ -126,15 +150,15 @@ class Category_creative_model extends CI_Model {
         }
 
         $result = $this->db->get('linkshare_categories_creative_temp');
-        if (isset($filters['name']))
+        
+        if (isset($filters['name'])) {
             $this->load->model('site_model');
-
-        foreach ($result->result_array() as $linie) {
-            if (isset($filters['name'])) {
+            
+            foreach ($result->result_array() as $linie) {
                 $site = $this->site_model->getSite($linie['id_site']);
                 $linie['id_site'] = $site['name'];
+                $row[] = $linie;
             }
-            $row[] = $linie;
         }
 
         return $row;
@@ -143,13 +167,14 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Temp Creative Category
      *
-     * @param int $sid site id
-     * @param int $cat_id
-     * @param int $mid
+     * @param int $sid    Site id
+     * @param int $cat_id Category id
+     * @param int $mid    Merchant id
      * 
      * @return array
      */
-    function getTempCreativeCategory($sid, $cat_id, $mid) {
+    public function getTempCreativeCategory($sid, $cat_id, $mid) 
+    {
         $row = array();
         $this->db->where('id_site', $sid);
         $this->db->where('cat_id', $cat_id);
@@ -168,7 +193,8 @@ class Category_creative_model extends CI_Model {
      * 
      * @return array
      */
-    function get_all_categories() {
+    public function get_all_categories() 
+    {
         $query = $this->db->get('linkshare_categories_creative');
         return $query->result();
     }
@@ -176,11 +202,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Categories Lines
      *
-     * @param array $filters 
+     * @param array $filters The filters to search by
      *
-     * @return array
+     * @return int
      */
-    function getCategoriesLines($filters) {
+    public function getCategoriesLines($filters) 
+    {
         if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
         }
@@ -208,15 +235,19 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Temp Creative Categories Lines
      *
-     * @param array $filters 
+     * @param array $filters The filters to search by
      *
      * @return int
      */
-    function getTempCategoriesLines($filters) {
-        if (isset($filters['id_site']))
+    public function getTempCategoriesLines($filters) 
+    {
+        if (isset($filters['id_site'])) {
             $this->db->where('id_site', $filters['id_site']);
-        if (isset($filters['mid']))
+        }
+
+        if (isset($filters['mid'])) {
             $this->db->where('mid', $filters['mid']);
+        }
 
         if (isset($filters['nume'])) {
             $filters['nume'] = str_replace("%2C", ",", $filters['nume']);
@@ -233,11 +264,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Category
      *
-     * @param int $id	
+     * @param int $id Category id
      *
      * @return array
      */
-    function getCategory($id) {
+    public function getCategory($id) 
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_categories_creative');
@@ -252,11 +284,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Category Name
      *
-     * @param int $id	
+     * @param int $id Category identifier
      *
      * @return array
      */
-    function getCategoryName($id) {
+    public function getCategoryName($id) 
+    {
         $row = array();
         $this->db->where('id', $id);
         $result = $this->db->get('linkshare_categories_creative');
@@ -271,11 +304,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Category Creative By cat_id
      *
-     * @param int $catId	
+     * @param int $catId Category id	
      *
      * @return array
      */
-    function getCategoryCreativeByCatId($catId) {
+    public function getCategoryCreativeByCatId($catId) 
+    {
         $row = array();
         $this->db->where('cat_id', $catId);
         $result = $this->db->get('linkshare_categories_creative');
@@ -290,58 +324,56 @@ class Category_creative_model extends CI_Model {
     /**
      * Create New Category
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields Fields to insert	
      *
      * @return int $insert_id
      */
-    function newCategory($insert_fields) {
+    public function newCategory($insert_fields)
+    {
         $this->db->insert('linkshare_categories', $insert_fields);
-        $insert_id = $this->db->insert_id();
-
-        return $insert_id;
+        return $this->db->insert_id();
     }
 
     /**
      * Create New Creative Category
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields The fields to insert	
      *
      * @return int $insert_id
      */
-    function newCreativeCategory($insert_fields) {
+    public function newCreativeCategory($insert_fields) 
+    {
         if (array_key_exists('id', $insert_fields)) {
             unset($insert_fields['id']);
         }
 
         $this->db->insert('linkshare_categories_creative', $insert_fields);
-        $insert_id = $this->db->insert_id();
-
-        return $insert_id;
+        return $this->db->insert_id();
     }
 
     /**
      * Create New Temp Creative Category
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields The fields to insert	
      *
      * @return int $insert_id
      */
-    function newTempCreativeCategory($insert_fields) {
+    public function newTempCreativeCategory($insert_fields) 
+    {
         $this->db->insert('linkshare_categories_creative_temp', $insert_fields);
-        $insert_id = $this->db->insert_id();
-
-        return $insert_id;
+        return $this->db->insert_id();
     }
 
     /**
      * Delete Category By Mid
      *
-     * @param int $id_site
-     * @param int $mid	
+     * @param int $id_site Site id
+     * @param int $mid     Merchant id	
      *
      * @return boolean true
      */
-    function deleteCategoryByMid($id_site, $mid) {
+    public function deleteCategoryByMid($id_site, $mid) 
+    {
         $this->db->delete('linkshare_categories_creative', array('id_site' => $id_site, 'mid' => $mid));
 
         return true;
@@ -350,12 +382,13 @@ class Category_creative_model extends CI_Model {
     /**
      * Delete Temp Category By Mid
      *
-     * @param int $id_site
-     * @param int $mid	
+     * @param int $id_site Site id
+     * @param int $mid     Merchant id 	
      *
      * @return boolean true
      */
-    function deleteTempCategoryByMid($id_site, $mid) {
+    public function deleteTempCategoryByMid($id_site, $mid) 
+    {
         $this->db->delete('linkshare_categories_creative_temp', array('id_site' => $id_site, 'mid' => $mid));
 
         return true;
@@ -364,12 +397,13 @@ class Category_creative_model extends CI_Model {
     /**
      * Update Category
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields Fields to update
+     * @param int $id              Category id 	
      *
      * @return boolean true
      */
-    function updateCategory($update_fields, $id) {
+    public function updateCategory($update_fields, $id) 
+    {
         $this->db->update('linkshare_categories_creative', $update_fields, array('id' => $id));
 
         return true;
@@ -378,11 +412,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Delete Category
      * 	
-     * @param int $id	
+     * @param int $id Category id	
      *
      * @return boolean true
      */
-    function deleteCategory($id) {
+    public function deleteCategory($id) 
+    {
         $this->db->delete('linkshare_categories_creative', array('id' => $id));
 
         return true;
@@ -391,70 +426,76 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Categories Parse
      *
-     * @param array $filters
+     * @param array $filters Filters to parse by
      * 
      * @return array
      * 
      */
-    function getCategoriesParse($filters) {
+    public function getCategoriesParse($filters) 
+    {
         if ($filters['limit']) {
             return array_slice($filters['categories'], $filters['offset'], $filters['limit']);
         }
+
         return $filters['categories'];
     }
 
     /**
      * Parse Creative Categories
      *
-     * @param array $params
+     * @param array $params The params to parse by
      * 
      * @return array
      * 
      */
-    function parseCategories($params) {
-        if (isset($params[0]['limit']))
+    public function parseCategories($params) 
+    {
+        if (isset($params[0]['limit'])) {
             $limit = $params[0]['limit'];
-        else
+        } else {
             $limit = 10;
-        if (isset($params[0]['offset']))
+        }
+            
+        if (isset($params[0]['offset'])) {
             $offset = $params[0]['offset'];
-        else
+        } else {
             $offset = 0;
+        }
+
         return array_slice($params, $offset, $limit, true);
     }
     
     /**
      * New Merged Categories
      *
-     * @param string $merged_category
-     * @param int $sid
+     * @param string $merged_category Merged category
+     * @param int $sid                Site id
      * 
      * @return array
      * 
      */
-    function newMergedCategory($merged_category, $sid) {
+    public function newMergedCategory($merged_category, $sid) 
+    {
         $insert_fields = array(
             'name' => $merged_category,
             'id_site' => $sid
         );
-        $this->db->insert('linkshare_categories_merged', $insert_fields);
-        $insert_id = $this->db->insert_id();
 
-        return $insert_id;
+        $this->db->insert('linkshare_categories_merged', $insert_fields);
+        return $this->db->insert_id();
     }
     
     /**
      * New Join Categories
      * 
-     * @param int $id_merged_category
-     * @param int $check_category
+     * @param int $id_merged_category Merged category
+     * @param int $check_category     Category check
      * 
      * @return array
      * 
      */
-
-    function newJoinCategory($id_merged_category, $check_category) 
-    {        
+    public function newJoinCategory($id_merged_category, $check_category)
+    {
         $checkedCategories = explode(',', $check_category);
         
         foreach ($checkedCategories as $checkedId) {
@@ -465,6 +506,7 @@ class Category_creative_model extends CI_Model {
                 'mid' => $temp['mid'],
                 'id_categ_merged' => $id_merged_category,
             );
+
             $this->db->insert('linkshare_categories_joins', $insert_fields);
             $insert_id[] = $this->db->insert_id();
             
@@ -476,11 +518,11 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Creative For Merge
      * 
-     * @param array $filters 
+     * @param array $filters The filters for merge
      * 
      * @return array
      */
-    function getCreativeForMerge($filters) 
+    public function getCreativeForMerge($filters) 
     {
         $this->load->model('site_model');
         $row = array();
@@ -547,13 +589,13 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Creative Merged
      * 
-     * @param int $cat_id 
-     * @param int $sid 
+     * @param int $cat_id Category id
+     * @param int $sid    Site id
      * 
      * @return array
      */
-
-    function getCreativeMerged($cat_id, $sid) {
+    public function getCreativeMerged($cat_id, $sid) 
+    {
         $row = array();
         $names = array();
         $this->db->where('cat_id', $cat_id);
@@ -571,11 +613,11 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Merged Creative Category by ID
      * 
-     * @param int $id 
+     * @param int $id Category id 
      * 
      * @return array
      */
-    function getMergedCategoryByID($id) 
+    public function getMergedCategoryByID($id) 
     {
         $this->db->where('ID', $id);
         $result = $this->db->get('linkshare_categories_merged');
@@ -595,7 +637,7 @@ class Category_creative_model extends CI_Model {
      * 
      * @return array
      */
-    function getMergedCategory($sid, $name = null) 
+    public function getMergedCategory($sid, $name = null) 
     {
         $this->db->where('id_site', $sid);
         
@@ -611,12 +653,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Get Joins Category
      * 
-     * @param int $id_categ_merged id_categ_merged
+     * @param int $id_categ_merged Category id merged
      * @param int $id_site         Site (channel) id
      * 
      * @return array
      */
-    function getJoinsCategory($id_categ_merged, $id_site = 0) 
+    public function getJoinsCategory($id_categ_merged, $id_site = 0) 
     {
         $this->db->where('id_categ_merged', $id_categ_merged);
 
@@ -631,7 +673,7 @@ class Category_creative_model extends CI_Model {
             $temp = $this->getCategoryCreativeByCatId($val['cat_id']);
             $val['name'] = $temp['name'];
  
-            $row[]=$val;
+            $row[] = $val;
         }
         
         return $row;
@@ -640,18 +682,18 @@ class Category_creative_model extends CI_Model {
     /**
      * List Merged Category
      * 
-     * @param array $filters
+     * @param array $filters The filters to search by
      * 
      * @return array
      */
-
-    function listMergedCategory($filters) {
+    public function listMergedCategory($filters) 
+    {
         $id_merged_category = $this->getMergedCategory($filters['id_site']);
 
         foreach ($id_merged_category as $row) {
             $listMergedCategory = array();
 
-            $categories = $this->getJoinsCategory($row['ID'],$filters['id_site']);            
+            $categories = $this->getJoinsCategory($row['ID'], $filters['id_site']);            
 
             foreach ($categories as $val) {
                 $nr_products = $this->getCountProductsByMID($filters['id_site'], $val['cat_id'], $val['mid']);
@@ -664,8 +706,7 @@ class Category_creative_model extends CI_Model {
             $listMergedCategory['count_merged'] = $this->countJoinCategory($row['ID']);
             $listMergedCategory['nr_products'] = $total_products;
 
-            $result[] = $listMergedCategory;
-            unset($category_merged);
+            $result[] = $listMergedCategory;            
         }
         //echo "<pre>"; print_r($categories); echo "</pre>";         
         //$nr_products = $this->getCountProductsByMID($filters['id_site'], $val['cat_id'], $val['mid']);
@@ -676,13 +717,13 @@ class Category_creative_model extends CI_Model {
     /**
      * Update Merged Category
      * 
-     * @param array $update_fields
-     * @param int $id
+     * @param array $update_fields Fields to update
+     * @param int $id              Category id 
      * 
      * @return boolean
      */
-
-    function updateMergedCategory($update_fields, $id) {
+    public function updateMergedCategory($update_fields, $id) 
+    {
         $this->db->update('linkshare_categories_merged', $update_fields, array('ID' => $id));
         return true;
     }
@@ -690,12 +731,12 @@ class Category_creative_model extends CI_Model {
     /**
      * Delete Merged Category
      * 
-     * @param int $id
+     * @param int $id Category id
      * 
      * @return boolean true
      */
-
-    function deleteMergedCategory($id) {
+    public function deleteMergedCategory($id) 
+    {
         $this->db->delete('linkshare_categories_merged', array('id' => $id));
         return true;
     }
@@ -707,7 +748,8 @@ class Category_creative_model extends CI_Model {
      * 
      * @return boolean true
      */
-    function deleteJoinCategory($categoryId, $idCategMerged, $mid = null) {
+    public function deleteJoinCategory($categoryId, $idCategMerged, $mid = null) 
+    {
         $filters = array(
           'cat_id' => $categoryId,
           'id_categ_merged' =>  $idCategMerged 
@@ -728,7 +770,8 @@ class Category_creative_model extends CI_Model {
      *
      * @return array
      */
-    function countJoinCategory($id_categ_merged) {
+    public function countJoinCategory($id_categ_merged) 
+    {
         $this->db->where('id_categ_merged', $id_categ_merged);
         $result = $this->db->get('linkshare_categories_joins');
 
@@ -736,15 +779,16 @@ class Category_creative_model extends CI_Model {
     }
 
     /**
-     * Check Temp Creative Category exists by mid,sid,cat_id
-     *
-     * existsAdvertiser
+     * Check Temp Creative Category exists by mid,sid,cat_id    
      * 	
-     * @param int $mid	
+     * @param int $sid    Site id
+     * @param int $cat_id Category id 
+     * @param int $mid    Merchant id
      *
      * @return boolean true
      */
-    function existsTempCC($sid, $cat_id, $mid) {
+    public function existsTempCC($sid, $cat_id, $mid) 
+    {
         $this->db->where('id_site', $sid);
         $this->db->where('cat_id', $cat_id);
         $this->db->where('mid', $mid);
@@ -759,23 +803,26 @@ class Category_creative_model extends CI_Model {
     }
 
     /**
-     * Update Creative Categories from Temp
-     *
-     * Updates magazin
+     * Update Creative Categories from Temp    
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields The fields to update
+     * @param int $id              Category id
+     * @param int $sid             Site id
+     * @param int $cat_id          Category id
+     * @param int $mid             Merchant id
      *
      * @return boolean true
      */
-    function updateCreativeCategoriesFromTemp($update_fields, $sid, $cat_id, $mid) {
-
+    public function updateCreativeCategoriesFromTemp($update_fields, $sid, $cat_id, $mid) 
+    {
         if (array_key_exists('id', $update_fields)) {
             unset($update_fields['id']);
         }
+        
         if (array_key_exists('id_site', $update_fields)) {
             unset($update_fields['id_site']);
         }
+        
         if (array_key_exists('live', $update_fields)) {
             unset($update_fields['live']);
         }
@@ -786,15 +833,16 @@ class Category_creative_model extends CI_Model {
     }
 
     /**
-     * Delete Temp Creative Category	
+     * Delete Temp Creative Category
      * 
-     * @param int $sid	
-     * @param int $cat_id
-     * @param int $mid
+     * @param int $sid	  Site id
+     * @param int $cat_id Category id
+     * @param int $mid    Merchand id
      *
      * @return boolean true
      */
-    function deleteTempCreativeCategory($sid, $cat_id, $mid) {
+    public function deleteTempCreativeCategory($sid, $cat_id, $mid) 
+    {
         $this->db->where('id_site', $sid);
         $this->db->where('cat_id', $cat_id);
         $this->db->where('mid', $mid);
@@ -804,12 +852,12 @@ class Category_creative_model extends CI_Model {
     }
 
     /**
-     * Delete Temporary Categories
-     *	
+     * Delete Temporary Categories    	
      *
      * @return boolean true
      */
-    function deleteTempCreativeCategories() {
+    public function deleteTempCreativeCategories() 
+    {
         $this->db->truncate('linkshare_categories_creative_temp');
         return true;
     }

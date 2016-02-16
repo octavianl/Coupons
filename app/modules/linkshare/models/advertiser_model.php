@@ -68,7 +68,9 @@ class Advertiser_model extends CI_Model
         if (isset($filters['pcc'])) {
             $this->db->where('pcc', $filters['pcc']);
         }
-        if (isset($filters['retry'])) {            
+        
+        if (isset($filters['retry'])) {
+            $this->db->where_not_in('retry', array(0));
             $this->db->order_by('retry', 'desc');
         }
 

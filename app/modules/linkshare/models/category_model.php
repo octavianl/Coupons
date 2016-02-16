@@ -14,10 +14,9 @@ class Category_model extends CI_Model
 {
     private $CI;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
-
         $this->CI = & get_instance();
     }
 
@@ -26,7 +25,7 @@ class Category_model extends CI_Model
      *
      * @return array
      */
-    function getCategories()
+    public function getCategories()
     {
         $row = array();
         $result = $this->db->get('linkshare_categories');
@@ -43,7 +42,7 @@ class Category_model extends CI_Model
      *
      * @return array
      */
-    function getCategoryStatus()
+    public function getCategoryStatus()
     {
         $row = array();
         $result = $this->db->get('linkshare_categories');
@@ -58,11 +57,11 @@ class Category_model extends CI_Model
     /**
      * Get Category
      *
-     * @param int $id	
+     * @param int $id Category id	
      *
      * @return array
      */
-    function getCategory($id)
+    public function getCategory($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -78,11 +77,11 @@ class Category_model extends CI_Model
     /**
      * Get Category Name
      *
-     * @param int $id	
+     * @param int $id Category id	
      *
      * @return array
      */
-    function getCategoryName($id)
+    public function getCategoryName($id)
     {
         $row = array();
         $this->db->where('id', $id);
@@ -98,45 +97,52 @@ class Category_model extends CI_Model
     /**
      * Create New Category
      *
-     * @param array $insert_fields	
+     * @param array $insert_fields Category fields to insert	
      *
      * @return int $insert_id
      */
-    function newCategory($insert_fields)
+    public function newCategory($insert_fields)
     {
         $this->db->insert('linkshare_categories', $insert_fields);
-        $insert_id = $this->db->insert_id();
-
-        return $insert_id;
+        return $this->db->insert_id();       
     }
 
     /**
      * Update Category
      * 
-     * @param array $update_fields
-     * @param int $id	
+     * @param array $update_fields Category fields to update
+     * @param int   $id            Category identifier	
      *
      * @return boolean true
      */
-    function updateCategory($update_fields, $id)
+    public function updateCategory($update_fields, $id)
     {
         $this->db->update('linkshare_categories', $update_fields, array('id' => $id));
-
         return true;
     }
 
     /**
      * Delete Category
      *
-     * @param int $id	
+     * @param int $id Category identifier	
      *
      * @return boolean true
      */
-    function deleteCategory($id)
+    public function deleteCategory($id)
     {
-
         $this->db->delete('linkshare_categories', array('id' => $id));
-
+        return true;
+    }
+    
+    /**
+     * Delete Categories
+     * 	     
+     *
+     * @return boolean true
+     */
+    public function deleteCategories() 
+    {
+        $this->db->truncate('linkshare_categories');
         return true;
     }
 
@@ -146,7 +152,7 @@ class Category_model extends CI_Model
      * @param array $filters
      * @return array
      */
-    function getCategoriesParse($filters)
+    public function getCategoriesParse($filters)
     {
         if ($filters['limit']) {
             return array_slice($filters['categories'], $filters['offset'], $filters['limit']);

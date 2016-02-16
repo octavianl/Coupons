@@ -76,33 +76,32 @@ class Product_model extends CI_Model
     /**
      * Get Count Products By Mid
      *
-     * @param int $mid
-     * @param int $id_site
-     * @param array $filters
+     * @param int $mid        Merchant id
+     * @param int $id_site    Site id
+     * @param array $filters  Filters to search by
      *
-     * @return array
+     * @return int No of products
      */
-    function getCountProductsByMID($mid, $id_site, $filters = array()) {
-        /* $i = 0;
-          $row = array(); */
+    public function getCountProductsByMID($mid, $id_site, $filters = array()) 
+    {
         $this->db->where('mid', $mid);
         $this->db->where('id_site', $id_site);
-        if (isset($filters['cat_creative_id']))
+        
+        if (isset($filters['cat_creative_id'])) {
             $this->db->where('cat_creative_id', $filters['cat_creative_id']);
-        if (isset($filters['cat_creative_name']))
+        }
+            
+        if (isset($filters['cat_creative_name'])) {
             $this->db->where('cat_creative_name', $filters['cat_creative_name']);
-        if (isset($filters['parsed']))
+        }
+            
+        if (isset($filters['parsed'])) {
             $this->db->where('parsed', $filters['parsed']);
+        }
+            
         $result = $this->db->get('linkshare_products');
 
-        return $result->num_rows();
-
-        //crapa memoria daca parcurg tot vectorul :)
-        /* foreach ($result->result_array() as $row) {
-          $i++;
-          }
-
-          return $i; */
+        return $result->num_rows();                
     }
     
     /**

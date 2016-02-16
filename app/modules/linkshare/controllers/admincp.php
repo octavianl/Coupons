@@ -804,7 +804,8 @@ class Admincp extends Admincp_Controller
      * @param string $url The linkshare url to parse
      */
     protected function parseAdvertiser($url)
-    {
+    {error_reporting(E_ALL);
+        ini_set('display_errors', 1);
         $this->load->library('admin_form');
         $this->load->model(array('site_model', 'status_model', 'advertiser_model', 'advertiser_temp_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);        
@@ -825,8 +826,7 @@ class Admincp extends Admincp_Controller
         $responseObj = $request->getFormattedResponse();
 
         $aux = $responseObj['body'];
-        $categories = simplexml_load_string($aux, "SimpleXMLElement", LIBXML_NOCDATA);
-        
+        $categories = simplexml_load_string($aux, "SimpleXMLElement");                
         if (isset($categories)) {
             $kids = $categories->children('ns1', true);
 
