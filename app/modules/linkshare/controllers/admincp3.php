@@ -724,7 +724,7 @@ class Admincp3 extends Admincp_Controller {
 
         $this->load->helper('file');
         $this->load->library('array_to_csv');
-        $need_header = true;
+        $need_header = false;
         
         if (!file_exists($filename) && $this->checkFolder($filepath)) {
             $csv_file = fopen($filename, 'w');
@@ -736,19 +736,19 @@ class Admincp3 extends Admincp_Controller {
            
             // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
             $main_array[] = array(
-                'id' => $row['cat_id'],
-                'active' => 1,
-                'name' => $row['name'],
-                'parent' => 0,
-                'root' => 1,
-                'description' => $row['name'],
-                'meta_title' => $row['name'],
-                'meta_keywords' => $row['name'],
-                'meta_description' => $row['name'],
-                'url_rewritten' => '',
-                'image_url' => '',
-                'shop_name' => $row['mid'],
-                'products_number' => $row['nr_products']
+                'ID' => $row['cat_id'],
+                'Active (0/1)' => 1,
+                'Name *' => $row['name'],
+                'Parent category' => 1,
+                'Root category (0/1)' => 1,
+                'Description' => $row['name'],
+                'Meta title' => $row['name'],
+                'Meta keywords' => $row['name'],
+                'Meta description' => $row['name'],
+                'URL rewritten' => '',
+                'Image URL' => ''
+//                'shop_name' => $row['mid'],
+//                'products_number' => $row['nr_products']
             );
         }
         $this->array_to_csv->input($main_array);
@@ -760,51 +760,48 @@ class Admincp3 extends Admincp_Controller {
     function exportJoinsProductsCSV($mergedCategoryId) {
 
         $this->load->model(array('site_model', 'category_creative_model', 'category_joins', 'product_model'));
+        $this->load->library('array_to_csv');
+        $this->load->helper('file');
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         
         $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
         $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
-        
+
         foreach ($joinsCategories as $joins){     
             $filters['id_site'] = $siteRow['id'];
             $filters['cat_creative_id'] = $joins['cat_id'];
             $filters['mid'] = $joins['mid'];
             
             $categoryProducts = $this->product_model->getProductsByMid($filters);
-
-            // Since we might be dealing with very large data
-            // Ensure we have time to process it
-            set_time_limit(0);
-
-            $filepath = FCPATH . 'writeable/' . 'merged_category' . '-'.  urlencode($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
-
-            $this->load->helper('file');
-            $this->load->library('array_to_csv');
-
-            // If the file already exists, we need
-            // to get rid of it since this is a new download.
-            $f = @fopen($filepath, 'r+');
-            if ($f !== false) {
-                ftruncate($f, 0);
-                fclose($f);
-            }
-
-            $csv_file = fopen($filepath, 'a');
-            $need_header = true;    // Do we need the CSV header?
-
+            
             foreach ($categoryProducts as $row) {  
+
+                if(!$this->sanitizeProduct($row)){ continue; }
+
+                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
+                $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
+
+                $need_header = false;
+
+                if (!file_exists($filename) && $this->checkFolder($filepath)) {
+                    $csv_file = fopen($filename, 'w');
+                } else {
+                    $csv_file = fopen($filename, 'a');
+                }
+
                 // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
                 $main_array[] = array(
                     'ID' => '',
                     'Active (0/1)' => 1, // (0/1)
                     'Name' => $row['productname'],
+                    'extern_link' => $row['click_url'],
                     'Categories (x,y,z...)' => $row['cat_id'], // (x,y,z...)
                     'Price tax excluded or Price tax included' => '',
                     'Tax rules ID' => '',
-                    'Wholesale price' => '',
+                    'Wholesale price' => str_replace('.',',',$row['price']),
                     'On sale (0/1)' => 0, // (0/1)
-                    'Discount amount' => '',
+                    'Discount amount' => $row['price_save'],
                     'Discount percent' => '',
                     'Discount from (yyyy-mm-dd)' => '',
                     'Discount to (yyyy-mm-dd)' => '',
@@ -819,14 +816,14 @@ class Admincp3 extends Admincp_Controller {
                     'Height' => '',
                     'Depth' => '',
                     'Weight' => '',
-                    'Quantity' => '',
+                    'Quantity' => 100,
                     'Minimal quantity' => '',
                     'Visibility' => '',
                     'Additional shipping cost' => '',
-                    'Unit for the unit price' => '',
-                    'Unit price' => '',
-                    'Short description' => '',
-                    'Description' => '',
+                    'Unit for the unit price' => 1,
+                    'Unit price' => str_replace('.',',',$row['price']),
+                    'Short description' => $row['description_short'],
+                    'Description' => $row['description_long'],
                     'Tags (x,y,z...)' => '', // (x,y,z...)
                     'Meta title' => '',
                     'Meta keywords' => '',
@@ -837,9 +834,9 @@ class Admincp3 extends Admincp_Controller {
                     'Available for order (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
                     'Product availability date' => '',
                     'Product creation date' => '',
-                    'Show price (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
-                    'Image URLs (x,y,z...)' => '', // (x,y,z...)
-                    'Delete existing images (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
+                    'Show price (0 = No, 1 = Yes)' => 1, // (0 = No, 1 = Yes)
+                    'Image URLs (x,y,z...)' => $row['imageurl'], // (x,y,z...)
+                    'Delete existing images (0 = No, 1 = Yes)' => 1, // (0 = No, 1 = Yes)
                     'Feature (Name:Value:Position:Customized)' => '', // (Name:Value:Position:Customized)
                     'Available online only (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
                     'Condition' => '',
@@ -852,25 +849,48 @@ class Admincp3 extends Admincp_Controller {
                     'Depends on stock' => '',
                     'Warehouse' => ''
                 );
+                
+                $this->array_to_csv->input($main_array);
+                $data = $this->array_to_csv->output($need_header, true);
+                fwrite($csv_file, $data);
+                fclose($csv_file);
+                unset($main_array);
             }
-            $this->array_to_csv->input($main_array);
-            $data = $this->array_to_csv->output($need_header, true);
-            fwrite($csv_file, $data);
-
-            // Make sure we're not output buffering anymore so we don't
-            // run out of memory due to buffering.
-            if (ob_get_level() > 0) {
-                ob_end_flush();
-            }
-            //ob_implicit_flush(true);
-
-            header("Content-type: application/vnd.ms-excel");
-            header("Content-disposition: attachment; filename=merged-category-" . $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . ".csv");
-            readfile($filepath);
         }
-        die();
     }
     
+    /**
+     * Sanitize product before export into csv
+     * 
+     * @param array $product
+     * 
+     * return boolean
+     */
+    public function sanitizeProduct ($product){
+        
+        // check if product is for selected site
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        if($product['id_site'] != $siteRow['id']){
+            return false;
+        }
+
+        // check if product has title , description, click url, image
+        $ckeck_keys = array('productname','price','currency','description_short','linkurl','imageurl');
+        foreach ($ckeck_keys as $key){
+            if(!isset($product[$key])){
+                return false;
+            }
+        }
+
+        // check if product is available 
+        if($product['available'] != 'yes'){
+            return false;
+        }
+        
+        return true;
+    }
+
+
     private function checkFolder($filepath) {
 //        chdir($filepath);      
         if (!is_dir($filepath)) {
