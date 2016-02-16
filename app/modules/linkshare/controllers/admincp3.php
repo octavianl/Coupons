@@ -777,6 +777,8 @@ class Admincp3 extends Admincp_Controller {
             
             foreach ($categoryProducts as $row) {  
 
+                if(!$this->sanitizeProduct($row)){ continue; }
+
                 $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
                 $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
 
@@ -857,6 +859,38 @@ class Admincp3 extends Admincp_Controller {
         }
     }
     
+    /**
+     * Sanitize product before export into csv
+     * 
+     * @param array $product
+     * 
+     * return boolean
+     */
+    public function sanitizeProduct ($product){
+        
+        // check if product is for selected site
+        $siteRow = $this->site_model->getSiteBySID($this->siteID);
+        if($product['id_site'] != $siteRow['id']){
+            return false;
+        }
+
+        // check if product has title , description, click url, image
+        $ckeck_keys = array('productname','price','currency','description_short','linkurl','imageurl');
+        foreach ($ckeck_keys as $key){
+            if(!isset($product[$key])){
+                return false;
+            }
+        }
+
+        // check if product is available 
+        if($product['available'] != 'yes'){
+            return false;
+        }
+        
+        return true;
+    }
+
+
     private function checkFolder($filepath) {
 //        chdir($filepath);      
         if (!is_dir($filepath)) {
