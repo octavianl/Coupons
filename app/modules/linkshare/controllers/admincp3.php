@@ -18,6 +18,7 @@ use app\third_party\LOG\Log;
 
 require_once APPPATH . 'third_party/OAUTH2/LinkshareConfig.php';
 require_once APPPATH . 'third_party/OAUTH2/CurlApi.php';
+require_once APPPATH . "third_party/LOG/Log.php";
 
 class Admincp3 extends Admincp_Controller {
 
@@ -720,8 +721,13 @@ class Admincp3 extends Admincp_Controller {
         $query = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
 
         $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
+        $message = 'Export CSV file created :' . $filename;
+        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+        
         $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
-
+        $message = 'Export folder created :' . $filepath;
+        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+        
         $this->load->helper('file');
         $this->load->library('array_to_csv');
         $need_header = false;
@@ -765,8 +771,12 @@ class Admincp3 extends Admincp_Controller {
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         
-        $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
+        $categoryMerged = $this->category_creative_model->getMergedCategoryByID($mergedCategoryId);
         $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
+
+        $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
+        $message = 'Export folder created :' . $filepath;
+        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
 
         foreach ($joinsCategories as $joins){     
             $filters['id_site'] = $siteRow['id'];
@@ -774,15 +784,14 @@ class Admincp3 extends Admincp_Controller {
             $filters['mid'] = $joins['mid'];
             
             $categoryProducts = $this->product_model->getProductsByMid($filters);
+
+            $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $joins['cat_id'] . '-' . $this->sanitize($joins['name']) . '.csv';
+            $message = 'Export CSV file created :' . $filename;
+            Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+            $need_header = false;
             
             foreach ($categoryProducts as $row) {  
-
                 if(!$this->sanitizeProduct($row)){ continue; }
-
-                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $row['cat_creative_id'] . '-' . $this->sanitize($row['cat_creative_name']) . '.csv';
-                $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
-
-                $need_header = false;
 
                 if (!file_exists($filename) && $this->checkFolder($filepath)) {
                     $csv_file = fopen($filename, 'w');
@@ -796,7 +805,7 @@ class Admincp3 extends Admincp_Controller {
                     'Active (0/1)' => 1, // (0/1)
                     'Name' => $row['productname'],
                     'extern_link' => $row['click_url'],
-                    'Categories (x,y,z...)' => $row['cat_id'], // (x,y,z...)
+                    'Categories (x,y,z...)' => $row['cat_creative_id'], // (x,y,z...)
                     'Price tax excluded or Price tax included' => '',
                     'Tax rules ID' => '',
                     'Wholesale price' => str_replace('.',',',$row['price']),
@@ -895,7 +904,8 @@ class Admincp3 extends Admincp_Controller {
 //        chdir($filepath);      
         if (!is_dir($filepath)) {
             if (!mkdir($filepath, 0777, true)){
-                $this->notices->SetError("Failed to create folder" . $filepath);
+                    $message = 'Failed to create folder :' . $filepath;
+                    Log::error( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
                 return false;
             }
         } else {
