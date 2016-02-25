@@ -716,30 +716,30 @@ class Admincp3 extends Admincp_Controller {
         $this->load->model(array('site_model', 'category_creative_model', 'category_joins'));
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
-        
-        $categoryMerged = $this->category_creative_model->getMergedCategoryByID ($mergedCategoryId);
+
+        $categoryMerged = $this->category_creative_model->getMergedCategoryByID($mergedCategoryId);
         $query = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
 
-        $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
-        $message = 'Export CSV file created :' . $filename;
-        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
-        
+        $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_category' . '-' . $this->sanitize($categoryMerged['name']) . '-' . date("Y-m-d") . '.csv';
+        $message = 'Export <strong>CSV</strong> file created :' . $filename;
+        Log::info(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+
         $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
-        $message = 'Export folder created :' . $filepath;
-        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
-        
+        $message = 'Export <strong>folder</strong> created :' . $filepath;
+        Log::info(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+
         $this->load->helper('file');
         $this->load->library('array_to_csv');
         $need_header = false;
-        
+
         if (!file_exists($filename) && $this->checkFolder($filepath)) {
             $csv_file = fopen($filename, 'w');
         } else {
             $csv_file = fopen($filename, 'a');
         }
-        
+
         foreach ($query as $row) {
-           
+
             // ID(category id);Active (0/1);Name *;Parent category;Root category (0/1);Description;Meta title;Meta keywords;Meta description;URL rewritten;Image URL;ID / Name of shop(MID)
             $main_array[] = array(
                 'ID' => $row['cat_id'],
@@ -770,30 +770,37 @@ class Admincp3 extends Admincp_Controller {
         $this->load->helper('file');
 
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
-        
+
         $categoryMerged = $this->category_creative_model->getMergedCategoryByID($mergedCategoryId);
         $joinsCategories = $this->category_joins->getJoinsCategory($mergedCategoryId, $siteRow['id']);
 
         $filepath = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId;
-        $message = 'Export folder created :' . $filepath;
-        Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+        $message = 'Export <strong>folder</strong> created :' . $filepath;
+        Log::info(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
 
-        foreach ($joinsCategories as $joins){     
+        foreach ($joinsCategories as $joins) {
             $filters['id_site'] = $siteRow['id'];
             $filters['cat_creative_id'] = $joins['cat_id'];
             $filters['mid'] = $joins['mid'];
-            
+
             $categoryProducts = $this->product_model->getProductsByMid($filters);
 
-            $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-'.  $this->sanitize($categoryMerged['name']) . '-' . $joins['cat_id'] . '-' . $this->sanitize($joins['name']) . '.csv';
-            $message = 'Export CSV file created :' . $filename;
-            Log::info( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
-            $need_header = false;
+            if($joins['nr_products'] != 0) {
+                $filename = FCPATH . APPPATH . 'logs/' . 'exports/' . date("Y") . '/' . date('m') . '/' . 'MergedCategory-' . $mergedCategoryId . '/' . 'merged_products' . '-' . $this->sanitize($categoryMerged['name']) . '-' . $joins['cat_id'] . '-' . $this->sanitize($joins['name']) . '.csv';
+                $message = "Export <strong>CSV</strong> file created :" . $filename;
+                Log::info(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);                
+            }
             
-            foreach ($categoryProducts as $row) {  
-                if(!$this->sanitizeProduct($row)){ continue; }
+            $need_header = false;
 
-                if (!file_exists($filename) && $this->checkFolder($filepath)) {
+            foreach ($categoryProducts as $row) {
+                if (!$this->sanitizeProduct($row)){
+                    $message = "Product from merchant # <strong>" . $row['mid'] . "</strong> with linkid # <strong>" . $row['linkid'] . "</strong> and linkname # <strong>" . $row['linkname'] . "</strong> NOT SANITIZED ";
+                    Log::error(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+                    continue;
+                }
+
+                if (!file_exists($filename) && $this->checkFolder($filepath)){
                     $csv_file = fopen($filename, 'w');
                 } else {
                     $csv_file = fopen($filename, 'a');
@@ -808,7 +815,7 @@ class Admincp3 extends Admincp_Controller {
                     'Categories (x,y,z...)' => $row['cat_creative_id'], // (x,y,z...)
                     'Price tax excluded or Price tax included' => '',
                     'Tax rules ID' => '',
-                    'Wholesale price' => str_replace('.',',',$row['price']),
+                    'Wholesale price' => str_replace('.', ',', $row['price']),
                     'On sale (0/1)' => 0, // (0/1)
                     'Discount amount' => $row['price_save'],
                     'Discount percent' => '',
@@ -830,7 +837,7 @@ class Admincp3 extends Admincp_Controller {
                     'Visibility' => '',
                     'Additional shipping cost' => '',
                     'Unit for the unit price' => 1,
-                    'Unit price' => str_replace('.',',',$row['price']),
+                    'Unit price' => str_replace('.', ',', $row['price']),
                     'Short description' => $row['description_short'],
                     'Description' => $row['description_long'],
                     'Tags (x,y,z...)' => '', // (x,y,z...)
@@ -854,11 +861,11 @@ class Admincp3 extends Admincp_Controller {
                     'Text fields (0 = No, 1 = Yes)' => '', // (0 = No, 1 = Yes)
                     'Action when out of stock' => '',
                     'ID / Name of shop' => '',
-                    'Advanced Stock Management' => '', 
+                    'Advanced Stock Management' => '',
                     'Depends on stock' => '',
                     'Warehouse' => ''
                 );
-                
+
                 $this->array_to_csv->input($main_array);
                 $data = $this->array_to_csv->output($need_header, true);
                 fwrite($csv_file, $data);
@@ -867,7 +874,7 @@ class Admincp3 extends Admincp_Controller {
             }
         }
     }
-    
+
     /**
      * Sanitize product before export into csv
      * 
@@ -875,44 +882,43 @@ class Admincp3 extends Admincp_Controller {
      * 
      * return boolean
      */
-    public function sanitizeProduct ($product){
-        
+    public function sanitizeProduct($product) {
+
         // check if product is for selected site
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
-        if($product['id_site'] != $siteRow['id']){
+        if ($product['id_site'] != $siteRow['id']) {
             return false;
         }
 
         // check if product has title , description, click url, image
-        $ckeck_keys = array('productname','price','currency','description_short','linkurl','imageurl');
-        foreach ($ckeck_keys as $key){
-            if(!isset($product[$key])){
+        $ckeck_keys = array('productname', 'price', 'currency', 'description_short', 'linkurl', 'imageurl');
+        foreach ($ckeck_keys as $key) {
+            if (!isset($product[$key])) {
                 return false;
             }
         }
 
         // check if product is available 
-        if($product['available'] != 'yes'){
+        if ($product['available'] != 'yes') {
             return false;
         }
-        
+
         return true;
     }
-
 
     private function checkFolder($filepath) {
 //        chdir($filepath);      
         if (!is_dir($filepath)) {
-            if (!mkdir($filepath, 0777, true)){
-                    $message = 'Failed to create folder :' . $filepath;
-                    Log::error( array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
+            if (!mkdir($filepath, 0777, true)) {
+                $message = 'Failed to create folder :' . $filepath;
+                Log::error(array(__FILE__, __LINE__, __CLASS__, __METHOD__, $message), Log::EXPORT);
                 return false;
             }
         } else {
             return true;
         }
     }
-    
+
     /**
      * Convert a string to the file/URL safe "slug" form
      *
@@ -920,15 +926,14 @@ class Admincp3 extends Admincp_Controller {
      * @param bool $is_filename TRUE will allow additional filename characters
      * @return string
      */
-    public function sanitize($string = '', $is_filename = TRUE)
-    {
-     // Replace all weird characters with dashes
-     $string = preg_replace('/[^\w\-'. ($is_filename ? '~_\.' : ''). ']+/u', '-', $string);
+    public function sanitize($string = '', $is_filename = TRUE) {
+        // Replace all weird characters with dashes
+        $string = preg_replace('/[^\w\-' . ($is_filename ? '~_\.' : '') . ']+/u', '-', $string);
 
-     // Only allow one dash separator at a time (and make string lowercase)
-     return mb_strtolower(preg_replace('/--+/u', '-', $string), 'UTF-8');
+        // Only allow one dash separator at a time (and make string lowercase)
+        return mb_strtolower(preg_replace('/--+/u', '-', $string), 'UTF-8');
     }
-    
+
     public function getXmlProducts() {
         $CI = & get_instance();
         $this->load->library('admin_form');
