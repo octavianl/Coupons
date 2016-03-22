@@ -310,7 +310,7 @@ class Admincp2 extends Admincp_Controller
 
     public function listTempCreativeCategory() 
     {
-        $this->load->model(array('site_model', 'category_creative_model', 'advertiser_model'));
+        $this->load->model(array('site_model', 'category_creative_model', 'category_creative_temp_model', 'advertiser_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
         $retryCount = $this->advertiser_model->checkPCC($siteRow['id']);
 
@@ -374,7 +374,7 @@ class Admincp2 extends Admincp_Controller
         $filters['name'] = true;
 
         $this->dataset->columns($columns);
-        $this->dataset->datasource('category_creative_model', 'getTempCreativeCategories', $filters);
+        $this->dataset->datasource('category_creative_temp_model', 'getTempCreativeCategories', $filters);
         $this->dataset->base_url(site_url('admincp2/linkshare/listTempCreativeCategory/'));
         $this->dataset->rows_per_page(50);
 
@@ -402,7 +402,7 @@ class Admincp2 extends Admincp_Controller
 
         // total rows
         $this->db->where('id_site', $siteRow['id']);
-        $total_rows = $this->category_creative_model->getTempCategoriesLines($filters);
+        $total_rows = $this->category_creative_temp_model->getTempCategoriesLines($filters);
         $this->dataset->total_rows($total_rows);
 
         $this->dataset->initialize();
@@ -419,8 +419,8 @@ class Admincp2 extends Admincp_Controller
 
     public function clearTempCC() 
     {
-        $this->load->model('category_creative_model');
-        $this->category_creative_model->deleteTempCreativeCategories();
+        $this->load->model('category_creative_temp_model');
+        $this->category_creative_temp_model->deleteTempCreativeCategories();
         redirect('admincp2/linkshare/listTempCreativeCategory/');
     }
 
@@ -430,33 +430,33 @@ class Admincp2 extends Admincp_Controller
         ini_set('display_errors', 1);
 
         $this->load->library('admin_form');
-        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model'));
+        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model', 'category_creative_temp_model'));
         $siteID = $this->site_model->getSiteBySID($this->siteID);
 
-        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+        $tempCC = $this->category_creative_temp_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
 
         $currentCC = $this->category_creative_model->getCategories(array('id_site' => $siteID['id']));
 
         foreach ($currentCC as $val) {
-            $existsTempCC = $this->category_creative_model->existsTempCC($siteID['id'], $val['cat_id'], $val['mid']);
+            $existsTempCC = $this->category_creative_temp_model->existsTempCC($siteID['id'], $val['cat_id'], $val['mid']);
 
             if (!empty($existsTempCC)) {
                 // Update creative categories from  linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)
-                $tempRow = $this->category_creative_model->getTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                $tempRow = $this->category_creative_temp_model->getTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
                 $this->category_creative_model->updateCreativeCategoriesFromTemp($tempRow, $siteID['id'], $val['cat_id'], $val['mid']);
-                $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                $this->category_creative_temp_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
             } else {
                 if ($val['live'] == 1) {
                     // Mark live items to be deleted by a later cron
                     $this->category_creative_model->updateCreativeCategoriesFromTemp(array('deleted' => 1), $siteID['id'], $val['cat_id'], $val['mid']);
                 } else {
                     // Delete advertiser from linkshare_categories_creative_temp by triplet (site_id,cat_id,mid)             
-                    $this->category_creative_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
+                    $this->category_creative_temp_model->deleteTempCreativeCategory($siteID['id'], $val['cat_id'], $val['mid']);
                 }
             }
         }
 
-        $tempCC = $this->category_creative_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
+        $tempCC = $this->category_creative_temp_model->getTempCreativeCategories(array('id_site' => $siteID['id']));
 
         foreach ($tempCC as $val) {
             $this->category_creative_model->newCreativeCategory($val);
@@ -464,7 +464,7 @@ class Admincp2 extends Admincp_Controller
 
         $this->advertiser_model->resetPCC($siteID['id']);
         
-        $this->category_creative_model->deleteTempCreativeCategories();
+        $this->category_creative_temp_model->deleteTempCreativeCategories();
         redirect('admincp2/linkshare/listTempCreativeCategory/');
     }
 
@@ -1174,7 +1174,7 @@ class Admincp2 extends Admincp_Controller
         include "app/third_party/LOG/Log.php";
         $CI = & get_instance();
 
-        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model'));
+        $this->load->model(array('site_model', 'advertiser_model', 'category_creative_model', 'category_creative_temp_model'));
         $siteRow = $this->site_model->getSiteBySID($this->siteID);
 
         $config = new LinkshareConfig();
@@ -1249,7 +1249,7 @@ class Admincp2 extends Admincp_Controller
             }
             
             // delete old categories for this mid and this site id
-            $this->category_creative_model->deleteTempCategoryByMid($siteRow['id'], $currentAdvertiser['mid']);
+            $this->category_creative_temp_model->deleteTempCategoryByMid($siteRow['id'], $currentAdvertiser['mid']);
             $this->advertiser_model->changePCC(1, $currentAdvertiser['mid'], $siteRow['id']);
             
             if (empty($cats)) {
@@ -1262,7 +1262,7 @@ class Admincp2 extends Admincp_Controller
             print '</pre>';            
                         
             foreach ($cats as $cat) {
-                $this->category_creative_model->newTempCreativeCategory($cat);
+                $this->category_creative_temp_model->newTempCreativeCategory($cat);
             }
                                                 
             echo '<META http-equiv="refresh" content="10; URL=/admincp2/linkshare/parseCreativeCategories/' . $pcc .'">';
